@@ -1,0 +1,19 @@
+---
+import Nav from '@components/Nav.astro';
+import LangSwitch from '@components/LangSwitch.astro';
+import { getLangFromUrl, useTranslations } from '@i18n/index';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const brandHref = lang === 'ja' ? '/' : '/en/';
+---
+
+<header class="site-header" role="banner">
+  <div class="site-header__inner">
+    <div class="site-header__brand">
+      <a href={brandHref}>{t('brand.short')}</a>
+    </div>
+    <Nav />
+    <LangSwitch />
+  </div>
+</header>

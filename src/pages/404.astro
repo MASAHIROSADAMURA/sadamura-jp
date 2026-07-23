@@ -1,0 +1,39 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="404 — ページが見つかりません | 貞村真宏"
+  description="お探しのページは見つかりませんでした。"
+  canonicalPath="/404"
+>
+  <h1>404 — ページが見つかりません</h1>
+
+  <p>
+    リクエストされた URL は存在しないか、移動・削除された可能性があります。
+  </p>
+
+  <h2>サイト内ナビゲーション</h2>
+  <ul>
+    <li><a href="/">トップ</a> — 自己紹介と外部プロフィール</li>
+    <li><a href="/profile">プロフィール</a> — 経歴・学位・所属学会・受賞</li>
+    <li><a href="/publications">研究業績</a> — 論文・学会発表・著書（3 軸フィルタ）</li>
+    <li><a href="/resources">研究リソース</a> — シナリオ・コード・参考文献</li>
+    <li><a href="/contact">連絡先</a></li>
+    <li><a href="/about">このサイトについて</a></li>
+  </ul>
+
+  <h2>外部プロフィール</h2>
+  <p>
+    本人の正規プロフィールは
+    <a href="https://researchmap.jp/sadamuramasahiro" rel="me noopener" target="_blank">researchmap</a>
+    および
+    <a href="https://orcid.org/0009-0008-2248-4583" rel="me noopener" target="_blank">ORCID</a>
+    にもあります。
+  </p>
+
+  <h2>英語版へ</h2>
+  <p>
+    <a href="/en/" hreflang="en">English version</a> をお探しの場合はこちら。
+  </p>
+</BaseLayout>

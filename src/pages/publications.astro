@@ -1,0 +1,164 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PaperEntry from '@components/PaperEntry.astro';
+import { getCollection } from 'astro:content';
+import { getLangFromUrl, useTranslations } from '@i18n/index';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const collection = await getCollection('papers');
+const papers = collection.map((c) => c.data);
+
+const byType = {
+  article: papers.filter((p) => p.pubtype === 'article'),
+  conference: papers.filter((p) => p.pubtype === 'conference'),
+  other: papers.filter((p) => p.pubtype === 'other'),
+  book: papers.filter((p) => p.pubtype === 'book')
+};
+
+const years = [...new Set(papers.map((p) => p.year))].filter((y) => y > 0).sort((a, b) => b - a);
+const topics = [...new Set(papers.flatMap((p) => p.topics))].sort();
+---
+
+<BaseLayout
+  title="研究業績 | 貞村真宏"
+  description="貞村真宏の論文・学会発表・著書一覧。法心理学、量刑判断、福祉的支援、自然言語処理を中心に。"
+>
+  <h1>研究業績</h1>
+
+  <p>
+    業績の最新版は
+    <a href="https://researchmap.jp/sadamuramasahiro" rel="noopener external" target="_blank">researchmap</a>
+    および
+    <a href="https://orcid.org/0009-0008-2248-4583" rel="noopener external" target="_blank">ORCID</a>
+    でも確認できます。
+  </p>
+
+  <section class="pub-filters" aria-label="業績の絞り込み">
+    <div class="pub-filters__group" role="group" aria-label={t('pub.filter.type')}>
+      <strong>{t('pub.filter.type')}</strong>
+      <button data-filter="type" data-value="all" aria-pressed="true">{t('pub.filter.all')}</button>
+      <button data-filter="type" data-value="article">{t('pub.type.article')}</button>
+      <button data-filter="type" data-value="conference">{t('pub.type.conference')}</button>
+      <button data-filter="type" data-value="other">{t('pub.type.other')}</button>
+      <button data-filter="type" data-value="book">{t('pub.type.book')}</button>
+    </div>
+
+    <div class="pub-filters__group" role="group" aria-label={t('pub.filter.year')}>
+      <strong>{t('pub.filter.year')}</strong>
+      <button data-filter="year" data-value="all" aria-pressed="true">{t('pub.filter.all')}</button>
+      {years.map((y) => (
+        <button data-filter="year" data-value={String(y)}>{y}</button>
+      ))}
+    </div>
+
+    <div class="pub-filters__group" role="group" aria-label={t('pub.filter.topic')}>
+      <strong>{t('pub.filter.topic')}</strong>
+      <button data-filter="topic" data-value="all" aria-pressed="true">{t('pub.filter.all')}</button>
+      {topics.map((tp) => (
+        <button data-filter="topic" data-value={tp}>{t(`pub.topic.${tp}`)}</button>
+      ))}
+    </div>
+  </section>
+
+  <section data-section="article">
+    <h2>{t('pub.type.article')}</h2>
+    {byType.article.length === 0 ? (
+      <p>{t('pub.empty')}</p>
+    ) : (
+      <ol class="pub-list">
+        {byType.article.map((p) => <PaperEntry paper={p} lang={lang} />)}
+      </ol>
+    )}
+  </section>
+
+  <section data-section="conference">
+    <h2>{t('pub.type.conference')}</h2>
+    {byType.conference.length === 0 ? (
+      <p>{t('pub.empty')}</p>
+    ) : (
+      <ol class="pub-list">
+        {byType.conference.map((p) => <PaperEntry paper={p} lang={lang} />)}
+      </ol>
+    )}
+  </section>
+
+  {byType.other.length > 0 && (
+    <section data-section="other">
+      <h2>{t('pub.type.other')}</h2>
+      <ol class="pub-list">
+        {byType.other.map((p) => <PaperEntry paper={p} lang={lang} />)}
+      </ol>
+    </section>
+  )}
+
+  <section data-section="book">
+    <h2>{t('pub.type.book')}</h2>
+    {byType.book.length === 0 ? (
+      <p>{t('pub.empty')}</p>
+    ) : (
+      <ol class="pub-list">
+        {byType.book.map((p) => <PaperEntry paper={p} lang={lang} />)}
+      </ol>
+    )}
+  </section>
+
+  <p id="pub-empty" hidden>{t('pub.empty')}</p>
+</BaseLayout>
+
+<script>
+  type FilterKey = 'type' | 'year' | 'topic';
+  const filters: Record<FilterKey, string> = { type: 'all', year: 'all', topic: 'all' };
+
+  const entries = Array.from(document.querySelectorAll<HTMLLIElement>('.pub-list > li'));
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
+  const emptyMessage = document.getElementById('pub-empty');
+
+  function matches(li: HTMLLIElement): boolean {
+    if (filters.type !== 'all' && li.dataset.type !== filters.type) return false;
+    if (filters.year !== 'all' && li.dataset.year !== filters.year) return false;
+    if (filters.topic !== 'all') {
+      const topics = (li.dataset.topics ?? '').split(',').map((t) => t.trim());
+      if (!topics.includes(filters.topic)) return false;
+    }
+    return true;
+  }
+
+  function apply(): void {
+    let visible = 0;
+    for (const li of entries) {
+      const show = matches(li);
+      li.hidden = !show;
+      if (show) visible++;
+    }
+    // Hide section header if all its items are filtered out
+    for (const section of sections) {
+      const sectionType = section.dataset.section;
+      const sectionVisible = entries
+        .filter((li) => li.dataset.type === sectionType)
+        .some((li) => !li.hidden);
+      section.hidden = filters.type !== 'all' && filters.type !== sectionType
+        ? true
+        : !sectionVisible;
+    }
+    if (emptyMessage) emptyMessage.hidden = visible > 0;
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.pub-filters button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.filter as FilterKey | undefined;
+      const value = btn.dataset.value;
+      if (!key || value === undefined) return;
+      filters[key] = value;
+      document
+        .querySelectorAll<HTMLButtonElement>(`.pub-filters button[data-filter="${key}"]`)
+        .forEach((b) => {
+          b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+        });
+      apply();
+    });
+  });
+
+  apply();
+</script>

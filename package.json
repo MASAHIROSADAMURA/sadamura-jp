@@ -1,0 +1,41 @@
+{
+  "name": "sadamura-jp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Personal academic website for Masahiro Sadamura (貞村真宏). Built with Astro.",
+  "author": "Masahiro Sadamura <contact@sadamura.jp>",
+  "license": "MIT",
+  "homepage": "https://sadamura.jp/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OWNER/sadamura-jp.git"
+  },
+  "scripts": {
+    "dev": "npm run bib && astro dev",
+    "start": "npm run dev",
+    "build": "npm run bib && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "bib": "node scripts/bib2json.mjs",
+    "preflight": "node scripts/preflight.mjs",
+    "format": "prettier --write \"src/**/*.{astro,ts,tsx,js,jsx,md,mdx,json,css}\""
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.0.0",
+    "@astrojs/rss": "^4.0.0",
+    "@astrojs/sitemap": "^3.2.0",
+    "astro": "^5.0.0",
+    "typescript": "^5.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "prettier": "^3.4.0",
+    "prettier-plugin-astro": "^0.14.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

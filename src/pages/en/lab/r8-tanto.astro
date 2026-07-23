@@ -1,0 +1,53 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+// Dataset structured data (JSON-LD). Embedded directly on the page to keep
+// SEO.astro generic. `distribution` (the JSON file's contentUrl) is added at
+// publication time once the file URL is fixed.
+const datasetLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: 'AI-Derived Answers to the 2026 Japanese Bar Examination (Short-Answer Section)',
+  description:
+    '113 answer slots for the short-answer section (Constitutional, Civil, and Criminal Law) of the 2026 Japanese Bar Examination, derived by a multi-stage LLM verification pipeline and fixed with confidence grades (A/B) before the official answers are published on August 6, 2026.',
+  creator: {
+    '@type': 'Person',
+    '@id': 'https://sadamura.jp/#person',
+    name: 'Masahiro Sadamura'
+  },
+  license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+  temporalCoverage: '2026',
+  inLanguage: 'en'
+  // distribution: add { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: '…' } at publication time.
+};
+---
+
+<BaseLayout
+  title="AI-Derived Answers to the 2026 Japanese Bar Exam — Pre-registered Public Verification | Masahiro Sadamura"
+  description="113 answer slots for the short-answer section of the 2026 Japanese Bar Examination, derived by a multi-stage LLM verification pipeline and fixed with confidence grades before the official answers are published (Aug 6, 2026). A pre-registered, timestamped evaluation of AI legal reasoning."
+>
+  <h1>Pre-registered Public Verification: AI-derived Answers for the 2026 Japanese Bar Exam (Short-answer)</h1>
+
+  <p>
+    This page fixes, before the official answers are published on August 6, 2026,
+    the answers to all 77 questions (113 answer slots) of the short-answer section
+    (Constitutional Law, Civil Law, and Criminal Law) of the 2026 Japanese Bar
+    Examination, as derived by a multi-stage AI verification pipeline: independent
+    derivation, multi-agent cross-checking against primary legal sources, an
+    adversarial audit, and confidence grading (A/B) with pre-registered "watch"
+    slots.
+  </p>
+
+  <p>
+    The purpose is not exam prep but a falsifiable, pre-registered evaluation of
+    large-language-model legal reasoning in a high-stakes domain: once the
+    official answers are released, per-subject accuracy and confidence
+    calibration will be published on a separate page, while this page remains
+    unchanged. Publication timestamps (Internet Archive, OpenTimestamps) and a
+    correction log from the pre-publication audit are disclosed.
+  </p>
+
+  <p>Full details are available in the <a href="/lab/r8-tanto">Japanese version</a>.</p>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(datasetLd)} />
+</BaseLayout>

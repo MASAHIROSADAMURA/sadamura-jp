@@ -1,0 +1,399 @@
+/* =============================================================================
+ *  global.css — sadamura.jp
+ *  独自デザイン（2026-07-23〜）: 藍（#165e83）を唯一のアクセントに、本文 = UD デジタル
+ *  教科書体・見出し = BIZ UDPGothic の対比で階層を作る。レスポンシブ／ダークモード／
+ *  A11y を静かに強化する方針は継続。旧・向井HP流の黒地白文字 h2／h1 中央太下線／
+ *  h3 左縦棒は 2026-07-23 に廃止（向井シグネチャの独自化）。
+ *  Design ref: 60_Website/02_設計/HP設計提案_v1_2026-04-22.md §4 + 2026-07-23 独自化方針
+ * ========================================================================== */
+
+/* ---------- CSS Custom Properties ----------------------------------------- */
+:root {
+  --color-bg:           #ffffff;
+  --color-fg:           #1a1a1a;
+  --color-muted:        #6b7280;
+  --color-border:       #1a1a1a;
+  --color-faint:        #f4f4f5;
+
+  /* Single accent — 藍 (indigo). Links / heading accents / focus / current.
+     Light: #165e83 → 7.09:1 on #fff (WCAG AA text). No multi-colour. */
+  --color-accent:       #165e83;
+  --color-on-accent:    #ffffff;
+
+  /* 本文 = UD デジタル教科書体（無ければ BIZ UDPGothic に自動フォールバック）。
+     見出し・ナビ・表 = BIZ UDPGothic のゴシック固定（本文=教科書体との対比で階層）。 */
+  --font-body:
+    "UD デジタル 教科書体 N-R", "UD Digi Kyokasho N-R",
+    "BIZ UDPGothic", "Hiragino Sans",
+    "Noto Sans JP", sans-serif;
+  --font-heading:
+    "BIZ UDPGothic", "Hiragino Sans",
+    "Noto Sans JP", sans-serif;
+  --font-mono:
+    "JetBrains Mono", "SFMono-Regular", Consolas,
+    "Liberation Mono", Menlo, monospace;
+
+  --measure: 38rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --radius: 0;
+
+  --line-height-body: 1.75;
+  --line-height-heading: 1.35;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg:           #0a0a0a;
+    --color-fg:           #e5e7eb;
+    --color-muted:        #9ca3af;
+    --color-border:       #e5e7eb;
+    --color-faint:        #18181b;
+
+    /* Dark accent — lighter 藍. #7fb3d3 → 8.76:1 on #0a0a0a (WCAG AA). */
+    --color-accent:       #7fb3d3;
+    --color-on-accent:    #0a0a0a;
+  }
+}
+
+/* ---------- Reset --------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { -webkit-text-size-adjust: 100%; }
+img, svg, video { display: block; max-width: 100%; height: auto; }
+
+/* ---------- Base ---------------------------------------------------------- */
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "palt";
+  font-size: 16px;
+  line-height: var(--line-height-body);
+  color: var(--color-fg);
+  background: var(--color-bg);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: var(--gutter);
+}
+
+/* ---------- Skip Link ----------------------------------------------------- */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  padding: 0.5rem 1rem;
+  background: var(--color-fg);
+  color: var(--color-bg);
+  text-decoration: none;
+  z-index: 100;
+}
+.skip-link:focus { top: 0; }
+
+/* ---------- Typography — Headings ---------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-feature-settings: "palt";
+  line-height: var(--line-height-heading);
+  font-weight: 700;
+}
+
+/* h1: 左寄せ・藍の縦棒（旧・中央太下線は 2026-07-23 廃止） */
+h1 {
+  font-size: clamp(1.4rem, 4vw, 1.75rem);
+  border-left: 4px solid var(--color-accent);
+  padding-left: 0.6em;
+  margin: 0 0 1.5em;
+}
+
+/* h2: 藍の下線（旧・黒地白文字は 2026-07-23 廃止） */
+h2 {
+  font-size: 1.15rem;
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: 0.2em;
+  margin: 2.5em 0 1em;
+}
+
+/* h3: 太字のみ（旧・左縦棒＋下線は 2026-07-23 廃止） */
+h3 {
+  font-size: 1.05rem;
+  margin: 2em 0 0.75em;
+}
+
+h4 {
+  font-size: 1rem;
+  margin: 1.5em 0 0.5em;
+}
+
+/* ---------- Paragraph / Lists -------------------------------------------- */
+p { margin: 0 0 1em; }
+ul, ol { margin: 0 0 1em 1.5em; }
+li { margin-bottom: 0.25em; }
+li > p { margin-bottom: 0.5em; }
+
+blockquote {
+  margin: 1.5em 0;
+  padding: 0.5em 1em;
+  border-left: 4px solid var(--color-muted);
+  color: var(--color-muted);
+  font-style: normal;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--color-muted);
+  margin: 2.5em 0;
+}
+
+small { color: var(--color-muted); font-size: 0.85em; }
+
+/* ---------- Links --------------------------------------------------------- */
+a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-thickness 0.1s ease, color 0.1s ease;
+}
+a:visited { color: var(--color-accent); }
+a:hover {
+  color: var(--color-accent);
+  text-decoration-thickness: 3px;
+}
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Code ---------------------------------------------------------- */
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+code {
+  background: var(--color-faint);
+  padding: 0.1em 0.35em;
+  border-radius: 2px;
+}
+pre {
+  background: var(--color-faint);
+  padding: 1em;
+  overflow-x: auto;
+  border-left: 3px solid var(--color-fg);
+  margin: 1em 0;
+}
+pre code { background: transparent; padding: 0; }
+
+/* ---------- Tables -------------------------------------------------------- */
+table {
+  font-family: var(--font-heading);
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+}
+th, td {
+  border: 1px solid var(--color-fg);
+  padding: 0.5em 0.75em;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: var(--color-fg);
+  color: var(--color-bg);
+  font-weight: 700;
+}
+
+/* ---------- Header / Nav (used by Header.astro) -------------------------- */
+.site-header {
+  font-family: var(--font-heading);
+  border-bottom: 1px solid var(--color-fg);
+  background: var(--color-bg);
+}
+.site-header__inner {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 0.75rem var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.site-header__brand a {
+  color: var(--color-fg);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1.05rem;
+}
+.site-nav { display: flex; align-items: center; gap: 0.25rem; flex-wrap: wrap; }
+.site-nav a {
+  color: var(--color-fg);
+  text-decoration: none;
+  padding: 0.4em 0.7em;
+  font-size: 0.95rem;
+}
+.site-nav a:hover { background: var(--color-faint); }
+.site-nav a[aria-current="page"] {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.lang-switch { display: inline-flex; gap: 0.25rem; margin-left: 0.5rem; }
+.lang-switch a {
+  color: var(--color-fg);
+  text-decoration: none;
+  padding: 0.3em 0.5em;
+  font-size: 0.85rem;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+}
+.lang-switch a:hover { background: var(--color-faint); }
+.lang-switch a[aria-current="true"] {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+/* ---------- Footer (used by Footer.astro) ------------------------------- */
+.site-footer {
+  margin-top: 4rem;
+  border-top: 1px solid var(--color-fg);
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+.site-footer__inner {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 1.5rem var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.site-footer a { color: var(--color-muted); }
+
+/* ---------- Publications filters (used by publications.astro) ------------ */
+.pub-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 1em 0 2em;
+  font-size: 0.9rem;
+}
+.pub-filters__group { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.pub-filters__group strong { margin-right: 0.5em; }
+.pub-filters button {
+  background: none;
+  border: 1px solid var(--color-fg);
+  color: var(--color-fg);
+  padding: 0.15em 0.6em;
+  font: inherit;
+  cursor: pointer;
+  font-size: 0.85rem;
+  min-height: 24px;
+  transition: background 0.1s ease, color 0.1s ease;
+}
+.pub-filters button:hover,
+.pub-filters button[aria-pressed="true"] {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: var(--color-accent);
+}
+
+.pub-list { list-style: none; padding: 0; margin: 0; }
+.pub-list li {
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: 1px dashed var(--color-muted);
+}
+.pub-list li:last-child { border-bottom: 0; }
+.pub-entry__meta {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+  margin-top: 0.25em;
+}
+.pub-entry__lang-badge {
+  display: inline-block;
+  border: 1px solid var(--color-muted);
+  padding: 0 0.4em;
+  font-size: 0.75rem;
+}
+.pub-entry strong.self { background: var(--color-faint); padding: 0 0.15em; }
+
+/* ---------- Lab badges (r8-tanto verification chips) --------------------- */
+/* 藍の枠線チップ: 確信度「B」・注記「◎注視」「訂正済」を控えめに縁取る。 */
+.badge {
+  display: inline-block;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  border-radius: 3px;
+  padding: 0 0.45em;
+  font-size: 0.8em;
+  font-weight: 700;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+/* ---------- Utility ------------------------------------------------------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Responsive --------------------------------------------------- */
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+  main { padding: 1rem; }
+  h1 { font-size: 1.25rem; }
+  h2 { font-size: 1.05rem; }
+  .site-header__inner { flex-direction: column; align-items: flex-start; }
+  .site-nav { width: 100%; }
+}
+
+/* ---------- Print -------------------------------------------------------- */
+/* インク節約のため白黒に戻す（藍アクセントは黒へ中和）。 */
+@media print {
+  body { background: #fff; color: #000; }
+  .site-header, .site-footer, .pub-filters, .skip-link, .lang-switch { display: none; }
+  main { max-width: 100%; padding: 0; }
+  h1, h2, h3, h4 { color: #000; }
+  h1 { border-left-color: #000; }
+  h2 { border-bottom-color: #000; }
+  a { text-decoration: underline; color: #000; }
+  a::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #666; }
+  .badge { border-color: #000; color: #000; }
+}

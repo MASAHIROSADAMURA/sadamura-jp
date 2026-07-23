@@ -1,0 +1,79 @@
+---
+import '@styles/global.css';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import SEO from '@components/SEO.astro';
+import { getLangFromUrl, useTranslations } from '@i18n/index';
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Optional Open Graph image URL (relative or absolute). Defaults to /og.png. */
+  image?: string;
+  /** Override the canonical path. Defaults to Astro.url.pathname. */
+  canonicalPath?: string;
+  /** Last update date in ISO YYYY-MM-DD. Defaults to today. */
+  lastUpdated?: string;
+}
+
+const { title, description, image, canonicalPath, lastUpdated } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+// Anchor "today" to Asia/Tokyo (JST). UTC-derived dates flip a day too
+// early when the build runs late-evening JST.
+const today = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit'
+}).format(new Date());
+const updated = lastUpdated ?? today;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Web font: BIZ UDPGothic 400/700 — fallback when UD デジタル教科書体 is
+         absent on the client. Body prefers the textbook face; headings/nav/tables
+         are gothic. Only font loaded (display=swap, preconnected). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap"
+    />
+
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      canonicalPath={canonicalPath}
+      lang={lang}
+    />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#1a1a1a" />
+    <link rel="alternate" type="application/rss+xml" title={t('rss.title')} href="/rss.xml" />
+    <link rel="me" href="https://researchmap.jp/sadamuramasahiro" />
+    <link rel="me" href="https://orcid.org/0009-0008-2248-4583" />
+  </head>
+
+  <body>
+    <a href="#main" class="skip-link">{t('a11y.skipToMain')}</a>
+    <Header />
+    <main id="main">
+      <slot />
+      <p style="margin-top: 3rem; font-size: 0.85rem; color: var(--color-muted);">
+        <small>{t('common.lastUpdated')}: <time datetime={updated}>{updated}</time></small>
+      </p>
+    </main>
+    <Footer />
+  </body>
+</html>

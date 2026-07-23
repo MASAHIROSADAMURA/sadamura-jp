@@ -1,0 +1,179 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonicalPath?: string;
+  lang: 'ja' | 'en';
+}
+
+const { title, description, image, canonicalPath, lang } = Astro.props;
+
+// Search-engine ownership verification meta tags.
+// Add the token via `.env` (PUBLIC_GOOGLE_SITE_VERIFICATION, PUBLIC_BING_SITE_VERIFICATION).
+// Empty values are skipped so dev builds stay clean.
+const googleVerify = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION ?? '';
+const bingVerify = import.meta.env.PUBLIC_BING_SITE_VERIFICATION ?? '';
+
+const siteOrigin = Astro.site?.origin ?? 'https://sadamura.jp';
+const pathname = canonicalPath ?? Astro.url.pathname;
+const canonical = new URL(pathname, siteOrigin).toString();
+const ogImage = new URL(image ?? '/og.png', siteOrigin).toString();
+
+// hreflang counterpart (single switch ja <-> en)
+function counterpart(p: string, current: 'ja' | 'en'): string {
+  if (current === 'ja') {
+    return p === '/' ? '/en/' : `/en${p}`;
+  }
+  return p.replace(/^\/en\/?/, '/') || '/';
+}
+const altPath = counterpart(pathname, lang);
+const altLang = lang === 'ja' ? 'en' : 'ja';
+const altUrl = new URL(altPath, siteOrigin).toString();
+
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${siteOrigin}/#person`,
+  name: '貞村 真宏',
+  alternateName: ['Masahiro Sadamura', 'SADAMURA Masahiro'],
+  givenName: 'Masahiro',
+  familyName: 'Sadamura',
+  jobTitle: 'Researcher',
+  url: siteOrigin + '/',
+  description,
+  knowsAbout: [
+    'Legal Psychology',
+    'Sentencing Decisions',
+    'Criminal Justice',
+    'Welfare-Oriented Support',
+    'Focal Concerns Theory',
+    'Natural Language Processing',
+    'Explainable AI',
+    'Law and Psychology',
+    'Mixed-Methods Research'
+  ],
+  knowsLanguage: ['ja', 'en'],
+  alumniOf: [
+    {
+      '@type': 'EducationalOrganization',
+      name: 'Waseda University',
+      department: 'School of Political Science and Economics'
+    },
+    {
+      '@type': 'EducationalOrganization',
+      name: 'The University of Tokyo',
+      department: 'Graduate Schools for Law and Politics'
+    }
+  ],
+  affiliation: {
+    '@type': 'EducationalOrganization',
+    name: 'The University of Osaka',
+    department: 'Graduate School of Human Sciences',
+    url: 'https://www.hus.osaka-u.ac.jp/'
+  },
+  sameAs: [
+    'https://researchmap.jp/sadamuramasahiro',
+    'https://orcid.org/0009-0008-2248-4583'
+  ]
+};
+
+// WebSite schema (provides site-wide identity to crawlers and ties pages back
+// to a single canonical site).
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${siteOrigin}/#website`,
+  url: siteOrigin + '/',
+  name: 'Masahiro Sadamura — 貞村真宏',
+  inLanguage: lang === 'ja' ? 'ja-JP' : 'en-US',
+  publisher: { '@id': `${siteOrigin}/#person` },
+  copyrightHolder: { '@id': `${siteOrigin}/#person` },
+  copyrightYear: new Date().getUTCFullYear(),
+  license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/'
+};
+
+// BreadcrumbList — derived from the canonical path. The home page omits
+// the list (a single-item breadcrumb is meaningless).
+const segments = pathname.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean);
+const segmentLabels: Record<string, { ja: string; en: string }> = {
+  profile:      { ja: 'プロフィール',   en: 'Profile' },
+  publications: { ja: '研究業績',       en: 'Publications' },
+  resources:    { ja: '研究リソース',   en: 'Resources' },
+  contact:      { ja: '連絡先',         en: 'Contact' },
+  about:        { ja: 'このサイトについて', en: 'About' },
+  '404':        { ja: 'ページが見つかりません', en: 'Page not found' }
+};
+let crumbs: { name: string; href: string }[] = [
+  { name: lang === 'ja' ? 'トップ' : 'Home', href: lang === 'ja' ? '/' : '/en/' }
+];
+const usableSegments = segments.filter((s) => s !== 'en');
+let crumbPath = lang === 'ja' ? '' : '/en';
+for (const seg of usableSegments) {
+  crumbPath += `/${seg}`;
+  const label = segmentLabels[seg]?.[lang] ?? seg;
+  crumbs.push({ name: label, href: crumbPath });
+}
+const breadcrumbLd = crumbs.length > 1 ? {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: crumbs.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    item: new URL(c.href, siteOrigin).toString()
+  }))
+} : null;
+
+// Plausible Analytics — opt-in via env var, never bundled when blank.
+const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN ?? '';
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="author" content="Masahiro Sadamura" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<link rel="canonical" href={canonical} />
+<link rel="alternate" hreflang={lang} href={canonical} />
+<link rel="alternate" hreflang={altLang} href={altUrl} />
+<link rel="alternate" hreflang="x-default" href={siteOrigin + '/'} />
+
+<!-- Open Graph -->
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:type" content="website" />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content={lang === 'ja' ? 'ja_JP' : 'en_US'} />
+<meta property="og:locale:alternate" content={lang === 'ja' ? 'en_US' : 'ja_JP'} />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- Search-engine ownership verification (Day 4 of setup guide) -->
+{googleVerify && <meta name="google-site-verification" content={googleVerify} />}
+{bingVerify && <meta name="msvalidate.01" content={bingVerify} />}
+
+<!-- JSON-LD: Person -->
+<script is:inline type="application/ld+json" set:html={JSON.stringify(personLd)} />
+
+<!-- JSON-LD: WebSite -->
+<script is:inline type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
+
+<!-- JSON-LD: BreadcrumbList (omitted on home) -->
+{breadcrumbLd && (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+)}
+
+<!-- Plausible Analytics — only when PUBLIC_PLAUSIBLE_DOMAIN is set -->
+{plausibleDomain && (
+  <script
+    is:inline
+    defer
+    data-domain={plausibleDomain}
+    src="https://plausible.io/js/script.js"
+  />
+)}

@@ -1,0 +1,25 @@
+{
+  "name": "Masahiro Sadamura — 貞村真宏",
+  "short_name": "Sadamura",
+  "description": "Masahiro Sadamura — researcher in legal psychology. Sentencing decisions and welfare-oriented support.",
+  "lang": "ja",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#1a1a1a",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

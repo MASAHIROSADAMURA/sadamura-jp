@@ -1,0 +1,21 @@
+---
+import { getLangFromUrl, useTranslations } from '@i18n/index';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const year = new Date().getUTCFullYear();
+const ccUrl = lang === 'ja'
+  ? 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja'
+  : 'https://creativecommons.org/licenses/by-nc-sa/4.0/';
+---
+
+<footer class="site-footer" role="contentinfo">
+  <div class="site-footer__inner">
+    <span>&copy; {year} Masahiro Sadamura</span>
+    <span>
+      <a href={ccUrl} rel="license noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      &middot; <a href="/rss.xml">RSS</a>
+      &middot; <a href={lang === 'ja' ? '/about' : '/en/about'}>{t('footer.about')}</a>
+    </span>
+  </div>
+</footer>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img"
+     aria-label="sadamura.jp — Masahiro Sadamura, researcher in legal psychology">
+  <!-- Background: black, mirroring the site's 2-tone palette. -->
+  <rect width="1200" height="630" fill="#1a1a1a"/>
+
+  <!-- Thin double underline echoing the in-page h1 rule. -->
+  <line x1="120" y1="540" x2="1080" y2="540" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+  <line x1="120" y1="548" x2="1080" y2="548" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+
+  <!-- Brand monogram block, top-left, matching favicon.svg style. -->
+  <g transform="translate(120,120)">
+    <rect width="80" height="80" fill="#ffffff"/>
+    <text x="40" y="55" text-anchor="middle"
+          font-family="-apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+          font-size="36" font-weight="700" fill="#1a1a1a">MS</text>
+  </g>
+
+  <!-- Primary heading: Japanese full name. -->
+  <text x="120" y="290"
+        font-family="'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif"
+        font-size="84" font-weight="700" fill="#ffffff" letter-spacing="0.02em">
+    貞村 真宏
+  </text>
+
+  <!-- Romaji name. -->
+  <text x="120" y="370"
+        font-family="-apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-size="42" font-weight="500" fill="#e5e7eb" letter-spacing="0.04em">
+    Masahiro Sadamura
+  </text>
+
+  <!-- Tagline. -->
+  <text x="120" y="450"
+        font-family="'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif"
+        font-size="28" font-weight="400" fill="#9ca3af">
+    法心理学 / 量刑判断と福祉的支援
+  </text>
+  <text x="120" y="490"
+        font-family="-apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-size="24" font-weight="400" fill="#9ca3af">
+    Legal psychology · Sentencing decisions · Welfare-oriented support
+  </text>
+
+  <!-- Footer: domain badge. -->
+  <text x="120" y="595"
+        font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace"
+        font-size="24" font-weight="500" fill="#ffffff">
+    sadamura.jp
+  </text>
+
+  <!-- Affiliation, right-aligned footer. -->
+  <text x="1080" y="595" text-anchor="end"
+        font-family="'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif"
+        font-size="22" font-weight="400" fill="#9ca3af">
+    大阪大学 大学院人間科学研究科
+  </text>
+</svg>

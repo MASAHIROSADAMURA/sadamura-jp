@@ -1,0 +1,28 @@
+---
+import { getLangFromUrl, useTranslations, localizedPath } from '@i18n/index';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const here = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const items: { slug: 'profile' | 'publications' | 'resources' | 'contact'; label: string }[] = [
+  { slug: 'profile',      label: t('nav.profile') },
+  { slug: 'publications', label: t('nav.publications') },
+  { slug: 'resources',    label: t('nav.resources') },
+  { slug: 'contact',      label: t('nav.contact') }
+];
+
+function isCurrent(slug: string): boolean {
+  const target = localizedPath(lang, `/${slug}`).replace(/\/$/, '');
+  return here === target;
+}
+---
+
+<nav class="site-nav" aria-label={t('nav.label')}>
+  {items.map((item) => (
+    <a
+      href={localizedPath(lang, `/${item.slug}`)}
+      aria-current={isCurrent(item.slug) ? 'page' : undefined}
+    >{item.label}</a>
+  ))}
+</nav>

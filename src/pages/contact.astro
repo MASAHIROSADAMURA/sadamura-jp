@@ -1,0 +1,76 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="連絡先 | 貞村真宏"
+  description="貞村真宏（さだむら まさひろ）への連絡先・外部プロフィールリンク。"
+>
+  <h1>連絡先</h1>
+
+  <p>
+    研究・共同研究・引用確認・取材依頼等の連絡は、以下のいずれかからお願いいたします。
+  </p>
+
+  <h2>メール</h2>
+  <p>
+    <span class="email-obfuscate" data-user="sadamuramasahiro" data-domain="moegi.waseda.jp">
+      sadamuramasahiro [at] moegi [dot] waseda [dot] jp
+    </span>
+  </p>
+  <p>返信は通常 3–7 日以内を心がけていますが、時期によっては時間をいただく場合があります。</p>
+
+  <h2>外部プロフィール</h2>
+  <table>
+    <thead><tr><th>サービス</th><th>URL</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>researchmap</td>
+        <td><a href="https://researchmap.jp/sadamuramasahiro" rel="me noopener" target="_blank">https://researchmap.jp/sadamuramasahiro</a></td>
+      </tr>
+      <tr>
+        <td>ORCID</td>
+        <td><a href="https://orcid.org/0009-0008-2248-4583" rel="me noopener" target="_blank">https://orcid.org/0009-0008-2248-4583</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>共同研究のお問い合わせについて</h2>
+  <p>
+    法心理学・量刑判断・福祉的支援・NLP/ML 応用などのテーマでの共同研究のご相談を歓迎します。連絡時には以下の情報があると検討が早まります：
+  </p>
+  <ul>
+    <li>ご所属・ご専門</li>
+    <li>研究テーマ・研究計画の概要</li>
+    <li>期待される協働の形（共著、データ提供、コメント、招聘講演など）</li>
+    <li>スケジュール感</li>
+  </ul>
+
+  <h2>お仕事のご依頼</h2>
+  <p>研究支援（統計・データ分析、学術英文校正、学術翻訳、受験・進学添削等）のご依頼もメールにて承ります。</p>
+  <p>※法律相談・個別事件に関する法的助言はお受けしておりません。</p>
+
+  <h2>取材・解説依頼について</h2>
+  <p>刑事司法・量刑判断・福祉的支援に関する取材・解説のご依頼については、以下の方針でお受けしています：</p>
+  <ul>
+    <li>個別事件についてのコメントは原則お受けできません</li>
+    <li>一般論・研究知見に基づく解説は可能な範囲でお受けします</li>
+    <li>学会等で発表済みの研究内容については、論文・発表資料を併せてご紹介します</li>
+  </ul>
+</BaseLayout>
+
+<script>
+  // メールアドレス難読化: data-user / data-domain → mailto:
+  document
+    .querySelectorAll<HTMLElement>('.email-obfuscate[data-user][data-domain]')
+    .forEach((el) => {
+      const u = el.dataset.user;
+      const d = el.dataset.domain;
+      if (!u || !d) return;
+      const addr = `${u}@${d}`;
+      const a = document.createElement('a');
+      a.href = `mailto:${addr}`;
+      a.textContent = addr;
+      el.replaceWith(a);
+    });
+</script>

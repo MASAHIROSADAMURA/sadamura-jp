@@ -1,0 +1,120 @@
+---
+/**
+ * One bibliographic entry row used inside `<ol class="pub-list">`.
+ * The wrapping <li> carries data attributes (`data-type`, `data-year`,
+ * `data-topics`) that the client-side filter script on publications.astro
+ * reads to show/hide entries.
+ */
+import type { Lang } from '@i18n/index';
+import type { CollectionEntry } from 'astro:content';
+
+// Single source of truth: derive the row's shape from the content schema
+// (src/content/config.ts) so the bib2json output, the Zod schema, and this
+// component can never drift apart.
+type Paper = CollectionEntry<'papers'>['data'];
+
+export interface Props {
+  paper: Paper;
+  lang: Lang;
+}
+
+const { paper, lang } = Astro.props;
+
+function displayAuthor(name: string, lang: Lang): string {
+  if (name.includes(',')) {
+    const [last, first] = name.split(',').map((s) => s.trim());
+    return lang === 'ja' ? `${last}, ${first}` : `${first} ${last}`;
+  }
+  return name;
+}
+
+// Role label for edited / editorial-board works (not authorship).
+function roleLabel(role: string, lang: Lang): string {
+  const ja: Record<string, string> = {
+    'joint-editor': '共編',
+    'student-editor': '学生編集委員',
+    editor: '編'
+  };
+  const en: Record<string, string> = {
+    'joint-editor': 'Joint editor',
+    'student-editor': 'Student editorial board',
+    editor: 'ed.'
+  };
+  return (lang === 'ja' ? ja[role] : en[role]) ?? (lang === 'ja' ? '編' : 'ed.');
+}
+
+function displayTitle(paper: Paper, lang: Lang): string {
+  if (lang === 'en' && paper.language === 'ja' && paper.titleEn) {
+    return paper.titleEn;
+  }
+  return paper.title;
+}
+
+function displayVenue(paper: Paper, lang: Lang): string {
+  if (lang === 'en' && paper.language === 'ja' && paper.venueEn) {
+    return paper.venueEn;
+  }
+  return paper.venue;
+}
+
+const title = displayTitle(paper, lang);
+const venue = displayVenue(paper, lang);
+const showJpBadge = lang === 'en' && paper.language === 'ja';
+const doiHref = paper.doi ? `https://doi.org/${paper.doi}` : paper.url;
+const editorIsSelf =
+  !!paper.editor && (paper.editor.includes('貞村') || paper.editor.includes('Sadamura'));
+
+const dateParts: string[] = [paper.yearText ?? String(paper.year)];
+if (paper.pubtype === 'conference' && paper.month) {
+  const md = paper.day ? `${paper.month}-${paper.day}` : paper.month;
+  dateParts.push(md);
+}
+const dateLabel = dateParts.join('-');
+---
+
+<li
+  class="pub-entry"
+  data-type={paper.pubtype}
+  data-year={String(paper.year)}
+  data-topics={paper.topics.join(',')}
+>
+  <div class="pub-entry__authors">
+    {paper.authors.map((a, i) => (
+      <>
+        {i > 0 ? ', ' : ''}
+        {a.isSelf
+          ? <strong class="self">{displayAuthor(a.name, lang)}</strong>
+          : <span>{displayAuthor(a.name, lang)}</span>}
+      </>
+    ))}
+    {paper.editor && paper.authors.length === 0 ? (
+      <span>
+        {editorIsSelf
+          ? <strong class="self">{displayAuthor(paper.editor, lang)}</strong>
+          : <span>{displayAuthor(paper.editor, lang)}</span>}
+        {paper.role ? ` (${roleLabel(paper.role, lang)})` : ' (ed.)'}
+      </span>
+    ) : null}
+    <span> ({paper.yearText ?? paper.year}).</span>
+  </div>
+
+  <div class="pub-entry__title">
+    {doiHref
+      ? <a href={doiHref} rel="noopener external" target="_blank">{title}</a>
+      : <span>{title}</span>}
+  </div>
+
+  <div class="pub-entry__meta">
+    {venue && <em>{venue}</em>}
+    {paper.volume && <span>{paper.volume}{paper.number ? `(${paper.number})` : ''}</span>}
+    {paper.pages && <span>{paper.pages}</span>}
+    {paper.doi && (
+      <span>
+        DOI: <a href={`https://doi.org/${paper.doi}`} rel="noopener external" target="_blank">{paper.doi}</a>
+      </span>
+    )}
+    {paper.note && <span>({paper.note})</span>}
+    {paper.pubtype === 'conference' && <span>{dateLabel}</span>}
+    {showJpBadge && <span class="pub-entry__lang-badge" aria-label="In Japanese">JP</span>}
+  </div>
+</li>

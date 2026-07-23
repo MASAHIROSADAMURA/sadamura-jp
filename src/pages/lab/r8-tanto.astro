@@ -1,0 +1,230 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+// Dataset 構造化データ（JSON-LD）。SEO.astro を汎用に保つためページに直接埋め込む。
+// distribution（JSONファイルの contentUrl）は公開時にファイルURLが確定してから追記する。
+const datasetLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: '令和8年司法試験 短答式 AI導出解答（公開検証・事前登録）',
+  description:
+    '大規模言語モデルを用いた多段検証パイプラインが令和8年司法試験短答式（憲法・民法・刑法）の全113解答欄について導出した解答。法務省による公式正答の公表（2026年8月6日見込み）より前に、確信度（A/B）付きで固定・公開した。',
+  creator: {
+    '@type': 'Person',
+    '@id': 'https://sadamura.jp/#person',
+    name: '貞村 真宏'
+  },
+  license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+  temporalCoverage: '2026',
+  inLanguage: 'ja'
+  // distribution: 公開時に { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: '…' } を追記（ファイルURL未確定）。
+};
+---
+
+<BaseLayout
+  title="令和8年司法試験 短答式 AI導出解答の公開検証（事前登録） | 貞村真宏"
+  description="大規模言語モデルを用いた多段検証パイプラインが令和8年司法試験短答式（憲法・民法・刑法）の全113解答欄について導出した解答を、法務省の公式正答公表前に確信度付きで固定・公開する事前登録型の公開検証。訂正履歴を公開。"
+>
+  <h1>令和8年司法試験 短答式　AI導出解答の公開検証（事前登録）</h1>
+
+  <p><strong>公開日: （公開時に確定）（公式正答の公表前）</strong></p>
+
+  <p>このページは、大規模言語モデル（LLM）を用いた多段検証パイプラインが、令和8年司法試験短答式試験（憲法・民法・刑法）の全<strong>77問113解答欄</strong>について導出した解答を、<strong>法務省による公式正答の公表（2026年8月6日見込み）より前に</strong>、確信度付きで固定・公開するものです。</p>
+
+  <p>目的は「解答速報」ではありません。<strong>高リスクの法的推論タスクにおけるAI出力の品質保証手法が、外部の正解（公式正答）によって採点されるとどの程度の精度と較正を示すか</strong>を、後出しの余地なく検証すること——研究でいう<strong>事前登録（pre-registration）</strong>の形式を、AI法学の題材で実装することにあります。</p>
+
+  <h2>方法の要約</h2>
+
+  <p>導出は次の多段構成で行いました（各段の構成のみを開示し、プロンプト・実装の詳細は営業上の秘密として非公開とします。学術的詳細は論文として投稿予定です）。</p>
+
+  <ol>
+    <li><strong>一次導出</strong> — 公式問題PDF（法務省公表）のみを入力として、全欄の解答を根拠付きで導出。</li>
+    <li><strong>独立検証</strong> — 別系統のAIエージェント複数体が、条文・判例の一次資料と照合して導出を検証。</li>
+    <li><strong>敵対的監査</strong> — 「導出は誤りである」という仮説側に立った反証専任の再導出。単独の判決に依存する欄は判決全文と逐語照合。</li>
+    <li><strong>確信度の格付けと注視欄の事前指定</strong> — 全欄をA（高確信）/B（低確信）に格付けし、正答が割れる可能性が最も高いと判断した欄を「注視欄」として<strong>公表前に</strong>指定。</li>
+    <li><strong>訂正履歴の公開</strong> — 監査で導出が覆った欄は、理由とともに履歴を残す。</li>
+  </ol>
+
+  <h2>導出解答（113欄）</h2>
+
+  <ul>
+    <li>対象: 憲法20問40欄・民法37問37欄・刑法20問36欄（順不同一致型・穴埋め型を含む）。</li>
+    <li>問題文は掲載しません。問題は法務省の公表ページを参照してください。</li>
+    <li>確信度B: <strong>14欄</strong>（憲法6・民法6・刑法2）。注視欄: <strong>2欄</strong>（憲法No.5・No.23）。</li>
+  </ul>
+
+    <table>
+      <caption>憲法（20問40欄）</caption>
+      <thead>
+        <tr><th>問</th><th>欄</th><th>導出解答</th><th>確信度</th><th>注記</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>No.1</td><td>2</td><td></td><td></td></tr>
+        <tr><td>1</td><td>No.2</td><td>1</td><td></td><td></td></tr>
+        <tr><td>1</td><td>No.3</td><td>1</td><td></td><td></td></tr>
+        <tr><td>2</td><td>No.4</td><td>1</td><td></td><td></td></tr>
+        <tr><td>2</td><td>No.5</td><td>1</td><td></td><td><span class="badge">◎注視</span></td></tr>
+        <tr><td>2</td><td>No.6</td><td>2</td><td></td><td></td></tr>
+        <tr><td>3</td><td>No.7</td><td>4</td><td></td><td></td></tr>
+        <tr><td>4</td><td>No.8</td><td>4</td><td></td><td></td></tr>
+        <tr><td>5</td><td>No.9</td><td>4</td><td></td><td></td></tr>
+        <tr><td>6</td><td>No.10</td><td>2</td><td></td><td><span class="badge">訂正済</span></td></tr>
+        <tr><td>6</td><td>No.11</td><td>1</td><td></td><td></td></tr>
+        <tr><td>6</td><td>No.12</td><td>1</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>7</td><td>No.13</td><td>2</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>7</td><td>No.14</td><td>2</td><td></td><td></td></tr>
+        <tr><td>7</td><td>No.15</td><td>1</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>8</td><td>No.16</td><td>1</td><td></td><td></td></tr>
+        <tr><td>8</td><td>No.17</td><td>2</td><td></td><td></td></tr>
+        <tr><td>8</td><td>No.18</td><td>1</td><td></td><td></td></tr>
+        <tr><td>9</td><td>No.19</td><td>8</td><td></td><td></td></tr>
+        <tr><td>10</td><td>No.20</td><td>5</td><td></td><td></td></tr>
+        <tr><td>11</td><td>No.21</td><td>2</td><td></td><td></td></tr>
+        <tr><td>11</td><td>No.22</td><td>2</td><td></td><td></td></tr>
+        <tr><td>11</td><td>No.23</td><td>1</td><td><span class="badge">B</span></td><td><span class="badge">◎注視</span></td></tr>
+        <tr><td>12</td><td>No.24</td><td>4</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>13</td><td>No.25</td><td>2</td><td></td><td></td></tr>
+        <tr><td>13</td><td>No.26</td><td>1</td><td></td><td></td></tr>
+        <tr><td>13</td><td>No.27</td><td>2</td><td></td><td></td></tr>
+        <tr><td>14</td><td>No.28</td><td>3</td><td></td><td></td></tr>
+        <tr><td>15</td><td>No.29</td><td>5</td><td></td><td></td></tr>
+        <tr><td>16</td><td>No.30</td><td>3</td><td></td><td></td></tr>
+        <tr><td>17</td><td>No.31</td><td>5</td><td></td><td></td></tr>
+        <tr><td>18</td><td>No.32</td><td>2</td><td></td><td></td></tr>
+        <tr><td>18</td><td>No.33</td><td>2</td><td></td><td></td></tr>
+        <tr><td>18</td><td>No.34</td><td>1</td><td></td><td></td></tr>
+        <tr><td>19</td><td>No.35</td><td>2</td><td></td><td></td></tr>
+        <tr><td>19</td><td>No.36</td><td>1</td><td></td><td></td></tr>
+        <tr><td>19</td><td>No.37</td><td>2</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>20</td><td>No.38</td><td>1</td><td></td><td></td></tr>
+        <tr><td>20</td><td>No.39</td><td>2</td><td></td><td></td></tr>
+        <tr><td>20</td><td>No.40</td><td>2</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <table>
+      <caption>民法（37問37欄）</caption>
+      <thead>
+        <tr><th>問</th><th>欄</th><th>導出解答</th><th>確信度</th><th>注記</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>問1</td><td>1</td><td></td><td></td></tr>
+        <tr><td>2</td><td>問2</td><td>2</td><td></td><td></td></tr>
+        <tr><td>3</td><td>問3</td><td>4</td><td></td><td></td></tr>
+        <tr><td>4</td><td>問4</td><td>5</td><td></td><td></td></tr>
+        <tr><td>5</td><td>問5</td><td>4</td><td></td><td></td></tr>
+        <tr><td>6</td><td>問6</td><td>2</td><td></td><td></td></tr>
+        <tr><td>7</td><td>問7</td><td>4</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>8</td><td>問8</td><td>1</td><td></td><td></td></tr>
+        <tr><td>9</td><td>問9</td><td>2</td><td></td><td></td></tr>
+        <tr><td>10</td><td>問10</td><td>2</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>11</td><td>問11</td><td>5</td><td></td><td></td></tr>
+        <tr><td>12</td><td>問12</td><td>3</td><td></td><td></td></tr>
+        <tr><td>13</td><td>問13</td><td>4</td><td></td><td></td></tr>
+        <tr><td>14</td><td>問14</td><td>4</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>15</td><td>問15</td><td>1</td><td></td><td></td></tr>
+        <tr><td>16</td><td>問16</td><td>4</td><td></td><td></td></tr>
+        <tr><td>17</td><td>問17</td><td>5</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>18</td><td>問18</td><td>5</td><td></td><td></td></tr>
+        <tr><td>19</td><td>問19</td><td>1</td><td></td><td></td></tr>
+        <tr><td>20</td><td>問20</td><td>5</td><td></td><td></td></tr>
+        <tr><td>21</td><td>問21</td><td>3</td><td></td><td></td></tr>
+        <tr><td>22</td><td>問22</td><td>1</td><td></td><td></td></tr>
+        <tr><td>23</td><td>問23</td><td>3</td><td></td><td></td></tr>
+        <tr><td>24</td><td>問24</td><td>4</td><td></td><td></td></tr>
+        <tr><td>25</td><td>問25</td><td>3</td><td></td><td></td></tr>
+        <tr><td>26</td><td>問26</td><td>2</td><td></td><td></td></tr>
+        <tr><td>27</td><td>問27</td><td>4</td><td></td><td></td></tr>
+        <tr><td>28</td><td>問28</td><td>5</td><td></td><td></td></tr>
+        <tr><td>29</td><td>問29</td><td>3</td><td></td><td></td></tr>
+        <tr><td>30</td><td>問30</td><td>3</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>31</td><td>問31</td><td>1</td><td></td><td></td></tr>
+        <tr><td>32</td><td>問32</td><td>5</td><td></td><td></td></tr>
+        <tr><td>33</td><td>問33</td><td>1</td><td></td><td></td></tr>
+        <tr><td>34</td><td>問34</td><td>3</td><td></td><td></td></tr>
+        <tr><td>35</td><td>問35</td><td>1</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>36</td><td>問36</td><td>1</td><td></td><td></td></tr>
+        <tr><td>37</td><td>問37</td><td>2</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <table>
+      <caption>刑法（20問36欄）</caption>
+      <thead>
+        <tr><th>問</th><th>欄</th><th>導出解答</th><th>確信度</th><th>注記</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>No.1</td><td>2</td><td></td><td></td></tr>
+        <tr><td>1</td><td>No.2</td><td>1</td><td></td><td></td></tr>
+        <tr><td>1</td><td>No.3</td><td>1</td><td></td><td></td></tr>
+        <tr><td>1</td><td>No.4</td><td>2</td><td></td><td></td></tr>
+        <tr><td>1</td><td>No.5</td><td>1</td><td></td><td></td></tr>
+        <tr><td>2</td><td>No.6</td><td>3</td><td></td><td></td></tr>
+        <tr><td>2</td><td>No.7</td><td>5</td><td></td><td></td></tr>
+        <tr><td>3</td><td>No.8</td><td>3</td><td></td><td></td></tr>
+        <tr><td>4</td><td>No.9</td><td>4</td><td></td><td></td></tr>
+        <tr><td>5</td><td>No.10</td><td>5</td><td></td><td></td></tr>
+        <tr><td>6</td><td>No.11</td><td>4</td><td></td><td></td></tr>
+        <tr><td>7</td><td>No.12</td><td>1</td><td></td><td></td></tr>
+        <tr><td>7</td><td>No.13</td><td>4</td><td></td><td></td></tr>
+        <tr><td>8</td><td>No.14</td><td>4</td><td></td><td></td></tr>
+        <tr><td>9</td><td>No.15</td><td>2</td><td></td><td></td></tr>
+        <tr><td>9</td><td>No.16</td><td>5</td><td></td><td></td></tr>
+        <tr><td>10</td><td>No.17</td><td>2</td><td></td><td></td></tr>
+        <tr><td>11</td><td>No.18</td><td>4</td><td></td><td></td></tr>
+        <tr><td>12</td><td>No.19</td><td>2</td><td></td><td></td></tr>
+        <tr><td>12</td><td>No.20</td><td>4</td><td></td><td></td></tr>
+        <tr><td>13</td><td>No.21</td><td>2</td><td></td><td></td></tr>
+        <tr><td>14</td><td>No.22</td><td>2</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>15</td><td>No.23</td><td>3</td><td></td><td></td></tr>
+        <tr><td>16</td><td>No.24</td><td>2</td><td></td><td></td></tr>
+        <tr><td>17</td><td>No.25</td><td>2</td><td><span class="badge">B</span></td><td></td></tr>
+        <tr><td>18</td><td>No.26</td><td>2</td><td></td><td></td></tr>
+        <tr><td>18</td><td>No.27</td><td>1</td><td></td><td></td></tr>
+        <tr><td>18</td><td>No.28</td><td>1</td><td></td><td></td></tr>
+        <tr><td>18</td><td>No.29</td><td>2</td><td></td><td></td></tr>
+        <tr><td>18</td><td>No.30</td><td>1</td><td></td><td></td></tr>
+        <tr><td>19</td><td>No.31</td><td>4</td><td></td><td></td></tr>
+        <tr><td>20</td><td>No.32</td><td>2</td><td></td><td></td></tr>
+        <tr><td>20</td><td>No.33</td><td>1</td><td></td><td></td></tr>
+        <tr><td>20</td><td>No.34</td><td>2</td><td></td><td></td></tr>
+        <tr><td>20</td><td>No.35</td><td>2</td><td></td><td></td></tr>
+        <tr><td>20</td><td>No.36</td><td>2</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+  <h2>訂正履歴（公表前の監査による）</h2>
+
+  <ul>
+    <li><strong>2026-07-22　憲法No.10（第6問ア）: １ → ２ に訂正。</strong> 敵対的監査において、当該肢の記述に用いられた判例の定式が、肢が引用元とする判決の判文には存在せず、別判決（森林法違憲判決）の定式を移植したもの（帰属の差し替え）であることを判決全文との逐語照合で特定したため。本ページの公開値は訂正後のものです。監査が公表前に実際に導出を覆した事例として、履歴を開示します。</li>
+  </ul>
+
+  <h2>検証性の担保</h2>
+
+  <ul>
+    <li>本ページは公開後、<strong>一切編集しません</strong>（8月6日の公式正答との照合結果は、別ページとして日付付きで公開します）。</li>
+    <li>導出データ（JSON）のSHA-256: <code>（公開時に確定）</code></li>
+    <li>第三者タイムスタンプ: Internet Archive（Wayback Machine）・archive.today のアーカイブ、および OpenTimestamps による存在証明を公開直後に取得し、本節に追記します（追記は公開当日のみ）。</li>
+  </ul>
+
+  <h2>免責・注記</h2>
+
+  <ul>
+    <li>本ページは<strong>非公式の研究デモ</strong>であり、法務省・司法試験委員会とは一切関係ありません。<strong>正答は2026年8月6日（見込み）に公表される公式正答のみが正</strong>であり、本ページの導出は誤りを含み得ます。</li>
+    <li>本ページは受験指導・解答速報の提供を目的とするものではなく、内容の正確性を保証しません。受験上の判断に用いないでください。</li>
+    <li>AIの出力には誤りが含まれ得ます。本検証はまさにその誤り率と較正を公開の場で測定する試みです。</li>
+  </ul>
+
+  <h2>今後の予定</h2>
+
+  <ul>
+    <li><strong>2026-08-06（見込み）</strong>: 公式正答との全欄照合を実施し、科目別の一致率・確信度別（A/B）の較正・注視欄の結果を別ページで公開します。</li>
+    <li>方法論の学術的詳細は、AIと法に関する国際会議・学会誌へ投稿予定です。</li>
+  </ul>
+
+  <hr />
+
+  <p><em>お問い合わせは <a href="/contact">contact</a> へ。</em></p>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(datasetLd)} />
+</BaseLayout>

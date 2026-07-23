@@ -1,0 +1,74 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Contact | Masahiro Sadamura"
+  description="Contact information and external profile links for Masahiro Sadamura."
+>
+  <h1>Contact</h1>
+
+  <p>
+    For research, collaboration, citation, or media inquiries, please reach
+    out via the following channels.
+  </p>
+
+  <h2>Email</h2>
+  <p>
+    <span class="email-obfuscate" data-user="sadamuramasahiro" data-domain="moegi.waseda.jp">
+      sadamuramasahiro [at] moegi [dot] waseda [dot] jp
+    </span>
+  </p>
+  <p>I aim to reply within 3–7 days, though busy periods may occasionally delay a response.</p>
+
+  <h2>External Profiles</h2>
+  <table>
+    <thead><tr><th>Service</th><th>URL</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>researchmap</td>
+        <td><a href="https://researchmap.jp/sadamuramasahiro?lang=en" rel="me noopener" target="_blank">researchmap.jp/sadamuramasahiro</a></td>
+      </tr>
+      <tr>
+        <td>ORCID</td>
+        <td><a href="https://orcid.org/0009-0008-2248-4583" rel="me noopener" target="_blank">orcid.org/0009-0008-2248-4583</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Collaboration Inquiries</h2>
+  <p>
+    I welcome inquiries about collaborative research in legal psychology, sentencing
+    decisions, welfare-oriented support, and NLP/ML applications. To facilitate
+    consideration, please include:
+  </p>
+  <ul>
+    <li>Your affiliation and area of expertise</li>
+    <li>Outline of the research theme or proposal</li>
+    <li>Expected form of collaboration (co-authorship, data sharing, commentary, invited talk, etc.)</li>
+    <li>Anticipated timeline</li>
+  </ul>
+
+  <h2>Media and Commentary Requests</h2>
+  <p>For interviews and commentary on criminal justice, sentencing, and welfare-oriented support, my general policies are:</p>
+  <ul>
+    <li>I generally cannot comment on specific ongoing cases.</li>
+    <li>I can offer commentary based on general principles or research findings, where appropriate.</li>
+    <li>For research already presented at conferences or in published papers, I will include relevant publications and presentation materials.</li>
+  </ul>
+</BaseLayout>
+
+<script>
+  document
+    .querySelectorAll<HTMLElement>('.email-obfuscate[data-user][data-domain]')
+    .forEach((el) => {
+      const u = el.dataset.user;
+      const d = el.dataset.domain;
+      if (!u || !d) return;
+      const addr = `${u}@${d}`;
+      const a = document.createElement('a');
+      a.href = `mailto:${addr}`;
+      a.textContent = addr;
+      el.replaceWith(a);
+    });
+</script>

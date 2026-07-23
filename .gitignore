@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+src/data/papers.json
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db
