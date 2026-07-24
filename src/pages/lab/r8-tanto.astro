@@ -16,8 +16,12 @@ const datasetLd = {
   },
   license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
   temporalCoverage: '2026',
-  inLanguage: 'ja'
-  // distribution: 公開時に { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: '…' } を追記（ファイルURL未確定）。
+  inLanguage: 'ja',
+  distribution: {
+    '@type': 'DataDownload',
+    encodingFormat: 'application/json',
+    contentUrl: 'https://sadamura.jp/lab/derivation_r8.json'
+  }
 };
 ---
 
@@ -27,7 +31,7 @@ const datasetLd = {
 >
   <h1>令和8年司法試験 短答式　AI導出解答の公開検証（事前登録）</h1>
 
-  <p><strong>公開日: （公開時に確定）（公式正答の公表前）</strong></p>
+  <p><strong>公開日: 2026年7月24日（公式正答の公表前）</strong></p>
 
   <p>このページは、大規模言語モデル（LLM）を用いた多段検証パイプラインが、令和8年司法試験短答式試験（憲法・民法・刑法）の全<strong>77問113解答欄</strong>について導出した解答を、<strong>法務省による公式正答の公表（2026年8月6日見込み）より前に</strong>、確信度付きで固定・公開するものです。</p>
 
@@ -203,7 +207,7 @@ const datasetLd = {
 
   <ul>
     <li>本ページは公開後、<strong>一切編集しません</strong>（8月6日の公式正答との照合結果は、別ページとして日付付きで公開します）。</li>
-    <li>導出データ（JSON）のSHA-256: <code>（公開時に確定）</code></li>
+    <li>導出データ（<a href="/lab/derivation_r8.json">JSON</a>）のSHA-256: <code>69e025a4823ea3dcc11ca5093f7211c22380fb43fe0179dc6df2c324acb35b52</code></li>
     <li>第三者タイムスタンプ: Internet Archive（Wayback Machine）・archive.today のアーカイブ、および OpenTimestamps による存在証明を公開直後に取得し、本節に追記します（追記は公開当日のみ）。</li>
   </ul>
 
