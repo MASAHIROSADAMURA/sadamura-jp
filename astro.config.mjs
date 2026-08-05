@@ -21,7 +21,7 @@ export default defineConfig({
     defaultStrategy: 'viewport'
   },
   i18n: {
-    locales: ['ja', 'en'],
+    locales: ['ja', 'en', 'zh'],
     defaultLocale: 'ja',
     routing: {
       prefixDefaultLocale: false,
@@ -32,14 +32,14 @@ export default defineConfig({
     mdx(),
     sitemap({
       // 404 is a soft error page, never a canonical destination — keep it out
-      // of the sitemap. (services is evacuated from src/pages for the initial
-      // launch, so it drops out of the sitemap automatically.)
+      // of the sitemap.
       filter: (page) => !page.includes('/404'),
       i18n: {
         defaultLocale: 'ja',
         locales: {
           ja: 'ja-JP',
-          en: 'en'
+          en: 'en',
+          zh: 'zh-CN'
         }
       },
       changefreq: 'monthly',

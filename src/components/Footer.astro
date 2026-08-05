@@ -1,5 +1,5 @@
 ---
-import { getLangFromUrl, useTranslations } from '@i18n/index';
+import { getLangFromUrl, useTranslations, langTag } from '@i18n/index';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -7,6 +7,13 @@ const year = new Date().getUTCFullYear();
 const ccUrl = lang === 'ja'
   ? 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja'
   : 'https://creativecommons.org/licenses/by-nc-sa/4.0/';
+// `/legal` (特商法表記) is JA-only. EN and ZH both publish prices, so from
+// 2026-08-01 the footer links to it in every locale with a "(Japanese)" label —
+// previously only the JA footer carried it and EN readers had no route to the
+// statutory disclosures at all. `/about` exists in JA and EN only, so ZH readers
+// are sent to the JA page and the ZH label says so (「关于本站（日文）」).
+const aboutHref = lang === 'en' ? '/en/about' : '/about';
+const aboutHreflang = lang === 'en' ? langTag.en : langTag.ja;
 ---
 
 <footer class="site-footer" role="contentinfo">
@@ -14,8 +21,13 @@ const ccUrl = lang === 'ja'
     <span>&copy; {year} Masahiro Sadamura</span>
     <span>
       <a href={ccUrl} rel="license noopener" target="_blank">CC BY-NC-SA 4.0</a>
-      &middot; <a href="/rss.xml">RSS</a>
-      &middot; <a href={lang === 'ja' ? '/about' : '/en/about'}>{t('footer.about')}</a>
+      {/* The feed is Japanese-only, so the visible link follows the head's
+          `alternate` and appears on JA pages only (2026-08-01). */}
+      {lang === 'ja' && (
+        <Fragment> &middot; <a href="/rss.xml">RSS</a></Fragment>
+      )}
+      &middot; <a href={aboutHref} hreflang={aboutHreflang}>{t('footer.about')}</a>
+      &middot; <a href="/legal" hreflang={langTag.ja}>{t('footer.legal')}</a>
     </span>
   </div>
 </footer>

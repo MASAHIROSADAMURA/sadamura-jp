@@ -1,0 +1,257 @@
+---
+// 記事 2: 研究計画書の書き方。典拠に関する注意点は以下のとおり。
+//   - 出所を特定できない転引数値（代写機構の文書テンプレート重合率など）は
+//     書かない。
+//   - JASSO の引用は途中で切らない。「由于对方只能通过书面来判断」の後に原典が
+//     続けて述べる「所以需要通过多次交流来表达自己的强烈愿望」まで引き、当方の
+//     助言との差が読者に見えるようにする。
+//   - 央視網／国家安全部通報は、記事3と同じ扱い——中国官方媒体の公開報道として
+//     言及するにとどめ、機関名・政治的文脈を当方の主張の裏づけに転用しない。
+//   - JASSO の 2 文から一般則を導かない。当方の観察として書く。
+//   - J-STAGE の規模は公式記載（4,000誌以上・9割以上無料）による。論文数は
+//     公式統計が公表されていないため書かない。
+//   - 「审稿人」（査読者）とは名乗らない。profile に査読歴の記載がない。
+//   - 日本語由来の術語（図書館送信・典藏・紀要・相互貸借・志望理由書）は
+//     中国語表現に置き換え、日本語原語を括注する。
+// title は記事タイトルに本サイト共通のブランド接尾辞を付したもの。
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { articleJsonLd, guideArticle, GUIDE_DATE } from '@data/zh-guide';
+
+const article = guideArticle('research-proposal-guide');
+const siteOrigin = Astro.site?.origin ?? 'https://sadamura.jp';
+const pageUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+const articleLd = articleJsonLd(article, siteOrigin, pageUrl);
+---
+
+<BaseLayout
+  title={article.title}
+  description={article.description}
+  keywords={article.keywords}
+  lastUpdated={GUIDE_DATE}
+  breadcrumbLabel={article.headline}
+>
+  <h1>研究计划书怎么写：日本教授真正在看的是什么</h1>
+
+  <p>去日本读研，最先卡住人的往往不是语言成绩，而是研究计划书。</p>
+
+  <p>网上流传着大量“研究计划书模板”。把模板填满，字数够了，格式也对，却仍然收不到教授的回信——这是最常见的情形。原因不在格式，而在于：<strong>模板能复制的部分，恰恰是教授不看的部分。</strong></p>
+
+  <p>本文不提供模板，只讲过程：教授读一份计划书时在判断什么，以及动笔前需要完成哪些工作。制度性内容依据日本学生支援机构（JASSO）的官方指南，其余为笔者作为研究者的实务观察。（本文中的引号引文，凡标注JASSO者均为其官方简体中文译本原文，下同。）</p>
+
+  <hr />
+
+  <h2>一、为什么这一份文件决定了结果</h2>
+
+  <p>JASSO的官方指南写得很清楚：<strong>几乎所有的大学院在入学时都要求提交研究计划书</strong>；而“导师是对学生的履修计划及研究给予指导的教师。原则上需要自己寻找。有些学校需要在申请前找好导师，并获得其接收的内诺。”</p>
+
+  <p>结合笔者的实务观察，这意味着：最终的合否虽由研究科的教员会议决定，但实际推动流程的，往往是<strong>一位具体的教授判断自己能否在未来两到五年里指导你</strong>。他要评估的不是“这个学生优秀吗”，而是“这个学生带着的这个题目，我能带吗，值得带吗，两年内做得完吗”。</p>
+
+  <p>所以研究计划书不是“申请材料的一项”，而是<strong>这场判断的全部证据</strong>。成绩单证明你过去合格，语言成绩证明你能听课，只有计划书能证明你具备做研究的能力。JASSO列出的出愿材料共八项，其中真正需要你从零创造的，只有这一项。</p>
+
+  <h3>先厘清一个词：日语的“研究生”不是中文的研究生</h3>
+
+  <p>中文的“研究生”＝日语的「大学院生」（正式生，攻读学位）。日语的「研究生」则是<strong>非正规生</strong>：JASSO定义的三类中，与出愿最相关的是“作为升入研究生院（大学院）正式课程的预备期而在籍者”，以旁听与研究准备为主，不授予学位，审查“以资料审查为主，有时候会需要进行面试”。</p>
+
+  <p>不少中文说明把这两个词混着用，于是有了“先进研究生再说”的话术。请记住：<strong>研究生阶段只是把你放到教授身边，正式课程仍然要考。</strong> 无论走哪条路，你交上去的都是同一份研究计划书。</p>
+
+  <hr />
+
+  <h2>二、教授实际在看的四件事</h2>
+
+  <p>JASSO官方指南列出的审查要点有五项：①对研究的热情 ②课题发现能力 ③事物分析能力 ④逻辑思考能力 ⑤专业知识。</p>
+
+  <p>这是官方语言。落到教授真实的阅读动作上，它们收敛为四个判断，而且有先后顺序。</p>
+
+  <p><strong>1. 问题是否明确，并且可以被回答。</strong><br />
+    教授读完第一页，会试着把你的研究浓缩成一句疑问句。如果他做不到，或者浓缩出来的是“少子化怎么办”这种无法用一篇论文回答的东西，阅读基本就停在这里。可回答意味着：有对象、有范围、有能判定“回答成功了没有”的标准。</p>
+
+  <p><strong>2. 先行研究的把握——这一项最重要。</strong><br />
+    这是四项里唯一无法伪装的。热情可以写、逻辑可以修、方法可以抄，唯独“这个领域已经讨论到哪一步了”需要真的读过。它还一次性证明了官方要点中的三项：知道空白在哪（课题发现能力）、说得清各家的差异（分析能力）、用得对领域的术语（专业知识）。</p>
+
+  <p>更现实的一点是：<strong>教授验证它只需要三十秒。</strong> 他会看你的参考文献里有没有这个子领域“所有人都知道的那三篇”。没有，他不会认为你眼光独到，只会认为你没读过；有，但你的概括与原文不符，情况更糟。</p>
+
+  <p><strong>3. 方法是否做得完。</strong><br />
+    教授会在心里跑一遍你的时间表：数据拿得到吗，样本从哪来，需要伦理审查吗，两年内收得完吗。写“采用问卷调查与访谈法”而不写对象、规模、分析手段，等于什么都没写。</p>
+
+  <p><strong>4. 与这个研究室是否匹配。</strong><br />
+    题目再好，若这位教授不做这个方向，他也只能把你推荐给别人——而这封邮件通常没有下文。匹配不是“同一个学科”，而是“同一个问题群、相近的方法论”。</p>
+
+  <hr />
+
+  <h2>三、结构：六段，以及字数怎么分</h2>
+
+  <p>JASSO给出的内容框架是：①研究目的 ②背景 ③意义 ④方法 ⑤参考文献等，并注明“格式与字数因学校而异。一般为2,000字左右。”（指日语字数，最终以各校当年度募集要项为准）。</p>
+
+  <p>在这个框架之上，实务上更好用的是下面六段。右侧给出的是各节的字数<strong>幅度</strong>（以2,000字规模为例，取下限时合计约1,600字，取上限会超出2,000字，请按各校要求取舍）——<strong>这张表本身就是本文的论点：先行研究应当是最长的一节。</strong></p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>段落</th><th>这一节必须回答的问题</th><th>参考字数</th><th>最常见的毛病</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1 问题意识</td><td>什么现象让你觉得“这里不对劲”</td><td>200–300</td><td>写成个人经历与感想</td></tr>
+        <tr><td>2 先行研究</td><td>这个问题已被讨论到哪一步，剩下什么没解决</td><td>600–800</td><td>罗列文献而不比较</td></tr>
+        <tr><td>3 研究问题</td><td>你要回答的那一句疑问句</td><td>100–150</td><td>一次提五个问题</td></tr>
+        <tr><td>4 方法</td><td>用什么数据、怎么分析、为什么这样能回答问题</td><td>400–500</td><td>只写方法名称</td></tr>
+        <tr><td>5 意义</td><td>回答出来之后，学界与社会各得到什么</td><td>150–200</td><td>夸大到“填补空白”</td></tr>
+        <tr><td>6 计划</td><td>两年（或三年）分别做什么</td><td>150–200</td><td>没有可检验的里程碑</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>几点写法上的提醒：</p>
+
+  <p><strong>第2节是全文的重心。</strong> 正确的写法不是“A研究了X，B研究了Y”，而是把已有研究<strong>分组</strong>，指出各组的前提差异，再说明为什么在你关心的那一点上，它们都没有给出回答。自检办法：逐句拆开，做“比较”与“评价”的句子是否至少占一半。</p>
+
+  <p><strong>第3节要能被第2节推出来。</strong> 读者读完第2节若猜不到你的研究问题，说明两节之间断了。</p>
+
+  <p><strong>第4节要写出你做不到什么。</strong> 主动写明限界（例如样本只覆盖一个地区、无法推断因果）不会减分，反而是研究训练的证据——知道自己的方法能得出什么结论，本身就是专业能力。</p>
+
+  <p><strong>关于“入学后能不能改”：</strong> 可以改，多数人也确实会改。审查看的是你<strong>能否设计一个可执行的研究</strong>，而不是把你锁死在这个题目上。明白这一点，就不必为了显得宏大而写一个做不完的题目。</p>
+
+  <hr />
+
+  <h2>四、日本特有的作法</h2>
+
+  <h3>为什么先行研究必须包含日语文献</h3>
+
+  <p>这是中文申请者最普遍也最致命的疏漏：整份计划书的参考文献全是英文，或者全是中文。理由有四个：</p>
+
+  <ol>
+    <li><strong>审查者身处日语学术共同体</strong>，是在日语的讨论脉络里评价你的题目。</li>
+    <li><strong>大量日本的研究不在英文数据库里。</strong> 各大学的学报（日文称“<span lang="ja">紀要</span>”）、学会的日语期刊、论文集里的分担执笔章节，常常正是某个具体问题上最扎实的积累。</li>
+    <li><strong>你的研究要在日本做。</strong> 制度、统计、判例、可获得的数据都是日本的，绕开日语文献就说不清题目在日本语境中的位置。</li>
+    <li><strong>它是一个能力信号</strong>：证明入学后你读得了研究室的必读文献，跟得上<span lang="ja">ゼミ</span>（讨论课）的进度。</li>
+  </ol>
+
+  <p>一个可操作的标准：<strong>精读3到5篇日语核心文献，并且能说出它们彼此的差别。</strong> 数量不重要，能不能比较才重要。</p>
+
+  <h3>检索工具的分工</h3>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>工具</th><th>网址</th><th>什么时候用</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CiNii Research（国立情报学研究所）</td><td>cir.nii.ac.jp</td><td>起点。横跨论文、图书、博士论文与研究项目，用来把这个领域的<strong>日语关键词</strong>固定下来</td></tr>
+        <tr><td>J-STAGE（科学技术振兴机构）</td><td>www.jstage.jst.go.jp</td><td>精读全文。据J-STAGE官方介绍，收录来自2,400余家发行机构的4,000种以上期刊与会议录，其中九成以上的文章可免费阅览（2026年7月查阅）</td></tr>
+        <tr><td>国立国会图书馆检索／数字馆藏</td><td>ndlsearch.ndl.go.jp／dl.ndl.go.jp</td><td>找纸质与未上网的资料（旧刊、单行本、大学学报）。已在网络公开（“无需登录即可阅览”）的数字化资料，任何人都可在家阅览；<strong>但大量近现代资料属于“送信服务”范围，面向个人的送信服务仅限日本国内居住者</strong>（详见〈用AI写研究计划书会被看穿吗〉一文）</td></tr>
+        <tr><td>KAKEN 科研费项目数据库</td><td>kaken.nii.ac.jp</td><td>查教授<strong>现在拿着什么项目</strong>——比已发表论文更接近他未来几年的方向</td></tr>
+        <tr><td>researchmap（科学技术振兴机构）</td><td>researchmap.jp</td><td>查教授的最新业绩、学会发表与所属</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>JASSO的官方指南本身，也正是把CiNii与researchmap列为论文检索与研究者检索的入口。</p>
+
+  <p>三个检索技巧：</p>
+
+  <ul>
+    <li><strong>日语关键词会摇摆。</strong> 汉字、片假名、同义术语常常并存，只用一个词检索必然漏掉半个领域。先试三到五种说法，看哪个命中最集中。</li>
+    <li><strong>先找综述。</strong> 标题里带「展望」「動向」「<span lang="ja">研究の到達点</span>」的文章，等于别人已替你画好了地图。</li>
+    <li><strong>顺着引用链往上走。</strong> 找到一篇最贴近的论文，把它的参考文献逐条查一遍，比继续换关键词有效率。</li>
+  </ul>
+
+  <h3>先读那位教授的研究，再动笔</h3>
+
+  <p>这一节与“教授内诺”直接相关。顺序不能颠倒：<strong>先读他的论文与在研项目，再写计划书，最后才写邮件。</strong> 反过来做，写出的就是那种任何教授都收得到的信——而同一领域的教授彼此认识，模板化的邮件是认得出来的。</p>
+
+  <p>JASSO对联系方式的建议是“具体写清楚迄今为止的研究成果和今后的研究计划以及选择该导师的理由”，并提醒“由于对方只能通过书面来判断，<strong>所以需要通过多次交流来表达自己的强烈愿望</strong>”。前半句值得反复读：<strong>你在教授眼里，暂时只是一份文件。</strong>至于后半句，JASSO鼓励的是<strong>多次交流</strong>；笔者的实务观察是，这里的关键在于“每一次交流都要带来新的内容”，而不是就同一封邮件反复催问——两者并不矛盾，但下面的作法与JASSO的原文侧重不同，请读者自行判断。</p>
+
+  <ul>
+    <li>邮件要短，材料要具体：正文控制在一屏之内，把研究计划书、成绩单、履历作为附件。</li>
+    <li>“选择该导师的理由”必须落到具体的论文或项目上。写“贵研究室学术氛围浓厚”等于没写。</li>
+    <li>不回信是常态。等两周再礼貌确认一次；再次联系时最好带上新的内容（例如读了他新发表的论文之后的具体问题），而不是就同一件事反复催问。</li>
+    <li>JASSO原文另建议“最好能附上毕业大学的导师等推荐信”——若目标研究科不禁止，这一项值得准备。</li>
+    <li>事前联系的要求因校而异：有些研究科要求出愿前取得内诺，有些明确表示不必事前联系。<strong>招生简章（日文称“<span lang="ja">募集要項</span>”）怎么写就怎么做。</strong></li>
+    <li><strong>内诺不等于录取，也不能被购买。</strong> 内诺来自教授对你研究内容的判断，因此第三方承诺的“保证内诺”“保录”“保过”，与这套制度在结构上就是矛盾的。遇到这类说法，第一反应应当是警惕。</li>
+  </ul>
+
+  <hr />
+
+  <h2>五、六种常见失败</h2>
+
+  <p><strong>1. 套用模板（以及请人代写）。</strong><br />
+    模板化的文件在教授手里很显眼：问题意识与后面的方法接不上，因为那两段本来就来自不同的人。风险还不止于此——申请文书被中介虚假“包装”甚至擅自篡改的问题，<strong>已被中国官方媒体公开报道</strong>（央视网，2024年8月9日）。这里要强调的不是某一类具体的虚假内容，而是<strong>材料一旦脱离本人之手，本人就失去了对署名文件的控制</strong>这一结构本身。</p>
+
+  <p>无论中间经过多少人的手，<strong>署名的是你</strong>。面试时教授会问“你为什么选这个方法”“这篇文献你怎么理解”，代写的部分在那三十秒里会全部暴露。</p>
+
+  <p><strong>2. 题目太大。</strong><br />
+    “日本少子化对策研究”不是一个题目，而是一个学科。缩小有四个刻度：<strong>对象</strong>（哪一类人／哪一个制度）、<strong>时期</strong>（哪几年）、<strong>数据</strong>（用什么材料能看见它）、<strong>比较轴</strong>（和什么对照才有意义）。每加一个刻度，题目就更接近可执行。</p>
+
+  <p><strong>3. 参考文献只有英文或只有中文。</strong> 理由见上节。</p>
+
+  <p><strong>4. 引用的文献并不存在。</strong><br />
+    生成式AI普及之后，这类错误急剧增加：作者、刊名、卷号、页码看起来都很像，但那篇文章从未发表过。请把每一条引用在CiNii Research、J-STAGE或国立国会图书馆检索中核对，确认作者、刊名、卷期、页码、年份五项全部对得上。日本的学术圈很小，教授在自己领域里一眼就看得出不对。</p>
+
+  <p><strong>5. 把计划书写成了“个人陈述”（日文称“<span lang="ja">志望理由書</span>”）。</strong><br />
+    自我介绍、家庭背景、对日本文化的热爱，都不属于这份文件。热情确实是审查要点之一，但它体现在你对问题的了解程度上，不在形容词里。</p>
+
+  <p><strong>6. 没读招生简章。</strong><br />
+    字数上限、格式、提交语言、是否需附毕业论文提纲、是否要求事前联系，这些每校每年都可能不同。JASSO在列出出愿材料后也特别注明：提交资料因校而异，详情请直接向报考院校确认。</p>
+
+  <hr />
+
+  <h2>六、定稿前的检查清单</h2>
+
+  <ul class="checklist">
+    <li>我能用一句疑问句说出我的研究问题吗？</li>
+    <li>这句疑问句，能从我写的先行研究部分推导出来吗？</li>
+    <li>我精读了至少3篇日语核心文献，并且能说出它们的差别吗？</li>
+    <li>这个子领域“所有人都知道的那几篇”，我的文献表里有吗？</li>
+    <li>先行研究一节里，做比较与评价的句子多于单纯转述的句子吗？</li>
+    <li>数据从哪来、规模多大、用什么方法分析，我都写清楚了吗？</li>
+    <li>我写出了这个方法做不到什么吗？</li>
+    <li>时间表里有可检验的里程碑，而不只是“第一年读文献”吗？</li>
+    <li>每一条引用的作者、刊名、卷期、页码、年份，我都核对过吗？</li>
+    <li>我读过那位教授近三～五年的论文与在研项目吗？术语和他一致吗？</li>
+    <li>字数、格式、提交方式，与今年的招生简章一致吗？</li>
+    <li>通篇有没有一句话，换成别的学校、别的教授也照样成立？（有就删掉）</li>
+  </ul>
+
+  <p>最后一条最有用。<strong>模板的本质就是“换个人也成立”。</strong> 把这样的句子逐句删掉，剩下的才是只有你能写的那份计划书。</p>
+
+  <hr />
+
+  <h2>结语</h2>
+
+  <p>写研究计划书的过程，就是提前把研究做一遍：定义问题、读透别人做过什么、设计一个自己做得完的方案。这个过程无法外包，因为要在未来两年里做这项研究的人是你。</p>
+
+  <p><strong>关于作者</strong>：贞村真宏（东京大学法务博士〔专业学位〕・同行评审论文21篇）。</p>
+
+  <p>如果你希望由研究者本人一对一地陪你走完这个过程，而不是拿到一份模板，可以在<a href="/zh/services#service-admissions-coaching">服务与价格</a>页面查看具体内容与费用；如需联系，请见 <a href="/zh/contact">联系方式</a>。</p>
+
+  <hr />
+
+  <p><em>本文为一般性信息，不构成任何个案建议。</em></p>
+
+  <p><em>本文基于公开第一手资料整理，信息截至2026年7月。各校的报考（出愿）要求以当年度招生简章为准。</em></p>
+
+  <h2>参考资料</h2>
+
+  <ol>
+    <li>日本学生支援机构（JASSO）《Student Guide to Japan 2025-2026》简体中文版（研究计划书的内容与审查要点、导师与内诺、“研究生”的定义、出愿材料清单）<br /><a href="https://www.studyinjapan.go.jp/ja/_mt/2025/12/sgtj_2025_simplified_chinese.pdf" target="_blank" rel="noopener external">https://www.studyinjapan.go.jp/ja/_mt/2025/12/sgtj_2025_simplified_chinese.pdf</a><br />（下载页面：<a href="https://www.studyinjapan.go.jp/ja/planning/brochures/" target="_blank" rel="noopener external">https://www.studyinjapan.go.jp/ja/planning/brochures/</a> ）</li>
+    <li>CiNii Research（国立情报学研究所）　<a href="https://cir.nii.ac.jp/" target="_blank" rel="noopener external">https://cir.nii.ac.jp/</a></li>
+    <li>J-STAGE（科学技术振兴机构）　<a href="https://www.jstage.jst.go.jp/" target="_blank" rel="noopener external">https://www.jstage.jst.go.jp/</a></li>
+    <li>国立国会图书馆检索　<a href="https://ndlsearch.ndl.go.jp/" target="_blank" rel="noopener external">https://ndlsearch.ndl.go.jp/</a></li>
+    <li>国立国会图书馆数字馆藏（NDL Digital Collections）　<a href="https://dl.ndl.go.jp/" target="_blank" rel="noopener external">https://dl.ndl.go.jp/</a></li>
+    <li>国立国会图书馆「面向图书馆的数字化资料传送服务」说明页（其中载明：已在网络公开的数字化资料，任何人都可以从家中的电脑等利用）　<a href="https://www.ndl.go.jp/use/digital_transmission" target="_blank" rel="noopener external">https://www.ndl.go.jp/use/digital_transmission</a></li>
+    <li>KAKEN 科研费项目数据库（国立情报学研究所）　<a href="https://kaken.nii.ac.jp/" target="_blank" rel="noopener external">https://kaken.nii.ac.jp/</a></li>
+    <li>researchmap（科学技术振兴机构）　<a href="https://researchmap.jp/" target="_blank" rel="noopener external">https://researchmap.jp/</a></li>
+    <li>央视网（2024年8月9日）留学中介篡改申请材料问题的报道（媒体报道）　<a href="https://news.cctv.cn/2024/08/09/ARTIUMRTkVxElhHmoYHYKlre240809.shtml" target="_blank" rel="noopener external">https://news.cctv.cn/2024/08/09/ARTIUMRTkVxElhHmoYHYKlre240809.shtml</a></li>
+    <li>J-STAGE「<span lang="ja">J-STAGEについて</span>」（收录规模的官方记载）　<a href="https://www.jstage.jst.go.jp/static/pages/JstageOverview/-char/ja" target="_blank" rel="noopener external">https://www.jstage.jst.go.jp/static/pages/JstageOverview/-char/ja</a></li>
+    <li>国立国会図書館「<span lang="ja">個人向けデジタル化資料送信サービス</span>」（利用者须为日本国内居住者）　<a href="https://www.ndl.go.jp/use/digital_transmission_individuals" target="_blank" rel="noopener external">https://www.ndl.go.jp/use/digital_transmission_individuals</a></li>
+  </ol>
+
+  <h2>相关阅读</h2>
+
+  <ul>
+    <li><a href="/zh/guide/ai-research-proposal">用AI写研究计划书会被看穿吗——AI幻觉、日文文献与“原典核实”的方法</a></li>
+    <li><a href="/zh/guide/japan-graduate-admissions-routes">日本读研全流程：研究生、修士直考、SGU三条路线</a></li>
+    <li><a href="/zh/guide">全部指南 → 留学指南</a></li>
+  </ul>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(articleLd)} />
+</BaseLayout>

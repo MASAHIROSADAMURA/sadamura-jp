@@ -1,0 +1,60 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+// zh 版の略歴ページ。学歴には年号を書かない（ja 版と揃える）。
+// 「所属」節は、所属を学歴欄から外したうえで独立させたもの。ja 版 profile の
+// 「大阪大学大学院人間科学研究科」を簡体字へ忠実に変換しただけで、年号・課程名
+// （博士後期課程 / 在读 等）は ja 版に無いため足さない。
+// 査読論文数は papers.bib の実数（21）に一致させる。
+// 中国語読者に読めない日本語語彙（修了・合格・奖学生・特待・若手・赏・注記・
+// 人间科学 等）は中国語表現に置き換え、日本語原語を括注する。学校名は
+// 「拉萨尔（La Salle）」表記に統一し、併記は初出のみ。
+const title = '简历：东京大学法务博士・同行评审论文21篇 | 贞村真宏';
+const description =
+  '贞村真宏简历：拉萨尔（La Salle）高中毕业、早稻田大学政治经济学部（全额学费减免）毕业、东京大学法科大学院毕业（法务博士・J.D.）、日本六所顶尖法科大学院全部获得录取。同行评审论文21篇，研究方向为法与心理学・量刑判断・可解释AI。';
+const keywords = '贞村真宏,东京大学 法务博士,法与心理学,研究者,简历';
+---
+
+<BaseLayout title={title} description={description} keywords={keywords}>
+  <h1>简历</h1>
+
+  <h2>在籍机构</h2>
+  <p>大阪大学 研究生院 人类科学研究科（日文原名：<span lang="ja">大阪大学大学院人間科学研究科</span>）</p>
+
+  <h2>学历</h2>
+  <ul>
+    <li>鹿儿岛 拉萨尔（La Salle）高中（<span lang="ja">ラ・サール高等学校</span>）毕业</li>
+    <li>早稻田大学 政治经济学部 毕业（<strong>全额学费减免</strong>）</li>
+    <li>东京大学法科大学院 毕业（日文称“<span lang="ja">修了</span>”）＝<strong>法务博士（专业学位・J.D.）</strong></li>
+    <li>东京大学 研究生院 医学系研究科 文部科学省课题解决型高度医疗人才养成计划（精神相关领域）结业</li>
+  </ul>
+
+  <h2>录取实绩</h2>
+  <p>
+    日本六所顶尖法科大学院<strong>全部获得录取</strong>——东京大学、京都大学、神户大学、大阪大学、早稻田大学（<strong>未修者课程与既修者课程双双录取</strong>，并获奖学金生资格）、庆应义塾大学（<strong>特别奖学金录取</strong>）
+  </p>
+
+  <h2>研究业绩</h2>
+  <p>
+    同行评审论文21篇（含国际期刊）、<span lang="ja">法と心理学会</span>（日本法与心理学会）<strong>青年研究者奖励奖</strong> 等
+  </p>
+  <p>
+    论文列表与经历可在第三方数据库核对：<a
+      href="https://researchmap.jp/sadamuramasahiro"
+      rel="me noopener"
+      target="_blank">researchmap</a
+    >（日本国立研究开发法人科学技术振兴机构运营的研究者数据库）／<a
+      href="https://orcid.org/0009-0008-2248-4583"
+      rel="me noopener"
+      target="_blank">ORCID 0009-0008-2248-4583</a
+    >（研究者国际标识符）。
+  </p>
+
+  <h2>研究领域</h2>
+  <p>法与心理学、量刑判断、可解释AI（XAI）、自然语言处理</p>
+
+  <h2>说明</h2>
+  <p>注：本人不是律师，本站也不提供法律服务。日本的<span lang="ja">弁護士</span>（律师）资格与“法务博士”（专业学位）是不同的制度。</p>
+
+  <p>更多服务内容与收费见 <a href="/zh/services">服务与价格</a>；如需联系，请见 <a href="/zh/contact">联系方式</a>；个人信息的处理见 <a href="/zh/privacy">隐私声明</a>。</p>
+</BaseLayout>

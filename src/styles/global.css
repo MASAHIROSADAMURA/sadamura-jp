@@ -55,6 +55,21 @@
   }
 }
 
+/* ---------- 簡体字（zh-CN）フォント ---------------------------------------
+ * 日本語フォント（UD デジタル教科書体 / BIZ UDPGothic）は簡体字の字形を持たない
+ * ため、zh ページのみシステム同梱の簡体字フォントを先頭に置く。Web フォントは
+ * 追加しない（読み込みは BIZ UDPGothic の 1 本のままで、性能水準を維持）。
+ * `:lang(zh)` は `lang="zh-CN"` にも前方一致でマッチする。
+ * ------------------------------------------------------------------------ */
+:root:lang(zh) {
+  --font-body:
+    "Noto Sans SC", "PingFang SC", "Microsoft YaHei",
+    "Hiragino Sans GB", "Source Han Sans SC", sans-serif;
+  --font-heading:
+    "Noto Sans SC", "PingFang SC", "Microsoft YaHei",
+    "Hiragino Sans GB", "Source Han Sans SC", sans-serif;
+}
+
 /* ---------- Reset --------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
@@ -346,6 +361,47 @@ th {
   font-size: 0.75rem;
 }
 .pub-entry strong.self { background: var(--color-faint); padding: 0 0.15em; }
+
+/* ---------- Entry cards (used by zh/index.astro) ------------------------- */
+/* 藍の枠で区切った入口カード。既存トークンのみで構成し、新しい色は導入しない。 */
+.entry-cards {
+  list-style: none;
+  margin: 1.5em 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+.entry-cards li {
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-accent);
+  padding: 1rem;
+}
+.entry-cards h2 {
+  font-size: 1.05rem;
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin: 0 0 0.5em;
+}
+.entry-cards p { margin: 0 0 0.75em; font-size: 0.95rem; }
+.entry-cards p:last-child { margin-bottom: 0; }
+
+/* ---------- Guide articles (/zh/guide/*) --------------------------------- */
+/* 列数の多い表が狭い画面でレイアウトを壊さないよう、横スクロールに逃がす。 */
+.table-scroll { overflow-x: auto; margin: 1.5em 0; }
+.table-scroll table { margin: 0; }
+
+/* Markdown のチェックリスト（- [ ]）。操作できない checkbox を置く代わりに、
+   □ を擬似要素で描く（テキストは本文の逐語のまま）。 */
+.checklist { list-style: none; margin: 0 0 1em; padding: 0; }
+.checklist li { position: relative; padding-left: 1.6em; margin-bottom: 0.4em; }
+.checklist li::before {
+  content: "□";
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+}
 
 /* ---------- Lab badges (r8-tanto verification chips) --------------------- */
 /* 藍の枠線チップ: 確信度「B」・注記「◎注視」「訂正済」を控えめに縁取る。 */

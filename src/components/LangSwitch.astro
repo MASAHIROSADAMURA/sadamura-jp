@@ -1,11 +1,12 @@
 ---
-import { getLangFromUrl, switchLangPath, type Lang } from '@i18n/index';
+import { getLangFromUrl, switchLangPath, langTag, type Lang } from '@i18n/index';
 
 const lang = getLangFromUrl(Astro.url);
 const pathname = Astro.url.pathname;
 const langs: { code: Lang; label: string }[] = [
   { code: 'ja', label: 'JA' },
-  { code: 'en', label: 'EN' }
+  { code: 'en', label: 'EN' },
+  { code: 'zh', label: 'ZH' }
 ];
 ---
 
@@ -13,7 +14,7 @@ const langs: { code: Lang; label: string }[] = [
   {langs.map((l) => (
     <a
       href={switchLangPath(pathname, l.code)}
-      hreflang={l.code}
+      hreflang={langTag[l.code]}
       aria-current={l.code === lang ? 'true' : undefined}
       rel={l.code === lang ? undefined : 'alternate'}
     >{l.label}</a>

@@ -3,18 +3,14 @@
 Astro implementation of Masahiro Sadamura's personal research website.
 Designed to honor [Tomoya Mukai's site](https://mukait.fool.jp/) (4 pillars +
 top, black/white typography) while quietly strengthening responsive layout,
-SEO, accessibility, i18n (ja/en), and CI.
+SEO, accessibility, i18n (ja / en / zh-CN), and CI.
 
-- **Project root in vault**: `60_Website/`
-- **This implementation**: `60_Website/03_実装/`
-- **Build source (papers)**: `03_実装/data/papers.bib` がビルド正本。`60_Website/04_コンテンツ原稿/_共通/papers.bib` はその同期ミラー（入力源ではない）
-- **Design references**: `60_Website/02_設計/HP設計提案_v1_2026-04-22.md` + `v2補遺_2026-04-28.md`
-- **Memory**: `40_ClaudeCode/shared_memory/project_website_personal.md`
+- **Build source (papers)**: `data/papers.bib` がビルド正本（`npm run bib` で `src/data/papers.json` を生成）。
+- 設計資料・原稿・運用メモは公開リポジトリの外で管理している。
 
 ## Quick start
 
 ```bash
-# From 60_Website/03_実装/
 npm install
 npm run bib        # data/papers.bib → src/data/papers.json
 npm run dev        # http://localhost:4321
@@ -63,19 +59,25 @@ Node 22 LTS or newer（`package.json` の `engines.node` は `>=22`、CI も Nod
     │   ├── Footer.astro      ← CC BY-NC-SA + RSS + about
     │   ├── SEO.astro         ← OGP / Twitter / JSON-LD (Person / WebSite / Breadcrumb)
     │   └── PaperEntry.astro  ← 1 引用エントリ（フィルタ用 data-attr 込）
-    └── pages/                ← JA 7 + EN 7（各: index / profile / publications / resources / contact / about / 404）
+    ├── data/zh-guide.ts      ← /zh/guide 記事メタの正本（title/headline/description/keywords）
+    └── pages/                ← 全 29 ページ（JA / EN / ZH-CN）
         ├── index.astro       ← 日本語デフォルト
         ├── profile.astro
         ├── publications.astro    ← 3 軸フィルタ（type/year/topic）
         ├── resources.astro
         ├── contact.astro
         ├── about.astro
+        ├── services.astro    ← 有償サービス（Service JSON-LD 付き）
+        ├── legal.astro       ← 特定商取引法に基づく表記・プライバシーポリシー（JA のみ）
+        ├── lab/r8-tanto.astro
         ├── 404.astro
-        ├── rss.xml.ts        ← RSS フィード
-        └── en/               ← 上記の英語ミラー（index / profile / publications / resources / contact / about / 404）
+        ├── rss.xml.ts        ← RSS フィード（JA のみ）
+        ├── en/               ← 英語版（index / profile / publications / resources / contact / about / services / lab / 404）
+        └── zh/               ← 簡体字版（index / profile / services / contact + guide ハブ + 記事 5 本）
 ```
 
-> `services.astro` は Phase 5（試験後）に分割実装予定のため、初回公開では `src/pages/` の外に退避（ビルド・sitemap 非対象）。
+> `/legal` は JA のみ。EN / ZH のフッタからも同ページへリンクし、ZH の `/zh/services`
+> には取引条件の要点を中国語で併記している（2026-08-01 裁定）。
 
 ## How content flows
 
@@ -100,7 +102,7 @@ publications.astro / en/publications.astro       ← rendered 3-axis filter list
 当初は向井 HP（黒白 2 色・ヒラギノ優先・黒地白文字 h2）を踏襲していたが、**2026-07-23
 に独自デザインへ移行**した。移行後の規律は以下。
 
-- **Pages**: 4 柱 (profile / publications / resources / contact) + top を核に、about・404 を加えた **JA 7 ページ**（EN も同一構成）。むやみに増設しない方針は維持（services は Phase 5・試験後）
+- **Pages**: 4 柱 (profile / publications / resources / contact) + top を核に、about・404・services・legal・lab を加えた構成。JA / EN / ZH-CN の 3 言語で **計 29 ページ**。むやみに増設しない方針は維持
 - **Colors**: 白黒基調 + **アクセント 1 色＝藍 `#165e83`**（light。dark は `#7fb3d3`）。藍はリンク・見出しアクセント（h1 縦棒 / h2 下線）・現在地/選択状態・focus リング・検証ラボのチップのみ。多色化はしない
 - **Fonts**: 本文＝**UD デジタル教科書体**優先（無ければ **BIZ UDPGothic** に自動フォールバック）。見出し・ナビ・表＝**BIZ UDPGothic** のゴシック固定。Web フォントは **BIZ UDPGothic 400/700 のみ Google Fonts から読込**（`display=swap` + preconnect。旧「Web フォント読込ゼロ」方針を変更）
 - **Headings**: h1 左寄せ + 藍の左縦棒（中央太下線は廃止）/ h2 藍の下線（黒地白文字は廃止）/ h3 太字のみ（左縦棒は廃止）。※ いずれも旧・向井シグネチャの廃止
@@ -128,8 +130,6 @@ publications.astro / en/publications.astro       ← rendered 3-axis filter list
    - `AAAA @ → 2606:50c0:8000::153` (and 8001 / 8002 / 8003)
    - `CNAME www → <username>.github.io`
 5. GitHub Pages の "Enforce HTTPS" を ON に
-
-> 詳細手順は `60_Website/Day1-5_セットアップ実行ガイド.md` を参照。
 
 ## Maintenance
 

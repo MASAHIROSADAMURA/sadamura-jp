@@ -1,11 +1,14 @@
 ---
 import Nav from '@components/Nav.astro';
 import LangSwitch from '@components/LangSwitch.astro';
-import { getLangFromUrl, useTranslations } from '@i18n/index';
+import { getLangFromUrl, useTranslations, localizedPath } from '@i18n/index';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const brandHref = lang === 'ja' ? '/' : '/en/';
+// ブランド（サイト名）リンクは常に「その言語のトップ」へ。zh を `/en/` に
+// 送っていた不具合を 2026-08-01 に修正（中国語読者がサイト名を押すと英語版
+// トップに飛んでいた）。
+const brandHref = localizedPath(lang, '/');
 ---
 
 <header class="site-header" role="banner">

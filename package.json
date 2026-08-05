@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "description": "Personal academic website for Masahiro Sadamura (貞村真宏). Built with Astro.",
-  "author": "Masahiro Sadamura <contact@sadamura.jp>",
+  "author": "Masahiro Sadamura",
   "license": "MIT",
   "homepage": "https://sadamura.jp/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/OWNER/sadamura-jp.git"
+    "url": "https://github.com/MASAHIROSADAMURA/sadamura-jp.git"
   },
   "scripts": {
     "dev": "npm run bib && astro dev",

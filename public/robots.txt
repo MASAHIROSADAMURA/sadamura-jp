@@ -4,26 +4,73 @@
 User-agent: *
 Allow: /
 
-# AI-training bots — opt out by default. Adjust as policy evolves.
+# AI-training bots — business pages only (/services, /en/services, /zh/,
+# /legal). Everything else stays opted out. Approved 2026-07-31.
+#
+# Note on the granularity (recorded 2026-08-01, revised 2026-08-04): `Allow:
+# /zh/` is a prefix, so it also opens /zh/contact and every /zh/guide article,
+# whereas the JA/EN counterparts (/contact, /profile) stay disallowed. That
+# asymmetry is intentional — the Chinese pages are the ones meant to be
+# quotable by assistants — but it is worth re-checking whenever a new /zh/
+# route is added. /zh/profile is excluded again: it is the most detailed
+# biography on the site (secondary school, fee waivers, admission results) and
+# has no counterpart in JA or EN, so it should not be the version that ends up
+# in a training corpus. `Allow: /services` is likewise a prefix and would also
+# cover /services-*.
 User-agent: GPTBot
+Allow: /services
+Allow: /en/services
+Allow: /zh/
+Disallow: /zh/profile
+Allow: /legal
 Disallow: /
 
 User-agent: ChatGPT-User
+Allow: /services
+Allow: /en/services
+Allow: /zh/
+Disallow: /zh/profile
+Allow: /legal
 Disallow: /
 
 User-agent: ClaudeBot
+Allow: /services
+Allow: /en/services
+Allow: /zh/
+Disallow: /zh/profile
+Allow: /legal
 Disallow: /
 
 User-agent: anthropic-ai
+Allow: /services
+Allow: /en/services
+Allow: /zh/
+Disallow: /zh/profile
+Allow: /legal
 Disallow: /
 
 User-agent: CCBot
+Allow: /services
+Allow: /en/services
+Allow: /zh/
+Disallow: /zh/profile
+Allow: /legal
 Disallow: /
 
 User-agent: PerplexityBot
+Allow: /services
+Allow: /en/services
+Allow: /zh/
+Disallow: /zh/profile
+Allow: /legal
 Disallow: /
 
 User-agent: Google-Extended
+Allow: /services
+Allow: /en/services
+Allow: /zh/
+Disallow: /zh/profile
+Allow: /legal
 Disallow: /
 
 Sitemap: https://sadamura.jp/sitemap-index.xml

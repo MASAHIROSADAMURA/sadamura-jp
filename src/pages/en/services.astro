@@ -1,0 +1,275 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+// en 版のサービス一覧。価格・注記は ja / zh 版と同じ 4 サービスを指す。
+// title はサイト慣例の brand サフィックス付き。
+//
+// 節構成は ja / zh と同じ並び（"AI Citation Audit" → リサーチ → 大学院指導 →
+// 寄宿校相談 → 学術支援）で、寄宿校相談は独立の見出しを持ち、卒業生／非卒業生の
+// 立場を分けて書く。§1 には ja と同じ弁護士法 72 条の留保を置く。
+//
+// Notes の管轄・準拠法条項は "exclusive jurisdiction" と書かない: 民訴法 3 条の
+// 7 第 5 項は、将来の消費者契約紛争を対象とする管轄合意の効力を、専属・付加を
+// 問わず 2 場合（契約締結時の消費者の住所地国の裁判所を定める合意／消費者による
+// 援用・提訴）に限定する。条項を成り立たせているのは「法令上認められる範囲に
+// おいて」の留保である。準拠法にも消費者の常居所地法の強行規定に関する留保を
+// 置く。同じ条項が /services・/legal にもあり、3 箇所は同文に保つ。
+//
+// §1 の商品 "AI Citation Audit" は「原文提示」型として記述する（実在・書誌一致の
+// 確認＋該当箇所の原文の提示＋所在情報まで）。業務範囲の垣根・受付状況は ja と
+// 同水準で本文に置く。
+const title = 'Research & Academic Services | Masahiro Sadamura';
+const description =
+  'Japan research you can verify: citation audits of AI output, research memos built from primary sources at the National Diet Library, academic editing, data analysis, and one-on-one graduate admissions coaching. No outcome is guaranteed; every citation is checked against the original.';
+const keywords =
+  'Japan legal research,Japanese case law research,AI citation audit,academic editing Japan,Japanese to English translation,data analysis,graduate admissions Japan,research proposal coaching';
+
+const siteOrigin = Astro.site?.origin ?? 'https://sadamura.jp';
+const pageUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+
+// Service × 4。ja 版 /services と同じ 4 サービス・同じ `@id` サフィックス・
+// 同じ価格で、3 言語版が同一の提供内容を指すようにする。
+// name / description / offers の文言は本ページ本文からの逐語抜粋。ja / zh と
+// 同じく学術支援（校正・翻訳・データ分析）は個別見積のため Service 化しない。
+// areaServed もページ言語で変わるものではないので ja / zh と同一。
+// 「from ¥…」表記のものは price に下限値を置き、範囲であることは offer の
+// description に残す。
+const provider = { '@id': `${siteOrigin}/#person` };
+const areaServed = [
+  { '@type': 'Country', name: 'Japan' },
+  { '@type': 'Country', name: 'China' }
+];
+const availableLanguage = ['en', 'ja', 'zh'];
+
+type ServiceDef = {
+  id: string;
+  name: string;
+  serviceType: string;
+  /** 本文に説明文がある項目だけ持つ（無いものは創作しない）。 */
+  description?: string;
+  offers: { price: string; description: string }[];
+};
+
+const serviceDefs: ServiceDef[] = [
+  {
+    id: 'citation-audit',
+    name: 'AI Citation Audit',
+    serviceType: 'AI Citation Audit',
+    description:
+      'I check each citation in your AI-generated text against the primary record and deliver a cross-check report: whether the citation exists, whether its bibliographic details match the original, the relevant passage quoted from the source, and where the source is held. I do not assess whether a citation supports your argument.',
+    offers: [
+      {
+        price: '33000',
+        description:
+          '¥33,000 per request (up to 5 citations, 3 business days); ¥5,500 per additional citation'
+      }
+    ]
+  },
+  {
+    id: 'research',
+    name: 'Japan Research Memos',
+    serviceType: 'Research memo',
+    description:
+      'Research reports built from primary sources, limited to general and abstract questions of law, case law, and literature: case-law and scholarship landscapes, legislative history, comparative-law overviews, and evidence reviews in law and psychology. I do not accept work relating to specific disputes or pending matters (Attorney Act, Art. 72), nor tax advice or individual tax determinations (Certified Public Tax Accountant Act, Art. 52).',
+    offers: [
+      {
+        price: '110000',
+        description:
+          'from ¥110,000 per assignment (individually quoted; standard turnaround from 5 business days)'
+      }
+    ]
+  },
+  {
+    id: 'admissions-coaching',
+    name: 'Graduate Admissions Coaching (Japan)',
+    serviceType: 'Graduate admissions coaching',
+    description:
+      'One-on-one coaching for applications to Japanese graduate schools. A research proposal stands or falls on its command of prior research — a mapped review of the Japanese-language literature is built into the package. Sessions available in English, Chinese, or Japanese.',
+    offers: [
+      {
+        price: '33000',
+        description:
+          'Initial strategy consultation (60 min, online): ¥33,000 — credited in full toward the first instalment if you enroll'
+      },
+      {
+        price: '880000',
+        description:
+          'Research Proposal Package (3 months, one-on-one): ¥880,000 — prior-research map / 12 coaching sessions / 12 rounds of proposal review (additional rounds ¥11,000 each) / professor-contact etiquette / two mock interviews. The fee is payable in three monthly instalments in advance: ¥293,333 for the first two instalments and ¥293,334 for the third (¥880,000 total)'
+      }
+    ]
+  },
+  {
+    id: 'boarding-school-strategy',
+    name: 'Boarding-school Admissions Strategy (La Salle alumnus)',
+    serviceType: 'Boarding-school admissions strategy',
+    description:
+      "I am a graduate of La Salle High School (Kagoshima) and advise on that school's entrance examination, application planning, interview preparation, and what dormitory life is actually like. Consultations on other boarding schools are also available, from a non-alumnus perspective. Subject tutoring is not offered. This is an independent private service, unaffiliated with the La Salle school corporation.",
+    offers: [{ price: '55000', description: '¥55,000 / 90 min' }]
+  }
+];
+
+const servicesLd = serviceDefs.map((s) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': `${pageUrl}#service-${s.id}`,
+  name: s.name,
+  serviceType: s.serviceType,
+  description: s.description,
+  inLanguage: 'en',
+  provider,
+  areaServed,
+  availableLanguage,
+  offers: s.offers.map((o) => ({
+    '@type': 'Offer',
+    priceCurrency: 'JPY',
+    price: o.price,
+    description: o.description,
+    url: pageUrl,
+    seller: { '@id': `${siteOrigin}/#person` }
+  }))
+}));
+---
+
+<BaseLayout title={title} description={description} keywords={keywords}>
+  <h1>Research &amp; Academic Services</h1>
+
+  <p>
+    Most of Japan's legal and scholarly record has never been digitized. Full-text court decisions, case commentaries (hanrei hyōshaku), legislative-history materials, and decades of print journals exist only on paper or in subscription databases — <strong>much of it lies outside what general-purpose AI can reach</strong>. I work from the primary sources at the National Diet Library and other major Japanese archives, check each citation against the original, and deliver research you can check.
+  </p>
+
+  <p>
+    I am a researcher in law and psychology with 21 peer-reviewed publications, and a J.D. (University of Tokyo). I am not a licensed attorney, and nothing here is legal advice on individual matters. I also do not handle tax advice or individual tax determinations, which in Japan are reserved to licensed tax accountants (<span lang="ja">税理士</span>).
+  </p>
+
+  <h2>1. AI Citation Audit</h2>
+  <p>
+    Generative AI can fabricate Japanese citations — case numbers that do not exist, journal pages that hold a different article; peer-reviewed testing of legal AI tools has reported hallucination rates of 17–33% (Magesh et al., Journal of Empirical Legal Studies 22(2), 216–242, 2025). I check each citation in your AI-generated text against the primary record and report, for every citation, whether it exists, whether its bibliographic details match the original, <strong>the relevant passage quoted from the source itself</strong>, and where that source is held.
+  </p>
+  <ul>
+    <li>Scope: AI answers, drafts, and research notes concerning Japanese law or Japanese-language scholarship</li>
+    <li>
+      Deliverable: a cross-check report giving, for each citation, (i) whether it exists and whether the bibliographic details match, (ii) <strong>the relevant passage quoted from the original</strong>, and (iii) where the source is held (library, call number, volume and page, URL)
+    </li>
+    <li>
+      Fee: <strong>¥33,000 per request</strong> (up to 5 citations, 3 business days); ¥5,500 per additional citation. The three-day turnaround applies where every citation can be confirmed online; where print-only sources must be consulted, a delivery date is quoted individually when the work is accepted
+    </li>
+    <li>
+      Where a citation cannot be confirmed in a publicly available database, it is reported as <strong>not confirmed</strong>, together with the route by which it could be traced (holding library, subscription database, remote copying). The courts' own case-law search does not contain every decision, so a search returning nothing is never reported as proof that a decision does not exist.
+    </li>
+    <li>
+      ⚠️ I do not accept work relating to specific disputes or pending matters (Attorney Act, Art. 72). The check covers whether a citation exists and whether the wording quoted matches the source. <strong>I do not assess whether a citation supports your argument or conclusion, and I do not judge the legal merits of what it says.</strong>
+    </li>
+    <li>
+      Reports are working documents for your own review; they are not prepared as certificates of fact for submission to third parties.
+    </li>
+  </ul>
+
+  <h2>2. Japan Research Memos</h2>
+  <p>
+    Research reports built from primary sources, <strong>limited to general and abstract questions</strong> of law, case law, and literature: case-law and scholarship landscapes, legislative history, comparative-law overviews, and evidence reviews in law and psychology.
+  </p>
+  <ul>
+    <li>Deliverable: a research memo in English or Japanese — summary, analysis, and a full citation apparatus with source locations</li>
+    <li>Fee: <strong>from ¥110,000 per assignment</strong> (individually quoted; standard turnaround from 5 business days)</li>
+    <li>
+      ⚠️ I do not accept work relating to specific disputes or pending matters (Attorney Act, Art. 72). Subjects are limited to general and abstract questions of law, case law, and literature, confirmed before engagement. Advice bearing on tax filings or the computation of a tax base, and work on applications to public authorities (residence status, licences, permits), is likewise not offered.
+    </li>
+    <li>
+      Reports are working documents for your own review; they are not prepared as certificates of fact for submission to third parties.
+    </li>
+  </ul>
+
+  <h2>3. Graduate Admissions Coaching (Japan)</h2>
+  <p>
+    One-on-one coaching for applications to Japanese graduate schools. A research proposal stands or falls on its command of prior research — a mapped review of the Japanese-language literature is built into the package. Sessions available in English, Chinese, or Japanese.
+  </p>
+  <ul>
+    <li>
+      Initial strategy consultation (60 min, online): <strong>¥33,000</strong> — credited in full toward the <strong>first instalment</strong> if you enroll <strong>within six months of the consultation</strong> (once only). If the package is then cancelled during the cooling-off period or terminated mid-term, the credited consultation fee enters the settlement
+    </li>
+    <li>
+      Research Proposal Package (3 months, one-on-one): <strong>¥880,000</strong> — prior-research map / <strong>12 coaching sessions</strong> / <strong>12 rounds of proposal review</strong> (additional rounds ¥11,000 each) / professor-contact etiquette / <strong>two mock interviews</strong>
+    </li>
+    <li>
+      <strong>Payment</strong>: the package fee is payable in <strong>three monthly instalments in advance: ¥293,333 for the first two instalments and ¥293,334 for the third (¥880,000 total)</strong>. Every other service remains payable in full before work begins.
+    </li>
+    <li>
+      (Instalment terms for the Research Proposal Package) Cash price and instalment price are both ¥880,000; no instalment fee (0% rate); payment period approx. 2 months; 3 payments.
+    </li>
+    <li>
+      <strong>Availability</strong>: only the initial strategy consultation is open at present. New package enrolments open once the contract documentation is complete; you are welcome to join the waiting list.
+    </li>
+    <li>
+      Continuous courses are contracted on written terms. Where the contract is a "specified continuous service" under the Specified Commercial Transactions Act, the statutory pre-contract and contract documents are issued; where it is not, an equivalent written statement of terms is issued. Visa and immigration procedures are the exclusive work of licensed professionals and are not offered here.
+    </li>
+    <li>
+      <strong>I cannot coach applicants to the graduate school where I am enrolled (The University of Osaka).</strong> I take no part in its admissions process, and I do not introduce, recommend, or broker contact with particular faculty members anywhere.
+    </li>
+  </ul>
+
+  <h2>4. Boarding-school Admissions Strategy</h2>
+  <p>
+    I am a graduate of La Salle High School (Kagoshima) and advise on that school's entrance examination, application planning, interview preparation, and what dormitory life is actually like. Consultations on other boarding schools are also available, from a non-alumnus perspective.
+  </p>
+  <ul>
+    <li>Fee: <strong>¥55,000 / 90 min</strong></li>
+    <li>Subject tutoring is not offered.</li>
+    <li>
+      <strong>This is an independent private service, unaffiliated with the La Salle school corporation</strong> — not endorsed, partnered, or recommended by the school.
+    </li>
+  </ul>
+
+  <h2>5. Academic Editing, Translation, and Data Analysis</h2>
+  <ul>
+    <li>
+      <strong>Academic English editing</strong> — from ¥80,000 per paper (approx. 5,000 words). By a published researcher: terminology, argument structure, and reviewer-response strategy, not just grammar
+    </li>
+    <li><strong>Japanese–English academic translation</strong> — from ¥15 per character</li>
+    <li>
+      <strong>Data analysis (statistics, NLP/ML)</strong> — from ¥200,000 per project. SEM (R: lavaan), NLP/ML (Python), study design through methods writing
+    </li>
+    <li>Individual quotes; recurring arrangements for labs and institutions on request</li>
+    <li>
+      Delivery deadlines are stated in the quotation and run from conclusion of the contract; see the <a href="/legal" hreflang="ja">legal disclosures</a>.
+    </li>
+  </ul>
+
+  {/* ja 版「準備中」と同じ節レベル（h2）に揃える。 */}
+  <h2>In preparation</h2>
+  <ul>
+    <li>Bar-exam essay coaching (Japanese law) — in preparation; the start date will be announced on this page</li>
+  </ul>
+
+  <h2>How it works</h2>
+  <p>
+    <a href="/en/contact">Inquiry</a> → quote (1–2 business days) → contract → advance payment → delivery → one round of minor revisions free.
+  </p>
+  <p>
+    When you reply to the quotation, I confirm your consent to receiving the acceptance and payment-receipt notice by e-mail.
+  </p>
+  <ul>
+    <li>Inquiries and quotations are <strong>free of charge</strong>.</li>
+    <li><strong>A summary of the cancellation, refund, and mid-term termination terms is set out in the quotation.</strong></li>
+    <li>Payment: bank transfer (Japan) / Wise (USD, EUR, GBP, SGD) / Alipay &amp; WeChat Pay (coming soon)</li>
+    <li>Payments are accepted from the contracting party only.</li>
+    <li>
+      <strong>Prices shown are the total amount payable.</strong> I am not a registered qualified-invoice issuer, so a Japanese qualified invoice (<span lang="ja">適格請求書</span>) cannot be issued.
+    </li>
+  </ul>
+
+  <h2>Notes</h2>
+  <ul>
+    <li>No outcome — acceptance, admission, or publication — is guaranteed, and nothing here implies otherwise.</li>
+    <li>Unpublished data and drafts are held in confidence (NDA available).</li>
+    <li>
+      Governed by the laws of Japan (for consumer contracts, the mandatory consumer protections of the consumer's habitual residence remain unaffected). To the extent permitted by law, the parties agree to the jurisdiction of the Tokyo District Court in the first instance.
+    </li>
+    <li><a href="/legal" hreflang="ja">Legal disclosures (Japanese)</a></li>
+  </ul>
+
+  {
+    servicesLd.map((s) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(s)} />
+    ))
+  }
+</BaseLayout>

@@ -1,0 +1,99 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+// zh 版の連絡先ページ。
+// メールは既存 /contact と同一アドレス・同一の難読化コンポーネントを流用する
+// （contact@sadamura.jp のような別アドレスは設けない）。
+// 冒頭文で「表单」に言及しないのは、サイトに問い合わせフォームが存在しないため。
+// 組版は中国語の作法に合わせる: 半角コロンを使わない、括注を重ねない、波浪号は
+// 全角 ～（U+FF5E）に統一する。
+const title = '联系方式（中文可） | 贞村真宏';
+const description =
+  '联系贞村真宏：日本大学院升学指导・文献调研・AI回答引用核实。支持中文・日语・英语咨询，1～2个工作日内回复。';
+const keywords = '贞村真宏 联系,日本升学 咨询,中文';
+---
+
+<BaseLayout title={title} description={description} keywords={keywords}>
+  <h1>联系</h1>
+
+  <p>
+    请通过下方邮箱与本人联系（<strong>中文可</strong>・<span lang="ja">日本語可</span>・<span lang="en">English OK</span>）。1～2个工作日内回复。
+  </p>
+
+  <p>
+    <span class="email-obfuscate" data-user="contact" data-domain="sadamura.jp">
+      contact [at] sadamura [dot] jp
+    </span>
+    <button type="button" class="email-copy" data-user="contact" data-domain="sadamura.jp" hidden>
+      复制邮箱
+    </button>
+  </p>
+
+  <p><strong>邮件咨询与报价均免费</strong>，收费自签约与预付开始。</p>
+
+  <p>
+    您提供的信息，<strong>仅用于答复咨询以及有偿服务的报价、签约与提供</strong>；不向任何第三方提供（法律要求的情形除外）。详见<a
+      href="/zh/privacy">隐私声明</a
+    >。
+  </p>
+
+  <p>咨询时请一并注明：</p>
+
+  <ul>
+    <li>① 目标院校与专业</li>
+    <li>② 期望的时间安排</li>
+    <li>③ 现居地（日本国内／中国大陆／其他）</li>
+  </ul>
+
+  <p>
+    <strong>申请人为未成年人时，请由监护人代为联系</strong>；本站不受理不满14周岁本人直接发来的咨询（详见<a
+      href="/zh/privacy">隐私声明</a
+    >六）。
+  </p>
+
+  <p>服务内容与收费见 <a href="/zh/services">服务与价格</a>；升学制度的说明见 <a href="/zh/guide">留学指南</a>。</p>
+</BaseLayout>
+
+<script>
+  // メールアドレス難読化: data-user / data-domain → mailto:
+  document
+    .querySelectorAll<HTMLElement>('.email-obfuscate[data-user][data-domain]')
+    .forEach((el) => {
+      const u = el.dataset.user;
+      const d = el.dataset.domain;
+      if (!u || !d) return;
+      const addr = `${u}@${d}`;
+      const a = document.createElement('a');
+      a.href = `mailto:${addr}`;
+      a.textContent = addr;
+      el.replaceWith(a);
+    });
+
+  // コピーボタン: 中国語圏の読者は微信内ブラウザで開くことが多く、mailto: が
+  // 開かない端末がある。難読化を保ったまま、クリックでアドレスを取得できる
+  // 手段を用意する（JS が動かない環境では hidden のまま出さない）。
+  document
+    .querySelectorAll<HTMLButtonElement>('.email-copy[data-user][data-domain]')
+    .forEach((btn) => {
+      const u = btn.dataset.user;
+      const d = btn.dataset.domain;
+      if (!u || !d) return;
+      btn.hidden = false;
+      const label = btn.textContent;
+      btn.addEventListener('click', async () => {
+        const addr = `${u}@${d}`;
+        try {
+          await navigator.clipboard.writeText(addr);
+          btn.textContent = '已复制';
+        } catch {
+          // クリップボード API が使えない環境（古い微信内ブラウザ等）では
+          // 選択できる形で見せるだけにする。
+          btn.textContent = addr;
+          return;
+        }
+        window.setTimeout(() => {
+          btn.textContent = label;
+        }, 2000);
+      });
+    });
+</script>

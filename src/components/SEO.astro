@@ -1,13 +1,35 @@
 ---
+import {
+  defaultLang,
+  langTag,
+  ogLocale,
+  localesForPath,
+  localizedPath,
+  stripLangPrefix,
+  type Lang
+} from '@i18n/index';
+
 export interface Props {
   title: string;
   description: string;
   image?: string;
   canonicalPath?: string;
-  lang: 'ja' | 'en';
+  lang: Lang;
+  /**
+   * Comma-separated `<meta name="keywords">` list. Google ignores it; it is
+   * emitted only for the legacy Chinese engines (Baidu/Sogou/360) that still
+   * read it. Omit unless a page has an approved keyword line — never stuff.
+   */
+  keywords?: string;
+  /**
+   * Label for the last BreadcrumbList item. Needed where the final URL segment
+   * is a slug rather than a known section (e.g. `/zh/guide/<article>`), so the
+   * crumb reads as the article title instead of the raw slug.
+   */
+  breadcrumbLabel?: string;
 }
 
-const { title, description, image, canonicalPath, lang } = Astro.props;
+const { title, description, image, canonicalPath, lang, keywords, breadcrumbLabel } = Astro.props;
 
 // Search-engine ownership verification meta tags.
 // Add the token via `.env` (PUBLIC_GOOGLE_SITE_VERIFICATION, PUBLIC_BING_SITE_VERIFICATION).
@@ -20,16 +42,33 @@ const pathname = canonicalPath ?? Astro.url.pathname;
 const canonical = new URL(pathname, siteOrigin).toString();
 const ogImage = new URL(image ?? '/og.png', siteOrigin).toString();
 
-// hreflang counterpart (single switch ja <-> en)
-function counterpart(p: string, current: 'ja' | 'en'): string {
-  if (current === 'ja') {
-    return p === '/' ? '/en/' : `/en${p}`;
-  }
-  return p.replace(/^\/en\/?/, '/') || '/';
-}
-const altPath = counterpart(pathname, lang);
-const altLang = lang === 'ja' ? 'en' : 'ja';
-const altUrl = new URL(altPath, siteOrigin).toString();
+// hreflang set — only the locales in which this page is actually published
+// (see `routeLocales` in src/i18n/index.ts). Includes a self-reference, which
+// is what Google expects, plus x-default.
+//
+// x-default points at *this page's* default version, not the site root
+// (2026-08-01 ruling). Pointing every page at the JA home page told Google the
+// default for /zh/services was the JA top page, and the zh-only cluster
+// (/zh/guide + its five articles) had no coherent default at all. Where the
+// page has no JA version, x-default is omitted rather than misdirected.
+const basePath = stripLangPrefix(pathname);
+const pageLocales = localesForPath(pathname);
+const alternates = pageLocales.map((l) => ({
+  hreflang: langTag[l],
+  href: new URL(localizedPath(l, basePath), siteOrigin).toString()
+}));
+const altOgLocales = pageLocales.filter((l) => l !== lang).map((l) => ogLocale[l]);
+const xDefault = pageLocales.includes(defaultLang)
+  ? new URL(localizedPath(defaultLang, basePath), siteOrigin).toString()
+  : null;
+
+// Person.description はサイト共通の固定文（ja トップの canonical 文）にする。
+// ページごとの `description` prop をそのまま入れると、同一 `@id` の人物に
+// 29 通りの相互に矛盾する説明（価格表・記事要旨など）が付いてしまう。
+// ページ固有の説明は `<meta name="description">` と、各ページの
+// WebPage / Article / Service 側にだけ持たせる。
+const PERSON_DESCRIPTION =
+  '法心理学の研究者。量刑判断における福祉的支援情報の機能を研究しています。大阪大学大学院人間科学研究科。';
 
 const personLd = {
   '@context': 'https://schema.org',
@@ -41,7 +80,7 @@ const personLd = {
   familyName: 'Sadamura',
   jobTitle: 'Researcher',
   url: siteOrigin + '/',
-  description,
+  description: PERSON_DESCRIPTION,
   knowsAbout: [
     'Legal Psychology',
     'Sentencing Decisions',
@@ -53,7 +92,10 @@ const personLd = {
     'Law and Psychology',
     'Mixed-Methods Research'
   ],
-  knowsLanguage: ['ja', 'en'],
+  knowsLanguage: ['ja', 'en', 'zh'],
+  // 中等教育機関は載せない。同一の `@id` を持つ Person は全 29 頁に出力される
+  // ため、販売頁の本文に必要な記述（卒業生であること）まで研究頁・ラボ頁に
+  // 機械可読で複製されてしまう。可視テキストとの非対称は意図的。
   alumniOf: [
     {
       '@type': 'EducationalOrganization',
@@ -86,7 +128,7 @@ const websiteLd = {
   '@id': `${siteOrigin}/#website`,
   url: siteOrigin + '/',
   name: 'Masahiro Sadamura — 貞村真宏',
-  inLanguage: lang === 'ja' ? 'ja-JP' : 'en-US',
+  inLanguage: { ja: 'ja-JP', en: 'en-US', zh: 'zh-CN' }[lang],
   publisher: { '@id': `${siteOrigin}/#person` },
   copyrightHolder: { '@id': `${siteOrigin}/#person` },
   copyrightYear: new Date().getUTCFullYear(),
@@ -96,22 +138,29 @@ const websiteLd = {
 // BreadcrumbList — derived from the canonical path. The home page omits
 // the list (a single-item breadcrumb is meaningless).
 const segments = pathname.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean);
-const segmentLabels: Record<string, { ja: string; en: string }> = {
-  profile:      { ja: 'プロフィール',   en: 'Profile' },
-  publications: { ja: '研究業績',       en: 'Publications' },
-  resources:    { ja: '研究リソース',   en: 'Resources' },
-  contact:      { ja: '連絡先',         en: 'Contact' },
-  about:        { ja: 'このサイトについて', en: 'About' },
-  '404':        { ja: 'ページが見つかりません', en: 'Page not found' }
+const segmentLabels: Record<string, Record<Lang, string>> = {
+  profile:      { ja: 'プロフィール',   en: 'Profile',        zh: '简历' },
+  publications: { ja: '研究業績',       en: 'Publications',   zh: '研究业绩' },
+  resources:    { ja: '研究リソース',   en: 'Resources',      zh: '研究资源' },
+  contact:      { ja: '連絡先',         en: 'Contact',        zh: '联系' },
+  about:        { ja: 'このサイトについて', en: 'About',       zh: '关于本站' },
+  services:     { ja: 'サービス',       en: 'Services',       zh: '服务' },
+  guide:        { ja: 'ガイド',         en: 'Guide',          zh: '指南' },
+  legal:        { ja: '特定商取引法に基づく表記', en: 'Legal notices', zh: '法律信息' },
+  privacy:      { ja: 'プライバシーポリシー', en: 'Privacy notice', zh: '隐私声明' },
+  '404':        { ja: 'ページが見つかりません', en: 'Page not found', zh: '页面未找到' },
+  lab:          { ja: 'ラボ',           en: 'Lab',            zh: '实验室' }
 };
+const homeLabel: Record<Lang, string> = { ja: 'トップ', en: 'Home', zh: '首页' };
 let crumbs: { name: string; href: string }[] = [
-  { name: lang === 'ja' ? 'トップ' : 'Home', href: lang === 'ja' ? '/' : '/en/' }
+  { name: homeLabel[lang], href: localizedPath(lang, '/') }
 ];
-const usableSegments = segments.filter((s) => s !== 'en');
-let crumbPath = lang === 'ja' ? '' : '/en';
-for (const seg of usableSegments) {
+const usableSegments = segments.filter((s) => s !== 'en' && s !== 'zh');
+let crumbPath = lang === defaultLang ? '' : `/${lang}`;
+for (const [idx, seg] of usableSegments.entries()) {
   crumbPath += `/${seg}`;
-  const label = segmentLabels[seg]?.[lang] ?? seg;
+  const isLast = idx === usableSegments.length - 1;
+  const label = (isLast ? breadcrumbLabel : undefined) ?? segmentLabels[seg]?.[lang] ?? seg;
   crumbs.push({ name: label, href: crumbPath });
 }
 const breadcrumbLd = crumbs.length > 1 ? {
@@ -131,12 +180,14 @@ const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN ?? '';
 
 <title>{title}</title>
 <meta name="description" content={description} />
+{keywords && <meta name="keywords" content={keywords} />}
 <meta name="author" content="Masahiro Sadamura" />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 <link rel="canonical" href={canonical} />
-<link rel="alternate" hreflang={lang} href={canonical} />
-<link rel="alternate" hreflang={altLang} href={altUrl} />
-<link rel="alternate" hreflang="x-default" href={siteOrigin + '/'} />
+{alternates.map((a) => (
+  <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+))}
+{xDefault && <link rel="alternate" hreflang="x-default" href={xDefault} />}
 
 <!-- Open Graph -->
 <meta property="og:title" content={title} />
@@ -144,8 +195,8 @@ const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN ?? '';
 <meta property="og:url" content={canonical} />
 <meta property="og:type" content="website" />
 <meta property="og:image" content={ogImage} />
-<meta property="og:locale" content={lang === 'ja' ? 'ja_JP' : 'en_US'} />
-<meta property="og:locale:alternate" content={lang === 'ja' ? 'en_US' : 'ja_JP'} />
+<meta property="og:locale" content={ogLocale[lang]} />
+{altOgLocales.map((l) => <meta property="og:locale:alternate" content={l} />)}
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />

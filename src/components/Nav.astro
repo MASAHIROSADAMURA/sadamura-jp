@@ -1,28 +1,60 @@
 ---
-import { getLangFromUrl, useTranslations, localizedPath } from '@i18n/index';
+import {
+  getLangFromUrl,
+  useTranslations,
+  localizedPath,
+  normalizePath,
+  type Lang
+} from '@i18n/index';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const here = Astro.url.pathname.replace(/\/$/, '') || '/';
+const here = normalizePath(Astro.url.pathname);
 
-const items: { slug: 'profile' | 'publications' | 'resources' | 'contact'; label: string }[] = [
-  { slug: 'profile',      label: t('nav.profile') },
-  { slug: 'publications', label: t('nav.publications') },
-  { slug: 'resources',    label: t('nav.resources') },
-  { slug: 'contact',      label: t('nav.contact') }
-];
+// Nav is defined per locale because the locales do not share a page set: the
+// ZH site is a compact entry point (home / profile / services / guide /
+// contact) without the publications and resources archives.
+// NOTE: `nav.services` (JA「サービス」) is a UI label, not body copy — the copy
+// master specifies only the ZH nav labels (首页／简历／服务／指南／联系).
+// `/zh/guide` (指南) was added on 2026-07-31; JA and EN keep their page sets.
+// `/services` shipped its EN copy on 2026-07-31, so Services is now in the EN
+// nav too (JA / ZH nav order is unchanged).
+const navItems: Record<Lang, { path: string; key: string }[]> = {
+  ja: [
+    { path: '/profile', key: 'nav.profile' },
+    { path: '/publications', key: 'nav.publications' },
+    { path: '/resources', key: 'nav.resources' },
+    { path: '/services', key: 'nav.services' },
+    { path: '/contact', key: 'nav.contact' }
+  ],
+  en: [
+    { path: '/profile', key: 'nav.profile' },
+    { path: '/publications', key: 'nav.publications' },
+    { path: '/resources', key: 'nav.resources' },
+    { path: '/services', key: 'nav.services' },
+    { path: '/contact', key: 'nav.contact' }
+  ],
+  zh: [
+    { path: '/', key: 'nav.home' },
+    { path: '/profile', key: 'nav.profile' },
+    { path: '/services', key: 'nav.services' },
+    { path: '/guide', key: 'nav.guide' },
+    { path: '/contact', key: 'nav.contact' }
+  ]
+};
 
-function isCurrent(slug: string): boolean {
-  const target = localizedPath(lang, `/${slug}`).replace(/\/$/, '');
-  return here === target;
+const items = navItems[lang];
+
+function isCurrent(path: string): boolean {
+  return here === normalizePath(localizedPath(lang, path));
 }
 ---
 
 <nav class="site-nav" aria-label={t('nav.label')}>
   {items.map((item) => (
     <a
-      href={localizedPath(lang, `/${item.slug}`)}
-      aria-current={isCurrent(item.slug) ? 'page' : undefined}
-    >{item.label}</a>
+      href={localizedPath(lang, item.path)}
+      aria-current={isCurrent(item.path) ? 'page' : undefined}
+    >{t(item.key)}</a>
   ))}
 </nav>

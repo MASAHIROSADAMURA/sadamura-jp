@@ -1,0 +1,61 @@
+---
+// 中文記事ハブ。カードの見出し・説明は各記事のメタデータ（headline /
+// description）をそのまま参照するだけで、ここで文言を作らない。
+// 記事の追加は src/data/zh-guide.ts と src/i18n/index.ts の routeLocales に
+// 1 行ずつ足す（このページと ItemList は自動で追随する）。
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { guideArticles } from '@data/zh-guide';
+
+// 語彙は記事側と揃える（日本語由来の言い回しを持ち込まない）。ハブから
+// /zh/services への導線を 1 本持つ。
+const title = '留学指南 | 贞村真宏';
+const description =
+  '日本读研与低龄留学的实务指南：三条升学路线与时间线、研究计划书的写法、AI引用的核实方法、寄宿制初中的制度与费用，以及“保录取”的法律与判例。全部依据公开可查的法条原文、监管部门公告与官方资料整理，不作任何“保录”承诺。';
+const keywords =
+  '日本读研,日本留学 指南,研究计划书,AI 引用 核实,日本寄宿中学,保录取,升学指导';
+
+const siteOrigin = Astro.site?.origin ?? 'https://sadamura.jp';
+const pageUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+
+// ItemList（掲載順＝カードの表示順）。name / url はカードと同じ配列から生成する
+// ので、表示とデータが構造上つねに一致する。既存の WebSite / Person /
+// BreadcrumbList には手を触れない。
+const itemListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  '@id': `${pageUrl}#articles`,
+  name: '留学指南',
+  inLanguage: 'zh-CN',
+  numberOfItems: guideArticles.length,
+  itemListOrder: 'https://schema.org/ItemListOrderAscending',
+  itemListElement: guideArticles.map((a, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: a.headline,
+    url: `${siteOrigin}/zh/guide/${a.slug}/`
+  }))
+};
+---
+
+<BaseLayout title={title} description={description} keywords={keywords}>
+  <h1>留学指南</h1>
+
+  <p>
+    这里整理面向中文读者的日本升学第一手资料：制度、费用、流程与方法。所有文章基于公开可查的法条原文、官方公告与官方募集要项写成，逐条注明出处（出处的性质在各文末尾的参考资料中标注），不含任何“保录”式承诺。
+  </p>
+
+  <p>服务内容与收费见 <a href="/zh/services">服务与价格</a>；如需联系，请见 <a href="/zh/contact">联系方式</a>。</p>
+
+  <ul class="entry-cards">
+    {
+      guideArticles.map((a) => (
+        <li>
+          <h2><a href={`/zh/guide/${a.slug}`}>{a.headline}</a></h2>
+          <p>{a.description}</p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
+</BaseLayout>

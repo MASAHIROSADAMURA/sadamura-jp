@@ -1,0 +1,252 @@
+---
+// 記事 3: AI 下書きを原典で裏打ちする話。OG 画像はサイト既定。
+//
+// 本文で守っている書き分け:
+//   - 「坐实」は中国語では「罪名を確定させる」の語感が強いので使わない。
+//     タイトル・H1・見出しを含め「核实」系で通す。
+//   - 幻覚の頻度・機序についての記述には、法域特化の実証研究 2 件を典拠として
+//     付ける。「训练数据にないものは検索できない」は、検索連携を使わない素の
+//     生成に限った話として書く。
+//   - 資料の所在は「公開インターネット上に全文が無い」という限定形で書く
+//     （「從未数字化」は言い過ぎ）。meta description も本文と同じ限定にする。
+//   - NDL デジタルコレクションの「公開範囲」ラベルは現行表記を使う（ログイン
+//     なしで閲覧可能／送信サービスで閲覧可能／国立国会図書館内限定）。
+//   - 立法資料は「紙面比率が高い」と一般化しない。審議会資料は各府省サイトで
+//     公開されている。
+//   - 出所を示せない業界一般への帰属は書かず、自らの観察として書く。
+//   - 裁判所・NDL の URL は現行の正規 URL。
+//   - 日本語由来の術語（図書館送信・典藏・事件番号・本登録・学協会・相互貸借・
+//     不正行為・指針）は中国語表現に置き換え、日本語原語を括注する。
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { articleJsonLd, guideArticle, GUIDE_DATE } from '@data/zh-guide';
+
+const article = guideArticle('ai-research-proposal');
+const siteOrigin = Astro.site?.origin ?? 'https://sadamura.jp';
+const pageUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+const articleLd = articleJsonLd(article, siteOrigin, pageUrl);
+---
+
+<BaseLayout
+  title={article.title}
+  description={article.description}
+  keywords={article.keywords}
+  lastUpdated={GUIDE_DATE}
+  breadcrumbLabel={article.headline}
+>
+  <h1>用AI写研究计划书会被看穿吗——AI幻觉、日文文献与“原典核实”的方法</h1>
+
+  <p>作者：贞村真宏（东京大学法务博士〔专业学位〕）</p>
+
+  <p>用AI写研究计划书，教授会不会看出来——这是这两年被问得越来越多的问题。</p>
+
+  <p>这个问题的问法本身有点偏。真正决定成败的，不是“你用没用AI”，而是“这份计划书里的每一条引用是不是真的存在、你是不是真的读过”。而这两件事，恰好是当前的AI在日语学术与法律文献上最不擅长的地方。</p>
+
+  <h2>一、先把结论说清楚：用AI起草，本身不是问题</h2>
+
+  <p>我自己的研究方向之一是可解释AI（XAI）——让机器的输出变得可核查、可追问。所以我不会写一篇“不要用AI”的文章，那既不现实，也不诚实。</p>
+
+  <p>现实是：日本的研究生院里，教授和学生都在用生成式AI。用它把模糊的想法整理成结构、把中文构思先转成日语的骨架、列出可能的检索关键词——这些都是合理的起点，效率上没有理由放弃。</p>
+
+  <p>所以教授在意的从来不是“这是不是AI写的”。审查一份研究计划书，看的是三件事：你的问题是否成立；这个问题此前被做到了哪一步；你打算用什么方法往前推一步。AI能把这三件事写得像模像样，却不能替你完成其中任何一件。</p>
+
+  <p>被扣分的从来不是AI，而是下面这三个具体的结果。</p>
+
+  <h2>二、三个结构性风险</h2>
+
+  <h3>（a）引用幻觉：不是偶尔出错，而是结构性的</h3>
+
+  <p>语言模型生成的是“在统计上最像正确答案的下一串字符”。当它引用一篇真实存在、且被大量数字化转载的英文论文时，正确的字符串就在它的参数里，命中率相当高。但当它被要求引用一篇从未数字化、公开互联网上根本不存在的日文文献时，它没有可以回退的事实——于是它做它唯一会做的事：<strong>把格式补全</strong>。</p>
+
+  <p>结果就是一条形式上无懈可击、实质上不存在的引用。以下是<strong>典型模式的例示</strong>（这是对常见形态的归纳，不是某一次具体测试的记录）：</p>
+
+  <ul>
+    <li><strong>判例编号型</strong>：“○○法院 令和○年○月○日判决（令和○年（<span lang="ja">受</span>）第○○○号；“（<span lang="ja">受</span>）”是日本最高法院受理上告事件的案件符号）”——法院名、判决日期、案号的格式完全合规，但该编号并不存在，或者对应的是一件毫不相干的案子。</li>
+    <li><strong>卷号页码型</strong>：期刊名真实、卷号与页码格式完美，但该卷该页上是另一篇文章。</li>
+    <li><strong>张冠李戴型</strong>：把两位真实存在的研究者与一份真实存在的期刊，拼成一篇从未发表过的论文。</li>
+    <li><strong>观点移植型</strong>：文献确实存在，但它并没有主张AI所说的那个观点。这一类最难发现，因为书目层面的核对会通过。</li>
+    <li><strong>转述当原典型</strong>：把中文或英文二手文献里对日本学说的转述，直接当成日文原典来引用。</li>
+  </ul>
+
+  <p>（本文刻意用“○”代替具体数字。虚构的编号一旦写实，就可能被检索到、被再次引用——这本身就是问题的一部分。）</p>
+
+  <p>需要强调的是：<strong>越是格式规范的引用，越容易让人放松警惕</strong>。就<strong>不接检索、仅凭参数生成</strong>的情形而言，这也不是“等模型再强一点就会消失”的缺陷，而是“训练数据里没有的东西无法被生成出来”这一结构本身；接入检索或联网（RAG）可以缓解，但缓解的前提是<strong>被检索的资料本身在线</strong>——这正是下一节要说的问题。</p>
+
+  <p>频率上，法律领域已有可引用的实测研究。斯坦福大学 RegLab／HAI 团队的两项研究经同行评审后发表：Dahl, Magesh, Suzgun &amp; Ho, “Large Legal Fictions: Profiling Legal Hallucinations in Large Language Models,” <em>Journal of Legal Analysis</em> 16(1), 64–93 (2024) 报告通用大模型<strong>在针对随机抽取的美国联邦判例所提的、可直接验证的问题上</strong>“<span lang="en">hallucinate at least 58% of the time</span>”（至少58%的情形出现幻觉）；Magesh 等，“Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools,” <em>Journal of Empirical Legal Studies</em> 22(2), 216–242 (2025) 则发现，即便是接入了法律数据库的专业检索工具（Lexis+ AI、Westlaw AI-Assisted Research 等），幻觉率仍在“<span lang="en">between 17% and 33% of the time</span>”。<strong>这两项研究的对象是美国法与英文资料</strong>；日语原典的在线比例更低，情况只会更差，但目前没有针对日语法学文献的同类实测数据可引——因此本文对日语环境的判断，是笔者的实务观察，而非实测值。</p>
+
+  <h3>（b）同质化：教授一年读几十份同一种文体</h3>
+
+  <p>一个申请季里，教授会读几十份研究计划书，其中相当一部分出自同一批工具。于是同一种段落结构、同一种连接方式、同一种谨慎到没有立场的问题设定，反复出现。</p>
+
+  <p>这里的风险不是“被认定为作弊”，而是更平淡也更致命的一件事：<strong>读起来没有作者</strong>。研究计划书评的是一个人的判断力——为什么选这个问题而不是那个、为什么接受这个前提而怀疑那个。当文本被磨得毫无棱角，评审者看不到判断，只能看到一份合格的模板。</p>
+
+  <p>顺带一提，这也是为什么“代写”产业的产品在日本这边并不好用。申请文书被中介虚假“包装”甚至擅自篡改的问题，已被中国官方媒体公开报道；审查方比申请人更早知道这类产业的存在。</p>
+
+  <h3>（c）先行研究的空洞</h3>
+
+  <p>AI没有读过那些文献的实物，所以它写出来的“先行研究”往往长这样：“关于本主题已有一定的研究积累”“既往研究主要从A与B两个角度展开”。听上去很像样，但没有任何一句能落到某位研究者的某个具体主张上。</p>
+
+  <p>而先行研究恰恰是整份计划书里唯一能证明“你已经进入这个学术共同体”的部分。它的功能不是显示你读得多，而是<strong>把你的问题定位在一张已有的地图上</strong>：谁做到了哪一步、卡在哪里、你要补的是哪一块。这一段空洞，后面所有的方法论设计都会失去意义。</p>
+
+  <h2>三、为什么在日语环境里尤其严重</h2>
+
+  <p>上面三点在任何语言里都成立，但在日语环境里会被显著放大。原因是一个很朴素的事实：<strong>日本的学术与法律信息，对AI来说是低资源语料</strong>。</p>
+
+  <ul>
+    <li><strong>判例</strong>。日本并非所有裁判文书都在网上公开，法院网站上能检索到的只是其中一部分。而对研究更重要的<strong>判例评释</strong>——法学者对个别判决的分析——大量刊载在纸质的商业出版物上，几乎不进入公开互联网。</li>
+    <li><strong>学术期刊</strong>。J-STAGE与各大学的机构知识库覆盖了一部分，但大量学会志、大学学报（日文称“<span lang="ja">紀要</span>”）未被数字化，或者只有书目信息在线。</li>
+    <li><strong>图书与旧文献</strong>。国立国会图书馆数字化了大量资料，但公开范围分三层：<strong>无需登录即可阅览／可通过送信服务阅览／国立国会图书馆内限定</strong>。其中“送信服务”包含面向图书馆的传送与面向个人的传送两种：<strong>面向个人的数字化资料传送服务，只有居住在日本国内的注册用户才能使用</strong>；图书馆传送服务则需要到日本国内的参加图书馆<strong>馆内</strong>阅览。</li>
+    <li><strong>立法资料</strong>。审议会（<span lang="ja">審議会</span>）的议事录与配布资料，多数已在各府省网站公开；但<strong>立案担当者的解说</strong>（如“<span lang="ja">一問一答</span>”系列与法律杂志上的连载）与逐条注释，纸面比例仍然很高，<strong>通常不在公开互联网上</strong>——多为纸本，或需购买电子书、订阅付费数据库。</li>
+  </ul>
+
+  <p>把这些加起来只有一个结论：中文与英文世界里“上网就能查到”的直觉，在日文原典上不成立。AI读不到它们，不是因为模型不够强，而是因为<strong>它们不在网上</strong>。</p>
+
+  <p>这里需要区分两件事，否则容易走到另一个极端。J-STAGE等平台确实公开了大量全文——据其官方介绍，收录来自2,400余家发行机构的4,000种以上期刊与会议录，其中九成以上的文章可免费阅览——<strong>这一部分AI也能读到</strong>。读不到的是没有进入这些平台的部分：纸质的判例评释、未数字化的大学学报（<span lang="ja">紀要</span>）、立案担当者的解说，以及只有书目在线的旧刊。所以真正的难点并不是笼统的“AI读不到日文”，而是<strong>AI分不清哪一条是它真的读过的、哪一条是它按格式补全出来的</strong>。</p>
+
+  <p>这里还有一个中文母语者特有的陷阱：汉字带来的错觉。能读懂汉字，确实让中文母语者在日语文献上的起点更高——但同形异义词、以及日语学术文体特有的委婉论证方式，恰恰因此更容易被误读。“看得懂”与“能准确引用”之间，隔着一整套学术规范。</p>
+
+  <h2>四、会怎样被发现</h2>
+
+  <p>很多人以为“查引用”是一件麻烦事。对教授来说不是——那是他每天都在做的事。</p>
+
+  <ul>
+    <li><strong>书目层面的核对通常只要几分钟</strong>。输入作者名与期刊名，在CiNii上检索一次；判例则到法院网站核对案号。对不上，就是对不上。但这只完成了三件事里的第一件：第二件是<strong>内容层面</strong>——该文献是否真的写了你引用的那句话（这一步必须读到原文，纸质的判例评释没有线上捷径）；第三件是<strong>页码层面</strong>——AI给出的引用几乎从不带准确页码。第一件你自己就能做，也应该自己做；后两件才是需要调阅原件的部分。</li>
+    <li><strong>面试上最自然的问题就是关于引用的</strong>。“你在计划书里提到的○○那篇，你怎么看他的论点？”“你说既往研究没有处理X，那○○的研究算不算处理了？”——这类问题不是刁难，是审查者的标准动作。没读过原文的话，通常三十秒内就会露馅：能复述AI给的摘要，却答不出这篇文章的立场、方法与局限。</li>
+    <li><strong>出愿之前的邮件往来</strong>里（申请日本的“研究生”、争取教授内诺时尤其如此），教授也常会回一句“你提到的先行研究，能否再具体说明”。这同样是一次核实。</li>
+  </ul>
+
+  <p>更重要的是被发现之后的<strong>性质</strong>。日语不够好、研究设计不成熟，属于能力问题——能力问题可以补，教授也见惯了。但引用了不存在的文献，性质完全不同：它会被归入<strong>诚信</strong>问题。日本的研究伦理框架把捏造、篡改、剽窃列为“特定学术不端行为”（文部科学省《关于应对研究活动中学术不端行为的指南》，日文原名：<span lang="ja">研究活動における不正行為への対応等に関するガイドライン</span>）。出愿阶段的研究计划书当然不直接适用那套惩戒程序，但读你计划书的人，判断标准来自同一套职业伦理。</p>
+
+  <p>这就是这件事真正的不对称之处：<strong>能力上的不足可以在入学后补上，诚信上的怀疑没有补救的机会。</strong></p>
+
+  <h2>五、正确的工作流：不是“抹掉AI”，而是“逐条回到原典核实AI”</h2>
+
+  <p>如果结论是“别用AI”，这篇文章就白写了。正确的做法不是把AI的痕迹擦掉——那只是化妆——而是把AI给出的每一个事实性主张，换成有出处、你自己读过的东西。</p>
+
+  <p><strong>第0步：让AI做它擅长的事——发散，而不是断言。</strong><br />
+    让它列出可能的研究角度、可能的日文检索关键词（同一个概念在日语里往往有好几种表述，这一步AI非常有用）、把你的中文构想转成日语学术表达的初稿。原则是：<strong>让AI提供检索的入口，不让它提供事实。</strong></p>
+
+  <p><strong>第1步：起草时先立规矩。</strong><br />
+    在提示里明确要求：需要引用的位置只留空标记（例如写成“［要出典］”），不要自行填充文献。如果它已经填了，就把每一条都当作“未经验证”处理——包括那些看起来最可信的。</p>
+
+  <p><strong>第2步：全量核实与替换（这一步是全文的核心）。</strong><br />
+    建一张<strong>引用台账</strong>，每条引用一行，至少五列：①这条引用支撑的主张 ②AI给出的出处 ③核实结果（存在／不存在／存在但不支持）④实际出处（含卷号与页码）⑤你用一句话写下的该文献要点。</p>
+
+  <p>处理规则只有三条：</p>
+
+  <ol>
+    <li><strong>存在且相符</strong> → 保留，补上准确页码。</li>
+    <li><strong>存在但不支持这个主张</strong> → 要么改写主张，要么更换出处。这一类最容易被放过，也最危险。</li>
+    <li><strong>不存在</strong> → 删除。然后回到检索，重新去找真的说过这件事的人。</li>
+  </ol>
+
+  <p>请注意顺序：不是“把假引用换成真引用”，而是<strong>先有阅读，再有引用</strong>。前者只是把幻觉洗白，后者才是研究。</p>
+
+  <p><strong>第3步：真的去读日文先行研究，并据此重建结构。</strong><br />
+    选3～5篇核心文献，向后追它们的参考文献、向前追引用它们的后续研究，把这条引用链走一遍。然后用自己的话写出三句：既往研究做到了哪一步／还剩什么没有解决／我要补的是哪一块。这三句话是整份计划书的心脏，也是面试必问之处。它必须由你来写。</p>
+
+  <p><strong>第4步：做一次“面试耐受性”自检。</strong><br />
+    对每一条引用问自己：我能不能用两句话说清这篇文章讲了什么、以及它为什么与我的问题有关。答不出来的，删掉。一份引用不多但每条都站得住的计划书，远胜过一份引用密集却经不起一问的。</p>
+
+  <p><strong>第5步：最后才轮到语言润色，这一步可以再交给AI。</strong><br />
+    顺序很重要：<strong>先核实事实，再打磨语言</strong>。反过来做，等于给假货打蜡。</p>
+
+  <h2>六、自查清单：把引用一条一条核实</h2>
+
+  <h3>6-1 期刊论文与大学纪要</h3>
+
+  <ul>
+    <li><strong>CiNii Research</strong>：日本学术文献的总入口。先用作者名与关键词确认“这篇文章是否存在”，这是最快的一步。</li>
+    <li><strong>J-STAGE</strong>：能拿到全文PDF的学会与协会期刊平台。</li>
+    <li><strong>IRDB（学术机构知识库数据库）与各大学的机构知识库</strong>：大学学报（日文称“<span lang="ja">紀要</span>”）类论文常常只在这里有全文。</li>
+    <li><strong>KAKEN（科研费数据库）</strong>：核实“这位研究者是不是真的在做这个课题”，也能反查该领域近年的动向；这一步顺便能帮你判断该找谁做指导教员。</li>
+  </ul>
+
+  <p>判定原则：<strong>查不到 ≠ 不存在</strong>（很可能只是没有数字化）。但如果既查不到书目、也说不出它的实体所在（哪本刊、哪一卷、哪家图书馆有），就按不存在处理。</p>
+
+  <h3>6-2 判例与法条</h3>
+
+  <ul>
+    <li><strong>裁判所网站的裁判例检索</strong>：核对法院、判决年月日、案号（日文称“<span lang="ja">事件番号</span>”）三者是否一致。任何一项对不上，这条引用就不能用。</li>
+    <li>网站收录的是公开的一部分裁判文书，因此“查不到”不等于该判决不存在；但“<strong>编号对不上</strong>”是硬伤，性质完全不同。</li>
+    <li><strong>判例评释</strong>多在纸质的商业刊物上，需要到图书馆看。这一步没有线上捷径。</li>
+    <li>法条用 <strong>e-Gov 法令检索</strong> 核对现行条文，并确认你引用的是修改前还是修改后的条号——AI在这里出错的频率很高。</li>
+  </ul>
+
+  <h3>6-3 图书与纸质资料</h3>
+
+  <ul>
+    <li><strong>国立国会图书馆检索（NDL Search）</strong>：查书目、查馆藏。</li>
+    <li><strong>国立国会图书馆数字馆藏（NDL Digital Collections）</strong>：注意每件资料上标示的“公开范围”——现行的三个标签是“<strong>无需登录即可阅览</strong>／<strong>可通过送信服务阅览</strong>／<strong>国立国会图书馆内限定</strong>”。</li>
+    <li><strong>面向个人的数字化资料传送服务</strong>：仅限居住在日本国内的注册用户（2026年8月查阅时该要件未变）。图书馆传送服务则需要到日本国内的参加图书馆馆内阅览。</li>
+    <li><strong>调查向导（Research Navi）与图书馆的参考咨询服务</strong>：可以直接询问“某个主题的先行研究该从哪里入手”。这是被严重低估的资源，而且免费。</li>
+  </ul>
+
+  <p>（以上各项的日文原名与网址见文末“参考资料”，检索时用日文原名更容易找到。）</p>
+
+  <h3>6-4 三个一分钟检查</h3>
+
+  <ol>
+    <li><strong>页码</strong>。AI给出的引用几乎从不带准确页码。没有页码的引用，一律重查。</li>
+    <li><strong>卷号与年份的对应关系</strong>。这是最常见的破绽，对一下该刊的发行年表即可。</li>
+    <li><strong>你能不能说出这篇文章的结论？</strong> 说不出，就说明你没读过；没读过，就不要引。</li>
+  </ol>
+
+  <h3>6-5 按处境的最小方案</h3>
+
+  <ul>
+    <li><strong>人在中国大陆</strong>：先用可在线获取全文的资源（J-STAGE、各大学机构典藏库、学协会公开PDF）搭起先行研究的骨架，把必须看纸本的部分留到能到馆的阶段，或委托能到馆的人核对页码与原文。要记住：<strong>在书目层面确认“存在”，与在原文层面确认“内容”，是两件不同的事</strong>，不要混为一谈。</li>
+    <li><strong>已在日本</strong>：完成国立国会图书馆的正式注册（日文称“<span lang="ja">本登録</span>”），并善用所属大学图书馆的馆际互借（ILL）与复印服务；纸质判例评释基本都能通过大学图书馆解决。</li>
+  </ul>
+
+  <h2>结语</h2>
+
+  <p>AI不是“要不要用”的问题，而是“用到哪一步为止”的问题。</p>
+
+  <p>我自己的研究方向之一是可解释AI——让机器的输出变得可核查、可追问，本来就是这个领域的主题。研究计划书也一样：AI可以给你一个高效的起点，但“核查”这一步不能再外包给AI，只能由你自己、或者由能真正读到日文原典的人来完成。</p>
+
+  <p>把这一步做完之后，你的计划书就不再是“AI写的”了。它是<strong>有出处的</strong>。</p>
+
+  <hr />
+
+  <blockquote>
+    <strong>如果你已经有一份AI写的初稿，却不知道其中哪些引用是真的</strong>：本站提供 <strong>AI回答引用核实</strong>（逐条核对日本判例、法条、文献是否真实存在，返还核实报告与正确出处）与 <strong>研究计划书套餐（3个月一对一）</strong>——先行研究地图、辅导课12次、研究计划书修改12稿、联系教授的礼仪指导、模拟面试2次。能在线确认的在线核对，只存在于纸面的到国立国会图书馆等处调阅原件核对，并把该处的原文与所在信息一并交给您；不代写，也不作任何“保录”承诺。<br />
+    → <a href="/zh/services#service-citation-audit">服务与价格（AI回答引用核实）</a>　|　<a href="/zh/contact">直接联系（中文可）</a>
+  </blockquote>
+
+  <p><strong>关于作者</strong>：贞村真宏。东京大学法科大学院毕业（日文称“<span lang="ja">修了</span>”），取得法务博士（专业学位、J.D.），同行评审论文21篇。研究方向为法与心理学、量刑判断、可解释AI（XAI）与自然语言处理。</p>
+
+  <p><strong>免责</strong>：本文为一般性信息，不构成任何个案建议。</p>
+
+  <p>本文基于公开第一手资料整理，信息截至2026年7月。</p>
+
+  <h3>参考资料</h3>
+
+  <ul>
+    <li>裁判所「裁判例検索」 <a href="https://www.courts.go.jp/hanrei/search1/index.html" target="_blank" rel="noopener external">https://www.courts.go.jp/hanrei/search1/index.html</a></li>
+    <li>e-Gov 法令検索 <a href="https://laws.e-gov.go.jp/" target="_blank" rel="noopener external">https://laws.e-gov.go.jp/</a></li>
+    <li>CiNii Research（国立情報学研究所） <a href="https://cir.nii.ac.jp/" target="_blank" rel="noopener external">https://cir.nii.ac.jp/</a></li>
+    <li>J-STAGE（科学技術振興機構） <a href="https://www.jstage.jst.go.jp/" target="_blank" rel="noopener external">https://www.jstage.jst.go.jp/</a></li>
+    <li>IRDB <span lang="ja">学術機関リポジトリデータベース</span> <a href="https://irdb.nii.ac.jp/" target="_blank" rel="noopener external">https://irdb.nii.ac.jp/</a></li>
+    <li>KAKEN <span lang="ja">科学研究費助成事業データベース</span> <a href="https://kaken.nii.ac.jp/" target="_blank" rel="noopener external">https://kaken.nii.ac.jp/</a></li>
+    <li><span lang="ja">国立国会図書館サーチ</span> <a href="https://ndlsearch.ndl.go.jp/" target="_blank" rel="noopener external">https://ndlsearch.ndl.go.jp/</a></li>
+    <li><span lang="ja">国立国会図書館デジタルコレクション</span>（数字馆藏） <a href="https://dl.ndl.go.jp/" target="_blank" rel="noopener external">https://dl.ndl.go.jp/</a></li>
+    <li>国立国会図書館「<span lang="ja">図書館向けデジタル化資料送信サービス</span>」 <a href="https://www.ndl.go.jp/use/digital_transmission" target="_blank" rel="noopener external">https://www.ndl.go.jp/use/digital_transmission</a></li>
+    <li>国立国会図書館「<span lang="ja">個人向けデジタル化資料送信サービス</span>」 <a href="https://www.ndl.go.jp/use/digital_transmission_individuals" target="_blank" rel="noopener external">https://www.ndl.go.jp/use/digital_transmission_individuals</a></li>
+    <li>国立国会図書館「利用者登録（個人）<span lang="ja">について</span>」 <a href="https://www.ndl.go.jp/jp/registration/index.html" target="_blank" rel="noopener external">https://www.ndl.go.jp/jp/registration/index.html</a></li>
+    <li>国立国会図書館「<span lang="ja">リサーチ・ナビ</span>」 <a href="https://ndlsearch.ndl.go.jp/rnavi" target="_blank" rel="noopener external">https://ndlsearch.ndl.go.jp/rnavi</a></li>
+    <li>文部科学省「<span lang="ja">研究活動における不正行為への対応等に関するガイドライン</span>」（平成26年8月26日 文部科学大臣決定） <a href="https://www.mext.go.jp/b_menu/houdou/26/08/1351568.htm" target="_blank" rel="noopener external">https://www.mext.go.jp/b_menu/houdou/26/08/1351568.htm</a></li>
+    <li>央视网（2024-08-09）留学中介篡改申请材料问题的报道（媒体报道） <a href="https://news.cctv.cn/2024/08/09/ARTIUMRTkVxElhHmoYHYKlre240809.shtml" target="_blank" rel="noopener external">https://news.cctv.cn/2024/08/09/ARTIUMRTkVxElhHmoYHYKlre240809.shtml</a></li>
+    <li>Matthew Dahl, Varun Magesh, Mirac Suzgun &amp; Daniel E. Ho, “Large Legal Fictions: Profiling Legal Hallucinations in Large Language Models,” <em>Journal of Legal Analysis</em> 16(1), 64–93 (2024)（同行评审・开放获取） <a href="https://academic.oup.com/jla/article/16/1/64/7699227" target="_blank" rel="noopener external">https://academic.oup.com/jla/article/16/1/64/7699227</a>（DOI: <a href="https://doi.org/10.1093/jla/laae003" target="_blank" rel="noopener external">10.1093/jla/laae003</a>）</li>
+    <li>Varun Magesh, Faiz Surani, Matthew Dahl, Mirac Suzgun, Christopher D. Manning &amp; Daniel E. Ho, “Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools,” <em>Journal of Empirical Legal Studies</em> 22(2), 216–242 (2025)（同行评审） DOI: <a href="https://doi.org/10.1111/jels.12413" target="_blank" rel="noopener external">https://doi.org/10.1111/jels.12413</a>（预印本： <a href="https://arxiv.org/abs/2405.20362" target="_blank" rel="noopener external">https://arxiv.org/abs/2405.20362</a>）</li>
+  </ul>
+
+  <h3>相关阅读</h3>
+
+  <ul>
+    <li><a href="/zh/guide/research-proposal-guide">研究计划书怎么写：日本教授真正在看的是什么</a></li>
+    <li><a href="/zh/guide/japan-graduate-admissions-routes">日本读研全流程：研究生、修士直考、SGU三条路线</a></li>
+    <li><a href="/zh/guide">全部指南 → 留学指南</a></li>
+  </ul>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(articleLd)} />
+</BaseLayout>
