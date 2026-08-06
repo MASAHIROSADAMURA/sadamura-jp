@@ -1,0 +1,26 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="AI-Derived Bar Exam Answers vs. the Official Answer Key — Results | Masahiro Sadamura"
+  description="Results of matching 113 pre-registered, AI-derived answer slots for the 2026 Japanese Bar Examination (short-answer section) against the official answer key published on August 6, 2026: 112 of 113 slots matched, and the single miss fell on a pre-designated watch slot."
+>
+  <h1>AI-derived Answers for the 2026 Japanese Bar Exam (Short-answer): Results Against the Official Answer Key</h1>
+
+  <p>
+    On 2026-07-24, before the official answer key existed publicly, all 113
+    answer slots (Constitutional, Civil, and Criminal Law) derived by a
+    multi-stage LLM verification pipeline were fixed and published with
+    confidence grades and pre-designated "watch" slots. The Ministry of Justice
+    released the official answer key on 2026-08-06, and every slot was matched
+    against it: <strong>112 of 113 slots agreed (99.1%)</strong> — 39/40 in
+    Constitutional Law, 37/37 in Civil Law, and 36/36 in Criminal Law. The
+    single disagreement fell on one of the two slots designated in advance as
+    most likely to diverge, all 14 low-confidence (grade B) slots matched, and
+    the one slot revised by the pre-publication adversarial audit matched in its
+    revised value.
+  </p>
+
+  <p>Full details are available in the <a href="/lab/r8-tanto-kekka">Japanese version</a>.</p>
+</BaseLayout>

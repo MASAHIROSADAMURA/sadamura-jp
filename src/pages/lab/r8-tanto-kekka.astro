@@ -1,0 +1,178 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import matching from '@data/r8_matching.json';
+
+// 照合表は手書きしない。公開済み derivation_r8.json（SHA-256 固定）× 公式正答を
+// scripts/gen_r8_matching.mjs が機械照合した src/data/r8_matching.json から描画する。
+// 再生成は `npm run r8:match`。
+type Row = (typeof matching.rows)[number];
+const rows: Row[] = matching.rows;
+
+const tally = (pred: (r: Row) => boolean): number => rows.filter(pred).length;
+
+// 本文が述べる数値とデータが食い違ったらビルドを落とす（数字は本文側を正とし、
+// データが動いたら prose ではなくビルド元を直す）。
+function expect(label: string, actual: number, want: number): void {
+  if (actual !== want) {
+    throw new Error(`r8-tanto-kekka: ${label} = ${actual}（本文の記載は ${want}）`);
+  }
+}
+expect('総欄数', rows.length, 113);
+expect('一致欄数', tally((r) => r.match), 112);
+expect('憲法の一致欄数', tally((r) => r.subject === '憲法' && r.match), 39);
+expect('民法の一致欄数', tally((r) => r.subject === '民法' && r.match), 37);
+expect('刑法の一致欄数', tally((r) => r.subject === '刑法' && r.match), 36);
+expect('確信度Aの欄数', tally((r) => r.confidence === 'A'), 99);
+expect('確信度Aの一致欄数', tally((r) => r.confidence === 'A' && r.match), 98);
+expect('確信度Bの欄数', tally((r) => r.confidence === 'B'), 14);
+expect('確信度Bの一致欄数', tally((r) => r.confidence === 'B' && r.match), 14);
+expect('注視欄の欄数', tally((r) => r.watch), 2);
+expect('注視欄の一致欄数', tally((r) => r.watch && r.match), 1);
+expect('訂正欄の欄数', tally((r) => r.corrected), 1);
+expect('訂正欄の一致欄数', tally((r) => r.corrected && r.match), 1);
+---
+
+<BaseLayout
+  title="令和8年司法試験 短答式 AI導出解答の公開検証——公式正答との照合結果 | 貞村真宏"
+  description="公式正答の公表前に確信度付きで固定・公開した令和8年司法試験短答式（憲法・民法・刑法）全113解答欄のAI導出解答を、法務省の公式正答と全欄照合した結果。113欄中112欄が一致。唯一の不一致は事前指定した注視欄から出た。"
+>
+  <h1>令和8年司法試験 短答式　AI導出解答の公開検証——照合結果</h1>
+
+  <p><strong>公式正答の公表: 2026年8月6日（法務省・16時頃）／照合実施: 同日／本ページ公開: 2026-08-06</strong></p>
+
+  <p><a href="/lab/r8-tanto">事前登録ページ（2026年7月24日公開・以後不変更）</a>で確信度付きで固定した全77問113解答欄のAI導出解答を、本日公表された公式正答と全欄照合した。結果は以下のとおり。</p>
+
+  <h2>結果の要約</h2>
+
+  <ul>
+    <li><strong>113欄中112欄が公式正答と一致（99.1%）。</strong></li>
+    <li>唯一の不一致は<strong>憲法No.5（第2問イ）</strong>——事前登録時に「公式正答が割れる可能性が最も高い」と<strong>公表前に指定していた注視欄そのもの</strong>だった。もう一方の注視欄（憲法No.23・第11問ウ）は一致。</li>
+    <li>確信度B（低確信）に格付けした14欄は<strong>14欄すべて一致</strong>。不一致はA格付けの欄から出た（A: 98/99）。二値の確信度格付けは失敗欄を捉えなかったが、より細かい<strong>「注視欄」の事前指定が、113欄中ただ一つの失敗箇所を言い当てた</strong>。</li>
+    <li>公表前の敵対的監査で訂正した憲法No.10（第6問ア・訂正履歴として開示済み）は、<strong>訂正後の値が公式正答と一致</strong>——監査による訂正は正しかった。</li>
+  </ul>
+
+  <h2>科目別の照合</h2>
+
+  <table>
+    <thead>
+      <tr><th scope="col">科目</th><th scope="col">一致</th><th scope="col">不一致</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>憲法（20問40欄）</td><td><strong>39/40</strong></td><td>No.5（第2問イ）</td></tr>
+      <tr><td>民法（37問37欄）</td><td><strong>37/37</strong></td><td>—</td></tr>
+      <tr><td>刑法（20問36欄）</td><td><strong>36/36</strong></td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <p>（113欄の全照合表: 欄ごとに導出・公式・一致/不一致・確信度・注視マークを表示。derivation_r8.json×公式正答から生成）</p>
+
+  <div class="table-scroll" role="region" aria-labelledby="matching-caption" tabindex="0">
+    <table>
+      <caption id="matching-caption">113欄の全照合表</caption>
+      <thead>
+        <tr>
+          <th scope="col">科目</th>
+          <th scope="col">問</th>
+          <th scope="col">欄</th>
+          <th scope="col">導出</th>
+          <th scope="col">公式</th>
+          <th scope="col">一致</th>
+          <th scope="col">確信度</th>
+          <th scope="col">注記</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            <td>{r.subject}</td>
+            <td>{r.question}</td>
+            <td>{r.slot}</td>
+            <td>{r.derived}</td>
+            <td>{r.official}</td>
+            <td>{r.match ? '一致' : <strong>不一致</strong>}</td>
+            <td>{r.confidence === 'B' ? <span class="badge">B</span> : 'A'}</td>
+            <td>
+              {r.watch && <span class="badge">◎注視</span>}
+              {r.corrected && <span class="badge">訂正済</span>}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>唯一の不一致欄——何を間違えたか（憲法第2問イ・No.5）</h2>
+
+  <p>第2問は、私人間効力に関する各学説について「記述ｂが見解ａの批判となっているか」だけを判定する純論理型の設問である。イは、ａ＝国家同視説（私人の高度に公的な行為を国家行為と同視して憲法を直接適用する構成）に対し、ｂ＝「国家と社会を分離する自由主義的国家論を採ることは当然視されるべきではない」が批判となるか、を問うた。</p>
+
+  <ul>
+    <li><strong>導出（誤り）</strong>: 国家同視説は「憲法は国家に向く」という国家/社会二分論を前提に、例外的に私人を国家側へ引き寄せる構成である——ゆえに前提たる二分論への疑義は批判になる（１）、と形式論理で読んだ。</li>
+    <li><strong>公式正答（２＝批判とならない）</strong>: 判定は説の<strong>動機</strong>で行う。国家同視説は、国家に匹敵する社会的権力の出現を前に国家/社会の峻別を<strong>絶対視しない</strong>からこそ、実質的国家性を帯びた私人の行為へ憲法を届かせる構成であり、ｂはこの説の根拠と<strong>同じ方向</strong>を向く命題である。設問の設計上も、無適用説をその根拠側の命題で支えた同問ウと鏡像をなす。</li>
+  </ul>
+
+  <p>事前登録時にこの欄を注視欄と指定した理由は「判例アンカーのない純論理欄であり、検証段で唯一、独立検証者の初回判断が割れた欄」だったこと——この事前診断はそのまま的中した。</p>
+
+  <h2>較正の評価</h2>
+
+  <table>
+    <thead>
+      <tr><th scope="col">事前指定</th><th scope="col">欄数</th><th scope="col">一致</th><th scope="col">一致率</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>確信度A</td><td>99</td><td>98</td><td>99.0%</td></tr>
+      <tr><td>確信度B</td><td>14</td><td>14</td><td>100%</td></tr>
+      <tr><td>うち注視欄</td><td>2</td><td>1</td><td>——唯一の不一致が注視欄1位から出た</td></tr>
+    </tbody>
+  </table>
+
+  <p>「AIの出力のどこが間違い得るかを、AI側のパイプラインが事前に特定できるか」という問いに対する、後出しの余地を排した1標本の答えである。誤り率0.9%という水準そのものより、<strong>誤り箇所の事前特定（注視欄）と、公表前監査による自己訂正（No.10）がともに機能した</strong>ことが、本検証の主たる知見と考えている。</p>
+
+  <h2>検証性の担保</h2>
+
+  <ul>
+    <li>事前登録: <a href="/lab/r8-tanto">/lab/r8-tanto</a>（2026-07-24公開・導出JSONのSHA-256を本文に刻印・Wayback/OpenTimestampsで存在証明済み・以後不変更）</li>
+    <li>公式正答: 法務省「令和8年司法試験短答式試験結果」ページ掲載の「正答及び配点」PDF3本（本ページの照合に用いた取得物のMD5: 憲法 <code>bfdff1c99018309456b80b9a5dae6f17</code>／民法 <code>1d3c5219cdbc5d8bf16209cc68472a8a</code>／刑法 <code>18a32feca0bc71605ad31894c711efa9</code>）</li>
+    <li>照合は公開済みJSONの導出値と公式正答の機械照合に、全欄の人手再確認を重ねた</li>
+    <li>本ページも公開後は編集しない（第三者タイムスタンプを公開直後に取得し本節へ追記——追記は公開当日のみ）</li>
+  </ul>
+
+  <h2>免責・注記</h2>
+
+  <ul>
+    <li>本ページは<strong>非公式の研究デモ</strong>であり、法務省・司法試験委員会とは一切関係ありません。正答は法務省公表の公式正答のみが正です。</li>
+    <li>本検証は受験指導・解答速報の提供を目的とするものではありません。</li>
+    <li>AIの出力には誤りが含まれ得ます。本検証は、その誤り率と較正を公開の場で測定する試みの後半（採点編）です。</li>
+  </ul>
+
+  <h2>今後の予定</h2>
+
+  <ul>
+    <li>方法論の学術的詳細（多段検証パイプラインの構成・確信度較正・注視欄指定の手続）は、AIと法に関する国際会議・学会誌へ投稿予定です。</li>
+  </ul>
+
+  <hr />
+
+  <p><em>お問い合わせは <a href="/contact">contact</a> へ。</em></p>
+</BaseLayout>
+
+<style>
+  /* 8列×113行の照合表だけが狭い画面で本文幅を超える。色は一切足さず、
+     横スクロール領域として切り出す（キーボードでも到達できるよう tabindex="0"）。 */
+  .table-scroll {
+    overflow-x: auto;
+    margin: 1.5em 0;
+  }
+  .table-scroll table {
+    margin: 0;
+    min-width: 34rem;
+  }
+  .table-scroll caption {
+    text-align: left;
+    font-size: 0.9rem;
+    padding-bottom: 0.4em;
+  }
+  .table-scroll:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+</style>

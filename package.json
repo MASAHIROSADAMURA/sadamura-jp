@@ -19,6 +19,7 @@
     "astro": "astro",
     "check": "astro check",
     "bib": "node scripts/bib2json.mjs",
+    "r8:match": "node scripts/gen_r8_matching.mjs",
     "preflight": "node scripts/preflight.mjs",
     "format": "prettier --write \"src/**/*.{astro,ts,tsx,js,jsx,md,mdx,json,css}\""
   },
