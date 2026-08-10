@@ -119,7 +119,7 @@ const dateLabel = dateParts.join('-');
     )}
     {!paper.doi && paper.url && (
       <span>
-        <a href={paper.url} rel="noopener noreferrer external" target="_blank">Link</a>
+        <a href={paper.url} rel="noopener external" target="_blank">Link</a>
       </span>
     )}
     {paper.note && <span>({paper.note})</span>}
