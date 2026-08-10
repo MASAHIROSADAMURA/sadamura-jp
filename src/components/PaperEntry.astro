@@ -60,6 +60,10 @@ function displayVenue(paper: Paper, lang: Lang): string {
 const title = displayTitle(paper, lang);
 const venue = displayVenue(paper, lang);
 const showJpBadge = lang === 'en' && paper.language === 'ja';
+// External link target for the title. DOI wins over a bare `url`; when neither
+// exists the title stays plain text. The meta row below mirrors this: a
+// `DOI: <doi>` link when a DOI is present, otherwise a bare `Link` when only
+// `url` is set, and nothing at all when the entry has no external target.
 const doiHref = paper.doi ? `https://doi.org/${paper.doi}` : paper.url;
 const editorIsSelf =
   !!paper.editor && (paper.editor.includes('貞村') || paper.editor.includes('Sadamura'));
@@ -111,6 +115,11 @@ const dateLabel = dateParts.join('-');
     {paper.doi && (
       <span>
         DOI: <a href={`https://doi.org/${paper.doi}`} rel="noopener external" target="_blank">{paper.doi}</a>
+      </span>
+    )}
+    {!paper.doi && paper.url && (
+      <span>
+        <a href={paper.url} rel="noopener noreferrer external" target="_blank">Link</a>
       </span>
     )}
     {paper.note && <span>({paper.note})</span>}
