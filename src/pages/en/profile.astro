@@ -1,5 +1,16 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+
+// 詫摩武俊賞の英語表記について（2026-08-16 一次確認）。
+// 日本パーソナリティ心理学会は本賞の公式英語名を公表していない。学会英語ページ
+// （jspp.gr.jp/en/）に賞の記載はなく、学会賞ページ・会則PDF・サイトマップ全25頁
+// にも英名・賞規程は無い。大阪大学研究者総覧・J-GLOBAL・researchmap のいずれも
+// 「英語版ページで賞名だけ日本語のまま」＝公式英名が存在しないことの傍証。
+// よって "Takuma Award" は本サイト独自の暫定表記（非公式訳）である。
+// 旧表記 "Takuma Takeshiro Award" はウェブ上に典拠が皆無の誤読のため撤去した。
+// 姓名の正しいローマ字は Taketoshi Takuma（KAKEN 研究者番号 90086934「TAKUMA
+// Taketoshi」、本人の J-STAGE 英語論文の著者名、CiNii カナ標目「タクマ, タケトシ」）。
+// 確定させるなら学会事務局（jspp.gr.jp/contact/）への直接照会が必要。
 ---
 
 <BaseLayout
@@ -10,6 +21,36 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 
   <h2>Name</h2>
   <p>Masahiro SADAMURA (<span lang="ja">貞村 真宏 / さだむら まさひろ</span>)</p>
+
+  <h2>Current Position</h2>
+  <p>
+    Researcher at the Graduate School of Human Sciences, The University of Osaka.
+    J.D., The University of Tokyo.
+  </p>
+
+  <h2>Brief Biographical Statement</h2>
+  <p>
+    I am a researcher in legal psychology at the Graduate School of Human
+    Sciences, The University of Osaka. My work asks how criminal courts handle
+    welfare-related information about defendants — developmental adversity,
+    disability, social isolation — and what role such information should play
+    where criminal justice meets social welfare.
+  </p>
+  <p>
+    I have published 21 peer-reviewed articles (as of August 2026) in psychology
+    and law journals and presented at international meetings including the
+    European Society of Criminology. Methodologically, I pair vignette
+    experiments and path analysis with natural language processing of Japanese
+    sentencing judgments and explainable machine learning (SHAP), building
+    evidence at the level of individual judgment and of the system.
+  </p>
+  <p>
+    Bridging law and social psychology, I aim to give Japanese criminal justice
+    an evidence-based account of how welfare considerations can — and should —
+    enter sentencing. My work has been recognized with awards from the Japan
+    Society for Research on Emotion, the Japan Society of Personality
+    Psychology, and the Japanese Society for Law and Psychology.
+  </p>
 
   <h2>Research Areas</h2>
   <ul>
@@ -27,6 +68,12 @@ import BaseLayout from '@layouts/BaseLayout.astro';
     Law and psychology
   </p>
 
+  <h2>Researcher Identifiers</h2>
+  <p>
+    ORCID iD: <a href="https://orcid.org/0009-0008-2248-4583" rel="me noopener" target="_blank">0009-0008-2248-4583</a>
+    · researchmap: <a href="https://researchmap.jp/sadamuramasahiro?lang=en" rel="me noopener" target="_blank">researchmap.jp/sadamuramasahiro</a>
+  </p>
+
   <h2>Education</h2>
   <ul>
     <li>B.A. in Economics, School of Political Science and Economics, Waseda University</li>
@@ -37,6 +84,12 @@ import BaseLayout from '@layouts/BaseLayout.astro';
   <ul>
     <li>Juris Doctor, The University of Tokyo</li>
     <li>Bachelor of Arts in Economics, Waseda University</li>
+  </ul>
+
+  <h2>Scholarships &amp; Fellowships</h2>
+  <ul>
+    <li>Okuma Memorial Scholarship, Waseda University</li>
+    <li>Anderson Mōri &amp; Tomotsune Scholarship, The University of Tokyo School of Law</li>
   </ul>
 
   <h2>Professional Affiliations</h2>
@@ -52,7 +105,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
   <h2>Awards</h2>
   <ul>
     <li>Outstanding Paper Award, Japan Society for Research on Emotion (2026)</li>
-    <li>Takuma Takeshiro Award (Outstanding Paper Award), Japan Society of Personality Psychology (2025)</li>
+    <li>Takuma Award (Outstanding Paper Award), Japan Society of Personality Psychology (2025)</li>
     <li><strong>Young Researcher Award</strong>, Japanese Society for Law and Psychology (2023)</li>
     <li>
       Best Legal Researcher Award (for an essay on "The Legal Nature of Credit Cooperatives"), Westlaw Japan (2012)<br />
@@ -60,13 +113,6 @@ import BaseLayout from '@layouts/BaseLayout.astro';
       / <a href="/files/award_westlaw_best_legal_researcher_2012.pdf" target="_blank" rel="noopener">Award page (PDF)</a>
     </li>
   </ul>
-
-  <h2>Scholarships &amp; Fellowships</h2>
-  <ul>
-    <li>Okuma Memorial Scholarship, Waseda University</li>
-    <li>Anderson Mōri &amp; Tomotsune Scholarship, The University of Tokyo School of Law</li>
-  </ul>
-  <p>…and several other named scholarships and fellowships.</p>
 
   <h2>Research Projects</h2>
   <ul>
@@ -84,24 +130,4 @@ import BaseLayout from '@layouts/BaseLayout.astro';
     <li>Student Editorial Board Member, <em>The University of Tokyo Law Review</em></li>
     <li>Lead Peer Supporter, Center for Research on Counseling and Support Services, The University of Tokyo</li>
   </ul>
-
-  <h2>Brief Biographical Statement</h2>
-  <p>
-    I am a researcher in legal psychology working on how the criminal justice
-    system handles welfare-oriented information about defendants — their
-    developmental backgrounds, disabilities, and social isolation. My core
-    question is whether and how such information shapes sentencing decisions
-    made by both lay citizens and professional judges, and what its proper
-    role might be in a system where criminal justice and social welfare meet.
-  </p>
-  <p>
-    Bridging law and social psychology, I take a mixed-methods approach:
-    combining vignette experiments, path
-    analysis, natural language processing of sentencing texts, and
-    explainable machine learning. Through this work I aim to clarify how
-    Japanese criminal justice can productively engage with welfare
-    considerations in sentencing. Throughout, I try to pair a broad interest
-    in people and society with warmth toward those involved and a commitment
-    to calm, evidence-based discussion.
-  </p>
 </BaseLayout>
