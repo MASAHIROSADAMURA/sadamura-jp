@@ -22,6 +22,7 @@
   address      = {{Kyushu University, Fukuoka, Japan}},
   issn         = {2432-3144},
   url          = {https://drive.google.com/file/d/1e8BsNgjvueqpnO9clalFgHHt-1FHj_jt/view},
+  pdf          = {https://researchmap.jp/sadamuramasahiro/published_papers/54932772/attachment_file.pdf},
   language     = {english},
   peerreview   = {yes},
   pubtype      = {article},
@@ -617,7 +618,16 @@
 % =============================================================================
 % 統計
 % Total entries: 44 (英文 5 + 和文 18 + その他 1 + 学会発表 18 + 著書 2; うち査読論文 22)
-% Last updated: 2026-09-13（JADH 2026 の会議録論文 sadamura2026_jadh26_proceedings を追加。
+% Last updated: 2026-09-15（JADH 2026 の会議録論文 sadamura2026_jadh26_proceedings に
+%   論文本体 PDF へのリンク pdf = {researchmap.jp/…/54932772/attachment_file.pdf} を併記。
+%   既存の url（Google Drive の予稿集全体・139頁）はそのまま残し、メタ行に「PDF」リンクを
+%   1本追加する（本人裁定 2026-09-15「併記する」）。統計値の増減なし＝総数 44・査読論文 22 で不変。
+%   pdf フィールドは本コミットで新設（bib2json.mjs の toItem・content/config.ts の Zod スキーマ・
+%   PaperEntry.astro のメタ行を同時に拡張）。url が無く pdf だけのエントリでは題名リンクが pdf を
+%   指す（doi > url > pdf の優先順）。researchmap 添付版は A4 2 頁・899,664 B・
+%   md5 f06fb1d81ea5db40a04c586aebe7bef7（2026-09-15 実測）。）
+%
+% 2026-09-13（JADH 2026 の会議録論文 sadamura2026_jadh26_proceedings を追加。
 %   Proceedings of JADH Conference, vol. 2026（ISSN 2432-3144・編者 WANG Yifan・pp. 30--31・
 %   2026-09-12 発行）掲載の査読付き論文。書誌の実体が会議録論文なのでエントリ型は
 %   @inproceedings のままとし、pubtype = article を明示して「論文 / Articles」節へ表示する

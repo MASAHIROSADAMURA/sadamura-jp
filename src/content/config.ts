@@ -31,6 +31,7 @@ const papers = defineCollection({
     pages: z.string().nullable(),
     doi: z.string().nullable(),
     url: z.string().nullable(),
+    pdf: z.string().nullable(),
     note: z.string().nullable(),
     publisher: z.string().nullable(),
     topics: z.array(z.string()),

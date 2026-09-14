@@ -320,6 +320,7 @@ function toItem(e) {
     pages: f.pages ?? null,
     doi: f.doi ?? null,
     url: f.url ?? null,
+    pdf: f.pdf ?? null,
     note: f.note ? decodeLatex(f.note) : null,
     publisher: f.publisher ? decodeLatex(f.publisher) : null,
     topics,
