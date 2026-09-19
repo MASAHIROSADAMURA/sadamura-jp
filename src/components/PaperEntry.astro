@@ -72,6 +72,13 @@ const doiHref = paper.doi ? `https://doi.org/${paper.doi}` : (paper.url ?? paper
 const editorIsSelf =
   !!paper.editor && (paper.editor.includes('貞村') || paper.editor.includes('Sadamura'));
 
+// Page ranges reach the content layer exactly as the bib writes them
+// (scripts/bib2json.mjs decodes LaTeX in the text fields but deliberately
+// leaves `pages` untouched), so a range still reads `30--31` here. Render the
+// LaTeX dashes as the typographic ones the bibliography style calls for,
+// without rewriting the stored value.
+const pagesLabel = paper.pages?.replace(/---/g, '—').replace(/--/g, '–') ?? null;
+
 const dateParts: string[] = [paper.yearText ?? String(paper.year)];
 if (paper.pubtype === 'conference' && paper.month) {
   const md = paper.day ? `${paper.month}-${paper.day}` : paper.month;
@@ -115,7 +122,7 @@ const dateLabel = dateParts.join('-');
   <div class="pub-entry__meta">
     {venue && <em>{venue}</em>}
     {paper.volume && <span>{paper.volume}{paper.number ? `(${paper.number})` : ''}</span>}
-    {paper.pages && <span>{paper.pages}</span>}
+    {pagesLabel && <span>{pagesLabel}</span>}
     {paper.doi && (
       <span>
         DOI: <a href={`https://doi.org/${paper.doi}`} rel="noopener external" target="_blank">{paper.doi}</a>

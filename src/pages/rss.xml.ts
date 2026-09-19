@@ -10,12 +10,22 @@ import type { APIContext } from 'astro';
  * researcher output. JA titles are exposed verbatim; the `description`
  * field carries the English title (if available) and venue, which is
  * what most feed readers display.
+ *
+ * Forthcoming work is held back. An entry marked `印刷中` (in press) carries no
+ * issue and often only a year, so the item date below falls back to January 1
+ * of a year that has not arrived yet and subscribers see an unpublished paper
+ * at the top of the feed as though it had just appeared. Entries whose note
+ * says they are in press, and anything dated after the current year, are
+ * dropped here; they join the feed once the bib carries a real publication
+ * date.
  */
 export async function GET(context: APIContext) {
   const all = await getCollection('papers');
+  const currentYear = new Date().getFullYear();
   const items = all
     .map((c) => c.data)
-    .filter((p) => p.year > 0)
+    .filter((p) => p.year > 0 && p.year <= currentYear)
+    .filter((p) => !/印刷中|in press/i.test(p.note ?? ''))
     .sort((a, b) => {
       if (b.year !== a.year) return b.year - a.year;
       return (b.monthNum ?? 0) - (a.monthNum ?? 0);
