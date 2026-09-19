@@ -95,7 +95,7 @@
 
 @article{ioku2025child,
   author       = {Ioku, Tomohiro and Iwatani, Shuma and Yuyama, Yuki and Mukai, Tomoya and Tanaka, Akiko and Matsuki, Yuma and Sadamura, Masahiro and Watamura, Eiichiro},
-  title        = {An Exploratory Study of Decoding Signs of Child Maltreatment},
+  title        = {An Exploratory Study of Decoding Signs of Child Maltreatment: How Case and Reporter Characteristics Shape Reporting Decisions},
   journal      = {Child Protection and Practice},
   volume       = {4},
   pages        = {100104},
@@ -155,7 +155,7 @@
 
 @article{yuyama2025jjess,
   author       = {湯山 祥 and 松木 祐馬 and 向井 智哉 and 貞村 真宏 and 綿村 英一郎},
-  title        = {{実名報道された特定少年に対する市民の受容の規定因}},
+  title        = {{実名報道された特定少年に対する市民の受容の規定因---実名報道がもたらすネガティブ効果の容認の観点から---}},
   journal      = {{実験社会心理学研究}},
   volume       = {64},
   number       = {2},
@@ -284,7 +284,7 @@
 
 @article{mukai2023jiess,
   author       = {向井 智哉 and 松木 祐馬 and 貞村 真宏},
-  title        = {{性犯罪被害者の性的前歴および職業が量刑判断に及ぼす影響}},
+  title        = {{性犯罪被害者の性的前歴および職業が量刑判断に及ぼす影響---「レイプ・シールド法」導入の是非をめぐる議論を背景に---}},
   journal      = {{実験社会心理学研究}},
   volume       = {63},
   number       = {1},
@@ -357,21 +357,22 @@
   topic        = {death-penalty, fear-of-crime, victimization-risk}
 }
 
+% -----------------------------------------------------------------------------
+% その他（非査読、報告書、要旨集 など）
+% -----------------------------------------------------------------------------
+
 @article{mukai2021jiesssup,
   author       = {向井 智哉 and 福島 由衣 and 貞村 真宏 and 外塚 果林 and 相澤 育郎},
   title        = {{性的同意に関する意識の探索的検討}},
   journal      = {{実験社会心理学研究}},
   volume       = {61},
-  note         = {Supplement（日本グループ・ダイナミックス学会第67回大会発表論文集）。大会発表の抄録であり査読論文には数えない},
   year         = {2021},
   language     = {japanese},
   peerreview   = {no},
+  pubtype      = {other},
+  note         = {Supplement（日本グループ・ダイナミックス学会第67回大会発表論文集）。大会発表の抄録であり査読論文には数えない},
   topic        = {sexual-consent, exploratory}
 }
-
-% -----------------------------------------------------------------------------
-% その他（非査読、報告書、要旨集 など）
-% -----------------------------------------------------------------------------
 
 @article{takahashi2020campushealth,
   author       = {高橋 千尋 and 貞村 真宏 and 河 美善 and 山本 周 and 落合 舞子},
@@ -460,7 +461,7 @@
   month        = {September},
   day          = {12},
   address      = {{University of Warsaw, Warsaw, Poland}},
-  note         = {Oral presentation},
+  note         = {Oral presentation; official programme session 329 "Sentencing in Practice: Alternatives, Trajectories and Judicial Memory", where the paper is listed as "Machine Learning Reveals Welfare Discourse Embedded in Japanese Sentencing: A Text Analysis of 2,000 Theft Judgments" under the first author only},
   language     = {english},
   authorrole   = {first-author},
   topic        = {welfare-support, sentencing}
@@ -485,7 +486,7 @@
   month        = {September},
   day          = {10},
   address      = {{University of Warsaw, Warsaw, Poland}},
-  note         = {Poster presentation},
+  note         = {Poster presentation; official programme no. P097, where the poster is listed as "The Institutional Buffering Hypothesis: How Pre-Sentence Report Systems Moderate the Effect of Welfare Support Information on Sentencing Decisions" under the first author only},
   language     = {english},
   authorrole   = {first-author},
   topic        = {welfare-support, sentencing}
@@ -613,7 +614,7 @@
 
 @inproceedings{sadamura2022_jslp23,
   author       = {貞村 真宏 and 松木 祐馬 and 向井 智哉},
-  title        = {{性犯罪被害者の性的前歴および職業が量刑判断に及ぼす影響}},
+  title        = {{性犯罪被害者の性的前歴および職業が量刑判断に及ぼす影響---「レイプ・シールド法」導入の是非をめぐる議論を背景に---}},
   booktitle    = {{法と心理学会第23回大会}},
   year         = {2022},
   month        = {October},
@@ -704,7 +705,29 @@
 
 % =============================================================================
 % 統計
-% Total entries: 51 (英文 6 + 和文 18 + その他 1 + 学会発表 24 + 著書 2; うち査読論文 21)
+% Total entries: 51 (英文 6 + 和文 17 + その他 2 + 学会発表 24 + 著書 2; うち査読論文 21)
+% Last updated: 2026-09-19（第2巡裁定 §5-9（整理）の適用。表示件数の増減なし＝総数 51・査読論文 21 で不変。
+%   (1) mukai2021jiesssup を「査読付き日本語論文」節から「その他」節へ移し、pubtype = {other} を付した
+%       （節・フィールド順とも takahashi2020campushealth と同じ扱いに揃えた）。peerreview = {no} は 2026-09-19 に適用済みだが、
+%       表示節を決めるのは pubtype のみ（bib2json.mjs の toItem）なので、画面上は「論文 / Articles」に残っていた。
+%       和文 18→17・その他 1→2（総数は不変）。
+%   (2) 副題の欠落4件を復元：ioku2025child・yuyama2025jjess・mukai2023jiess・sadamura2022_jslp23。
+%       出所＝researchmap 公開API（published_papers 49162421・51853103・42603052、presentations 42140791）。
+%       和文の2件は Crossref で出版社登録の正式題目も照合した（doi 10.2130/jjesp.2313・10.2130/jjesp.2210）。
+%       区切りは本 bib の慣行どおり LaTeX の --- （→ U+2014）に正規化した（原表記の ―・――・半角コロンを問わず揃える。
+%       既存の mukai2025jslp・mukai2022jslp 等も同じ）。ioku2025child は英文エントリの慣行（Title Case）を維持し、副題のみ足した
+%       （出版社登録は sentence case だが、同じ Elsevier の mukai2023ijlcj も bib では Title Case で書いている）。
+%   (3) EuroCrim 2026 の2件の note に公式プログラムの掲載情報を併記。題目本体は変えていない（表紙優先が既決）。
+%       出所＝PDF_Program_V1_Eurocrim2026.pdf（93頁・2026-09-19 取得・md5 7929cb205fe7227a3680f7cc7d9e85ba）の逐語。
+%       ポスター＝THURSDAY, SEPTEMBER, 10 の 188. Poster Session（6:30 to 7:45 pm・Room 0.141）の P097。
+%       口頭＝SATURDAY, SEPTEMBER, 12 の 329. Sentencing in Practice（9:00 to 10:15 am・Room 1.147）。口頭に論文番号は無い。
+%       いずれもプログラム上は筆頭著者のみの名義。
+%   (4) JADH 2026 会議録の発行日を一次確認。予稿集実物（rm 54932772 の see_also の Google Drive・
+%       139頁・18,646,124 B・md5 fa2ac546dfb5643323f0702929973e88・2026-09-19 取得）の奥付に
+%       逐語で "Date of publication: September 12, 2026" とある。sadamura2026_jadh26_proceedings の
+%       day = {12} は正しく、bib は不変。ja/en の新着が述べていた 9月13日（口頭発表の日）のみ
+%       9月12日に揃えた。）
+%
 % Last updated: 2026-09-19（掲載漏れ監査 2026-09-19 §3-1 の是正。共著の未掲載4件を追加。
 %   (1) ioku2027nwom＝産業・組織心理学研究（Japanese Journal of Industrial and Organizational
 %       Psychology）の印刷中論文。貞村は第7著者。書誌は共著者2名の researchmap の一致した
