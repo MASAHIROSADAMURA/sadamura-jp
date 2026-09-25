@@ -101,10 +101,14 @@ const editorIsSelf =
 // without rewriting the stored value.
 const pagesLabel = paper.pages?.replace(/---/g, '—').replace(/--/g, '–') ?? null;
 
+// Conference dates read YYYY-MM-DD. The bib stores the month as a name
+// (`October`), so use the parsed `monthNum`; the raw text is only a fallback
+// for a month bib2json could not parse.
+const pad2 = (v: string | number) => String(v).padStart(2, '0');
 const dateParts: string[] = [paper.yearText ?? String(paper.year)];
 if (paper.pubtype === 'conference' && paper.month) {
-  const md = paper.day ? `${paper.month}-${paper.day}` : paper.month;
-  dateParts.push(md);
+  const mm = paper.monthNum ? pad2(paper.monthNum) : paper.month;
+  dateParts.push(paper.day ? `${mm}-${pad2(paper.day)}` : mm);
 }
 const dateLabel = dateParts.join('-');
 ---
