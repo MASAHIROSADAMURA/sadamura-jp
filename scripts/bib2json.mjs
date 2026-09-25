@@ -28,7 +28,7 @@ const outPath = path.resolve(projectRoot, 'src/data/papers.json');
 const pubtypeOrder = { article: 0, conference: 1, other: 2, book: 3 };
 
 // Allowed values of the optional `pdftype` field (see pdfQualifiers below).
-const PDF_TYPES = ['aam', 'abstracts', 'researchgate'];
+const PDF_TYPES = ['aam', 'abstracts', 'program', 'researchgate'];
 
 // Fine-grained bib topic slugs → coarse display categories (10 buckets).
 // Every coarse key here MUST have a `pub.topic.<key>` entry in src/i18n/{ja,en}.json,
@@ -341,6 +341,8 @@ function toItem(e) {
 //   abstracts    a whole conference abstract book; `pdfpage` (1-based page of
 //                that PDF file, not the printed folio) is then required and
 //                becomes a #page= fragment so the viewer opens at the abstract
+//   program      a whole conference program, for slots such as flash talks
+//                that print no abstract of their own; `pdfpage` as above
 //   researchgate a ResearchGate full-text page rather than a PDF file
 // A bad combination fails the build instead of rendering a wrong label.
 function pdfQualifiers(f, key) {
@@ -355,8 +357,9 @@ function pdfQualifiers(f, key) {
   if (f.pdfpage && !(pdfPage >= 1 && String(pdfPage) === f.pdfpage)) {
     throw new Error(`bib2json: ${key}: pdfpage must be a positive integer`);
   }
-  if ((pdfType === 'abstracts') !== (pdfPage !== null)) {
-    throw new Error(`bib2json: ${key}: pdfpage goes with pdftype = {abstracts} and nothing else`);
+  const paged = pdfType === 'abstracts' || pdfType === 'program';
+  if (paged !== (pdfPage !== null)) {
+    throw new Error(`bib2json: ${key}: pdfpage goes with pdftype = {abstracts} or {program} and nothing else`);
   }
   return { pdfType, pdfPage };
 }

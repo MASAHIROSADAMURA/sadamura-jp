@@ -75,6 +75,10 @@ function pdfLabel(paper: Paper, lang: Lang): string {
       return lang === 'ja'
         ? `発表論文集 PDF（p. ${paper.pdfPage}）`
         : `Abstracts PDF (p. ${paper.pdfPage})`;
+    case 'program':
+      return lang === 'ja'
+        ? `大会プログラム PDF（p. ${paper.pdfPage}）`
+        : `Conference program PDF (p. ${paper.pdfPage})`;
     case 'researchgate':
       return lang === 'ja' ? '全文（ResearchGate）' : 'Full text (ResearchGate)';
     default:
