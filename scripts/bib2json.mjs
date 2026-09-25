@@ -27,6 +27,9 @@ const outPath = path.resolve(projectRoot, 'src/data/papers.json');
 
 const pubtypeOrder = { article: 0, conference: 1, other: 2, book: 3 };
 
+// Allowed values of the optional `pdftype` field (see pdfQualifiers below).
+const PDF_TYPES = ['aam', 'abstracts', 'researchgate'];
+
 // Fine-grained bib topic slugs → coarse display categories (10 buckets).
 // Every coarse key here MUST have a `pub.topic.<key>` entry in src/i18n/{ja,en}.json,
 // otherwise the filter button renders the raw key. Unmapped slugs fall back to
@@ -296,6 +299,7 @@ function toItem(e) {
     .map((t) => t.trim())
     .filter(Boolean);
   const topics = coarseTopics(fineTopics);
+  const { pdfType, pdfPage } = pdfQualifiers(f, e.key);
 
   return {
     id: e.key,
@@ -321,12 +325,40 @@ function toItem(e) {
     doi: f.doi ?? null,
     url: f.url ?? null,
     pdf: f.pdf ?? null,
+    pdfType,
+    pdfPage,
     note: f.note ? decodeLatex(f.note) : null,
     publisher: f.publisher ? decodeLatex(f.publisher) : null,
     topics,
     firstAuthor,
     soloAuthor
   };
+}
+
+// Optional qualifiers for the `pdf` link. `pdftype` says what the target is
+// when it is not simply the published PDF of the entry itself:
+//   aam          the accepted manuscript (the publisher's version is not posted)
+//   abstracts    a whole conference abstract book; `pdfpage` (1-based page of
+//                that PDF file, not the printed folio) is then required and
+//                becomes a #page= fragment so the viewer opens at the abstract
+//   researchgate a ResearchGate full-text page rather than a PDF file
+// A bad combination fails the build instead of rendering a wrong label.
+function pdfQualifiers(f, key) {
+  const pdfType = f.pdftype ? f.pdftype.toLowerCase() : null;
+  const pdfPage = f.pdfpage ? Number.parseInt(f.pdfpage, 10) : null;
+  if ((pdfType || f.pdfpage) && !f.pdf) {
+    throw new Error(`bib2json: ${key}: pdftype/pdfpage given without pdf`);
+  }
+  if (pdfType && !PDF_TYPES.includes(pdfType)) {
+    throw new Error(`bib2json: ${key}: unknown pdftype "${pdfType}"`);
+  }
+  if (f.pdfpage && !(pdfPage >= 1 && String(pdfPage) === f.pdfpage)) {
+    throw new Error(`bib2json: ${key}: pdfpage must be a positive integer`);
+  }
+  if ((pdfType === 'abstracts') !== (pdfPage !== null)) {
+    throw new Error(`bib2json: ${key}: pdfpage goes with pdftype = {abstracts} and nothing else`);
+  }
+  return { pdfType, pdfPage };
 }
 
 function sortDesc(a, b) {

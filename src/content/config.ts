@@ -32,6 +32,8 @@ const papers = defineCollection({
     doi: z.string().nullable(),
     url: z.string().nullable(),
     pdf: z.string().nullable(),
+    pdfType: z.enum(['aam', 'abstracts', 'researchgate']).nullable(),
+    pdfPage: z.number().int().positive().nullable(),
     note: z.string().nullable(),
     publisher: z.string().nullable(),
     topics: z.array(z.string()),

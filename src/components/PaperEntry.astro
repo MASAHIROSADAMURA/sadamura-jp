@@ -60,15 +60,37 @@ function displayVenue(paper: Paper, lang: Lang): string {
 const title = displayTitle(paper, lang);
 const venue = displayVenue(paper, lang);
 const showJpBadge = lang === 'en' && paper.language === 'ja';
+// Full-text link. For a whole conference abstract book `pdfPage` becomes a
+// #page= fragment, so the viewer opens at this entry's own abstract.
+const pdfHref =
+  paper.pdf && paper.pdfPage ? `${paper.pdf}#page=${paper.pdfPage}` : paper.pdf;
+
+// The label says what the link opens whenever that is not simply the
+// published PDF of the entry itself (see `pdftype` in scripts/bib2json.mjs).
+function pdfLabel(paper: Paper, lang: Lang): string {
+  switch (paper.pdfType) {
+    case 'aam':
+      return lang === 'ja' ? 'PDF（受理稿）' : 'PDF (accepted manuscript)';
+    case 'abstracts':
+      return lang === 'ja'
+        ? `発表論文集 PDF（p. ${paper.pdfPage}）`
+        : `Abstracts PDF (p. ${paper.pdfPage})`;
+    case 'researchgate':
+      return lang === 'ja' ? '全文（ResearchGate）' : 'Full text (ResearchGate)';
+    default:
+      return 'PDF';
+  }
+}
+
 // External link target for the title. DOI wins over a bare `url`, which in
 // turn wins over `pdf`; when none of the three exists the title stays plain
 // text. The meta row below mirrors this: a `DOI: <doi>` link when a DOI is
 // present, otherwise a bare `Link` when only `url` is set, and nothing at all
 // when the entry has no external target. `pdf` is additive rather than
-// exclusive: it renders its own `PDF` link next to whichever of those is
+// exclusive: it renders its own full-text link next to whichever of those is
 // shown, so one entry can point at both a proceedings volume (`url`) and the
 // full text of the paper itself (`pdf`).
-const doiHref = paper.doi ? `https://doi.org/${paper.doi}` : (paper.url ?? paper.pdf);
+const doiHref = paper.doi ? `https://doi.org/${paper.doi}` : (paper.url ?? pdfHref);
 const editorIsSelf =
   !!paper.editor && (paper.editor.includes('貞村') || paper.editor.includes('Sadamura'));
 
@@ -133,9 +155,9 @@ const dateLabel = dateParts.join('-');
         <a href={paper.url} rel="noopener external" target="_blank">Link</a>
       </span>
     )}
-    {paper.pdf && (
+    {pdfHref && (
       <span>
-        <a href={paper.pdf} rel="noopener external" target="_blank">PDF</a>
+        <a href={pdfHref} rel="noopener external" target="_blank">{pdfLabel(paper, lang)}</a>
       </span>
     )}
     {paper.note && <span>({paper.note})</span>}
