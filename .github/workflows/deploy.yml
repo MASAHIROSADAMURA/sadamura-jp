@@ -27,6 +27,9 @@ jobs:
       - run: npm run bib
       - run: npm run check
       - run: npm run build
+        env:
+          # Public GA4 Measurement ID (G-…) from the repository variable; blank = no analytics emitted.
+          PUBLIC_GA4_MEASUREMENT_ID: ${{ vars.PUBLIC_GA4_MEASUREMENT_ID }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

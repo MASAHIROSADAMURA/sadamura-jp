@@ -27,8 +27,16 @@ import BaseLayout from '@layouts/BaseLayout.astro';
   </p>
   <h3>取得する情報</h3>
   <ul>
-    <li><strong>アクセス解析</strong>: <strong>現在、アクセス解析は導入していません。</strong>導入する場合は、取得する項目（ページビュー、参照元、ユーザーエージェント、国別カウント）を本ページに明記したうえで開始します。Cookie は使用しません。</li>
-    <li><strong>外部への通信</strong>: Web フォントの配信のため、ページの表示時に Google LLC（米国）へ IP アドレス等が送信されます。個人を特定する情報を当方が収集することはありませんが、この点を含め GDPR / CCPA の遵守を無条件に保証するものではありません。</li>
+    <li><strong>アクセス解析</strong>: 2026 年 10 月から、<a href="https://marketingplatform.google.com/about/analytics/" rel="noopener" target="_blank">Google アナリティクス 4</a>（Google LLC・米国）を利用しています。
+      <ul>
+        <li><strong>取得する項目</strong>: 閲覧したページの URL とタイトル、閲覧日時、参照元（リンク元のサイト・検索エンジン）、ブラウザ・OS・端末の種類と画面サイズ（ユーザーエージェント）、おおまかな地域（国・都市）と言語、ページのスクロール、PDF などのファイルや外部サイトへのリンクのクリック。氏名・メールアドレスなど個人を特定する情報は取得・送信しません。</li>
+        <li><strong>Cookie</strong>: 同じブラウザからの再訪を区別するため、Google アナリティクスの Cookie（<code>_ga</code> および <code>_ga_*</code>、有効期間は最長 2 年）を利用者の端末に保存します。</li>
+        <li><strong>送信先と設定</strong>: データは Google LLC へ送信され、<a href="https://policies.google.com/technologies/partner-sites?hl=ja" rel="noopener" target="_blank">「Google のサービスを使用するサイトやアプリから収集した情報の Google による使用」</a>に従って処理されます。広告向けの機能（Google シグナル）は無効にし、利用者単位のデータの保持期間は 14 か月に設定しています。Google アナリティクス 4 は IP アドレスを保存しません。</li>
+        <li><strong>利用目的</strong>: どのページや資料が読まれているかを把握してサイトを改善するためだけに、個人と結び付けない集計の形で用います。</li>
+        <li><strong>停止する方法</strong>: ブラウザの設定で Cookie を拒否・削除するか、<a href="https://tools.google.com/dlpage/gaoptout?hl=ja" rel="noopener" target="_blank">Google アナリティクス オプトアウト アドオン</a>をご利用ください。</li>
+      </ul>
+    </li>
+    <li><strong>外部への通信</strong>: Web フォントの配信およびアクセス解析のため、ページの表示時に Google LLC（米国）へ IP アドレス等が送信されます。個人を特定する情報を当方が収集することはありませんが、この点を含め GDPR / CCPA の遵守を無条件に保証するものではありません。</li>
     <li><strong>お問い合わせ</strong>: メールに記載された宛先・本文。本人が受信し、本人のみが閲覧します（メールサービスの運営者による技術的なアクセスの可能性を除きます）。第三者には提供しません。</li>
   </ul>
   <h3>利用目的</h3>

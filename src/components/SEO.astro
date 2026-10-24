@@ -174,8 +174,12 @@ const breadcrumbLd = crumbs.length > 1 ? {
   }))
 } : null;
 
-// Plausible Analytics — opt-in via env var, never bundled when blank.
-const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN ?? '';
+// Google Analytics 4 — opt-in via env var, never bundled when blank.
+// The Measurement ID (G-XXXXXXXXXX) is a public value that appears in the HTML.
+// CI receives it from the repository variable PUBLIC_GA4_MEASUREMENT_ID
+// (see .github/workflows/deploy.yml); deleting the variable turns analytics off.
+// What is collected is disclosed on /about (ja/en) and /zh/privacy §8 — keep in sync.
+const ga4Id = import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? '';
 ---
 
 <title>{title}</title>
@@ -219,12 +223,15 @@ const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN ?? '';
   <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 )}
 
-<!-- Plausible Analytics — only when PUBLIC_PLAUSIBLE_DOMAIN is set -->
-{plausibleDomain && (
-  <script
-    is:inline
-    defer
-    data-domain={plausibleDomain}
-    src="https://plausible.io/js/script.js"
-  />
+<!-- Google Analytics 4 — only when PUBLIC_GA4_MEASUREMENT_ID is set -->
+{ga4Id && (
+  <Fragment>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
+    <script is:inline define:vars={{ ga4Id }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', ga4Id);
+    </script>
+  </Fragment>
 )}
