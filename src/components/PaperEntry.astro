@@ -29,6 +29,13 @@ function displayAuthor(name: string, lang: Lang): string {
 }
 
 // Role label for edited / editorial-board works (not authorship).
+// Issue number for a serial without volumes (e.g. a bulletin numbered 第6号).
+function issueLabel(n: string | number, lang: Lang): string {
+  if (lang === 'ja') return `第${n}号`;
+  if (lang === 'zh') return `第${n}期`;
+  return `No. ${n}`;
+}
+
 function roleLabel(role: string, lang: Lang): string {
   const ja: Record<string, string> = {
     'joint-editor': '共編',
@@ -151,7 +158,9 @@ const dateLabel = dateParts.join('-');
 
   <div class="pub-entry__meta">
     {venue && <em>{venue}</em>}
-    {paper.volume && <span>{paper.volume}{paper.number ? `(${paper.number})` : ''}</span>}
+    {paper.volume
+      ? <span>{paper.volume}{paper.number ? `(${paper.number})` : ''}</span>
+      : paper.number && <span>{issueLabel(paper.number, lang)}</span>}
     {pagesLabel && <span>{pagesLabel}</span>}
     {paper.doi && (
       <span>
