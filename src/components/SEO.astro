@@ -148,9 +148,11 @@ const segmentLabels: Record<string, Record<Lang, string>> = {
   guide:        { ja: 'ガイド',         en: 'Guide',          zh: '指南' },
   legal:        { ja: '特定商取引法に基づく表記', en: 'Legal notices', zh: '法律信息' },
   privacy:      { ja: 'プライバシーポリシー', en: 'Privacy notice', zh: '隐私声明' },
-  '404':        { ja: 'ページが見つかりません', en: 'Page not found', zh: '页面未找到' },
-  lab:          { ja: 'ラボ',           en: 'Lab',            zh: '实验室' }
+  '404':        { ja: 'ページが見つかりません', en: 'Page not found', zh: '页面未找到' }
 };
+// Path segments that have no index page of their own (e.g. /lab, /en/lab return 404).
+// They are skipped as intermediate crumbs so the list never points at a missing URL.
+const noIndexSegments = new Set(['lab']);
 const homeLabel: Record<Lang, string> = { ja: 'トップ', en: 'Home', zh: '首页' };
 let crumbs: { name: string; href: string }[] = [
   { name: homeLabel[lang], href: localizedPath(lang, '/') }
@@ -160,6 +162,7 @@ let crumbPath = lang === defaultLang ? '' : `/${lang}`;
 for (const [idx, seg] of usableSegments.entries()) {
   crumbPath += `/${seg}`;
   const isLast = idx === usableSegments.length - 1;
+  if (!isLast && noIndexSegments.has(seg)) continue;
   const label = (isLast ? breadcrumbLabel : undefined) ?? segmentLabels[seg]?.[lang] ?? seg;
   crumbs.push({ name: label, href: crumbPath });
 }
