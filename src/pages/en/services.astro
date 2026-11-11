@@ -6,7 +6,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 //
 // 節構成は ja / zh と同じ並び（"AI Citation Audit" → リサーチ → 大学院指導 →
 // 寄宿校相談 → 学術支援）で、寄宿校相談は独立の見出しを持ち、卒業生／非卒業生の
-// 立場を分けて書く。§1 には ja と同じ弁護士法 72 条の留保を置く。
+// 立場を分けて書く。§2 には ja と同じ弁護士法 72 条の留保を置く。
 //
 // Notes の管轄・準拠法条項は "exclusive jurisdiction" と書かない: 民訴法 3 条の
 // 7 第 5 項は、将来の消費者契約紛争を対象とする管轄合意の効力を、専属・付加を
@@ -15,12 +15,12 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 // おいて」の留保である。準拠法にも消費者の常居所地法の強行規定に関する留保を
 // 置く。同じ条項が /services・/legal にもあり、3 箇所は同文に保つ。
 //
-// §1 の商品 "AI Citation Audit" は「原文提示」型として記述する（実在・書誌一致の
+// §2 の商品 "AI Citation Audit" は「原文提示」型として記述する（実在・書誌一致の
 // 確認＋該当箇所の原文の提示＋所在情報まで）。業務範囲の垣根・受付状況は ja と
 // 同水準で本文に置く。
 const title = 'Research & Academic Services | Masahiro Sadamura';
 const description =
-  'Japan research you can verify: citation audits of AI output, research memos built from primary sources at the National Diet Library, academic editing, data analysis, one-on-one graduate admissions coaching, and Japanese bar exam coaching. No outcome is guaranteed; every citation is checked against the original.';
+  'Japanese bar exam coaching, and Japan research you can verify: citation audits of AI output, research memos built from primary sources at the National Diet Library, academic editing, data analysis, and one-on-one graduate admissions coaching. No outcome is guaranteed; every citation is checked against the original.';
 const keywords =
   'Japan legal research,Japanese case law research,AI citation audit,academic editing Japan,Japanese to English translation,data analysis,graduate admissions Japan,research proposal coaching';
 
@@ -152,7 +152,18 @@ const servicesLd = serviceDefs.map((s) => ({
     I am a researcher in law and psychology with 22 peer-reviewed publications, and a J.D. (University of Tokyo). I am not a licensed attorney, and nothing here is legal advice on individual matters. I also do not handle tax advice or individual tax determinations, which in Japan are reserved to licensed tax accountants (<span lang="ja">税理士</span>).
   </p>
 
-  <h2>1. AI Citation Audit</h2>
+  <h2>1. Japanese Bar Exam Coaching</h2>
+  <p>
+    One-on-one coaching for the Japanese bar examination (<span lang="ja">司法試験</span>) by a J.D. (University of Tokyo) who has passed the exam: essay-answer review, short-answer preparation, and study planning. Candidates for the preliminary examination (<span lang="ja">予備試験</span>) and law school students are also welcome. Coaching is conducted in Japanese.
+  </p>
+  <ul>
+    <li>Essay answer review: <strong>¥5,500 per answer</strong> (send the question and your answer; it is returned with corrections and comments within 7 days of receipt)</li>
+    <li>One-on-one session (60 min, online; in person in Tokyo by arrangement): <strong>¥11,000</strong> — essay technique and answer review, short-answer preparation, subject priorities and study planning</li>
+    <li>No pass is guaranteed.</li>
+    <li>Coaching works from exam and hypothetical problems only; no legal advice on actual cases or disputes is given (Attorneys Act, Art. 72).</li>
+  </ul>
+
+  <h2>2. AI Citation Audit</h2>
   <p>
     Generative AI can fabricate Japanese citations — case numbers that do not exist, journal pages that hold a different article; peer-reviewed testing of legal AI tools has reported hallucination rates of 17–33% (Magesh et al., Journal of Empirical Legal Studies 22(2), 216–242, 2025). The study tested three US legal research tools on US-law queries, and its error definition included responses that misinterpret a cited source or cite an inapplicable source. I check each citation in your AI-generated text against the primary record and report, for every citation, whether it exists, whether its bibliographic details match the original, <strong>the relevant passage quoted from the source itself</strong>, and where that source is held.
   </p>
@@ -175,7 +186,7 @@ const servicesLd = serviceDefs.map((s) => ({
     </li>
   </ul>
 
-  <h2>2. Japan Research Memos</h2>
+  <h2>3. Japan Research Memos</h2>
   <p>
     Research reports built from primary sources, <strong>limited to general and abstract questions</strong> of law, case law, and literature: case-law and scholarship landscapes, legislative history, comparative-law overviews, and evidence reviews in law and psychology.
   </p>
@@ -190,7 +201,7 @@ const servicesLd = serviceDefs.map((s) => ({
     </li>
   </ul>
 
-  <h2>3. Graduate Admissions Coaching (Japan)</h2>
+  <h2>4. Graduate Admissions Coaching (Japan)</h2>
   <p>
     One-on-one coaching for applications to Japanese graduate schools. A research proposal stands or falls on its command of prior research — a mapped review of the Japanese-language literature is built into the package. Sessions available in English, Chinese, or Japanese.
   </p>
@@ -218,7 +229,7 @@ const servicesLd = serviceDefs.map((s) => ({
     </li>
   </ul>
 
-  <h2>4. Boarding-school Admissions Strategy</h2>
+  <h2>5. Boarding-school Admissions Strategy</h2>
   <p>
     I am a graduate of La Salle High School (Kagoshima) and advise on that school's entrance examination, application planning, interview preparation, and what dormitory life is actually like. Consultations on other boarding schools are also available, from a non-alumnus perspective.
   </p>
@@ -230,7 +241,7 @@ const servicesLd = serviceDefs.map((s) => ({
     </li>
   </ul>
 
-  <h2>5. Academic Editing, Translation, and Data Analysis</h2>
+  <h2>6. Academic Editing, Translation, and Data Analysis</h2>
   <ul>
     <li>
       <strong>Academic English editing</strong> — from ¥80,000 per paper (approx. 5,000 words). By a published researcher: terminology, argument structure, and reviewer-response strategy, not just grammar
@@ -243,17 +254,6 @@ const servicesLd = serviceDefs.map((s) => ({
     <li>
       Delivery deadlines are stated in the quotation and run from conclusion of the contract; see the <a href="/legal" hreflang="ja">legal disclosures</a>.
     </li>
-  </ul>
-
-  <h2>6. Japanese Bar Exam Coaching</h2>
-  <p>
-    One-on-one coaching for the Japanese bar examination (<span lang="ja">司法試験</span>) by a J.D. (University of Tokyo) who has passed the exam: essay-answer review, short-answer preparation, and study planning. Candidates for the preliminary examination (<span lang="ja">予備試験</span>) and law school students are also welcome. Coaching is conducted in Japanese.
-  </p>
-  <ul>
-    <li>Essay answer review: <strong>¥5,500 per answer</strong> (send the question and your answer; it is returned with corrections and comments within 7 days of receipt)</li>
-    <li>One-on-one session (60 min, online; in person in Tokyo by arrangement): <strong>¥11,000</strong> — essay technique and answer review, short-answer preparation, subject priorities and study planning</li>
-    <li>No pass is guaranteed.</li>
-    <li>Coaching works from exam and hypothetical problems only; no legal advice on actual cases or disputes is given (Attorneys Act, Art. 72).</li>
   </ul>
 
   <h2>How it works</h2>
