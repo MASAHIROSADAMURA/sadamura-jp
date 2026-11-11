@@ -108,12 +108,12 @@ const serviceDefs: ServiceDef[] = [
   },
   {
     id: 'bar-exam-coaching',
-    name: 'Japanese Bar Exam and Law School Coaching',
+    name: 'Coaching for the Bar Exam, Preliminary Exam, and Law School',
     serviceType: 'Bar exam coaching',
     description:
       'One-on-one coaching for the Japanese bar examination by a J.D. (University of Tokyo) who has passed the exam, also covering the preliminary examination, law school entrance examinations, and law school term examinations: essay-answer review, short-answer preparation, and study planning. Candidates via the preliminary examination and repeat takers are especially welcome. Coaching is conducted in Japanese.',
     offers: [
-      { price: '5500', description: 'Essay answer review: ¥5,500 per answer' },
+      { price: '5500', description: 'Answer review: ¥5,500 per answer' },
       { price: '11000', description: 'One-on-one session (60 min, online; in person in Tokyo by arrangement): ¥11,000' }
     ]
   }
@@ -152,14 +152,25 @@ const servicesLd = serviceDefs.map((s) => ({
     I am a researcher in law and psychology with 22 peer-reviewed publications, and a J.D. (University of Tokyo). I am not a licensed attorney, and nothing here is legal advice on individual matters. I also do not handle tax advice or individual tax determinations, which in Japan are reserved to licensed tax accountants (<span lang="ja">税理士</span>).
   </p>
 
-  <h2>1. Japanese Bar Exam and Law School Coaching</h2>
+  <h2>1. Coaching for the Bar Exam, Preliminary Exam, and Law School</h2>
   <p>
     One-on-one coaching for the Japanese bar examination (<span lang="ja">司法試験</span>) by a J.D. (University of Tokyo) who has passed the exam. I read each of your answers myself and work directly on the habits in your writing and the places where your study has stalled, which a lecture hall cannot reach. Coaching is conducted in Japanese.
   </p>
   <p><strong>Covers</strong>: the bar examination (<span lang="ja">司法試験</span>), the preliminary examination (<span lang="ja">予備試験</span>), law school entrance examinations, and law school term examinations</p>
   <h3>About me</h3>
   <ul>
-    <li>J.D., The University of Tokyo School of Law. Admitted to six leading law schools: Tokyo (three-year course), Kyoto (Special Selection for the three-year course, <span lang="ja">法学未修者特別選抜</span>), Kobe (two-year course), Osaka (two-year course), Waseda (both the three-year and two-year courses, each with the Tomon Hoso Scholarship, <span lang="ja">稲門法曹奨学金</span>), and Keio (two-year course, with a special scholarship)</li>
+    <li>J.D., The University of Tokyo School of Law</li>
+    <li>
+      Admitted to all six of the following law schools
+      <ul>
+        <li>The University of Tokyo (three-year course)</li>
+        <li>Kyoto University (Special Selection for the three-year course, <span lang="ja">法学未修者特別選抜</span>)</li>
+        <li>Kobe University (two-year course)</li>
+        <li>The University of Osaka (two-year course)</li>
+        <li>Waseda University (both the three-year and two-year courses, each with the Tomon Hoso Scholarship, <span lang="ja">稲門法曹奨学金</span>)</li>
+        <li>Keio University (two-year course, with a special scholarship)</li>
+      </ul>
+    </li>
     <li>Student editor, University of Tokyo Law Review</li>
     <li>Anderson Mōri &amp; Tomotsune Scholarship, The University of Tokyo School of Law</li>
     <li>Best Legal Researcher Award (Westlaw Japan)</li>
@@ -174,11 +185,17 @@ const servicesLd = serviceDefs.map((s) => ({
   </ul>
   <h3>Fees</h3>
   <ul>
-    <li>Essay answer review: <strong>¥5,500 per answer</strong> (send the question and your answer; it is returned with corrections and comments within 7 days of receipt). Start with a single answer</li>
+    <li>Answer review: <strong>¥5,500 per answer</strong> (returned with corrections and comments within 7 days of receipt). The same fee applies to answers for the bar exam, the preliminary exam, law school entrance exams, and term exams. Start with a single answer</li>
     <li>One-on-one session (60 min, online; in person in Tokyo by arrangement): <strong>¥11,000</strong></li>
-    <li>No pass is guaranteed.</li>
     <li>Coaching works from exam and hypothetical problems only; no legal advice on actual cases or disputes is given (Attorneys Act, Art. 72).</li>
   </ul>
+  <h3>How to apply</h3>
+  <ol>
+    <li>Tell me through the <a href="/en/contact">contact page</a> which exam you are preparing for and what you would like</li>
+    <li>After payment of the quoted fee, send the question and your answer as a PDF or Word file</li>
+    <li>Your answer is returned with corrections and comments within 7 days of receipt</li>
+    <li>If you wish, we go over your rewritten answer together in a one-on-one session</li>
+  </ol>
 
   <h2>2. AI Citation Audit</h2>
   <p>
