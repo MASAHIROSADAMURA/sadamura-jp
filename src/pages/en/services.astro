@@ -20,7 +20,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 // 同水準で本文に置く。
 const title = 'Research & Academic Services | Masahiro Sadamura';
 const description =
-  'Japan research you can verify: citation audits of AI output, research memos built from primary sources at the National Diet Library, academic editing, data analysis, and one-on-one graduate admissions coaching. No outcome is guaranteed; every citation is checked against the original.';
+  'Japan research you can verify: citation audits of AI output, research memos built from primary sources at the National Diet Library, academic editing, data analysis, one-on-one graduate admissions coaching, and Japanese bar exam coaching. No outcome is guaranteed; every citation is checked against the original.';
 const keywords =
   'Japan legal research,Japanese case law research,AI citation audit,academic editing Japan,Japanese to English translation,data analysis,graduate admissions Japan,research proposal coaching';
 
@@ -105,6 +105,17 @@ const serviceDefs: ServiceDef[] = [
     description:
       "I am a graduate of La Salle High School (Kagoshima) and advise on that school's entrance examination, application planning, interview preparation, and what dormitory life is actually like. Consultations on other boarding schools are also available, from a non-alumnus perspective. Subject tutoring is not offered. This is an independent private service, unaffiliated with the La Salle school corporation.",
     offers: [{ price: '55000', description: '¥55,000 / 90 min' }]
+  },
+  {
+    id: 'bar-exam-coaching',
+    name: 'Japanese Bar Exam Coaching',
+    serviceType: 'Bar exam coaching',
+    description:
+      'One-on-one coaching for the Japanese bar examination by a J.D. (University of Tokyo) who has passed the exam: essay-answer review, short-answer preparation, and study planning. Candidates for the preliminary examination and law school students are also welcome. Coaching is conducted in Japanese.',
+    offers: [
+      { price: '5500', description: 'Essay answer review: ¥5,500 per answer' },
+      { price: '11000', description: 'One-on-one session (60 min, online; in person in Tokyo by arrangement): ¥11,000' }
+    ]
   }
 ];
 
@@ -234,10 +245,15 @@ const servicesLd = serviceDefs.map((s) => ({
     </li>
   </ul>
 
-  {/* ja 版「準備中」と同じ節レベル（h2）に揃える。 */}
-  <h2>In preparation</h2>
+  <h2>6. Japanese Bar Exam Coaching</h2>
+  <p>
+    One-on-one coaching for the Japanese bar examination (<span lang="ja">司法試験</span>) by a J.D. (University of Tokyo) who has passed the exam: essay-answer review, short-answer preparation, and study planning. Candidates for the preliminary examination (<span lang="ja">予備試験</span>) and law school students are also welcome. Coaching is conducted in Japanese.
+  </p>
   <ul>
-    <li>Bar-exam essay coaching (Japanese law) — in preparation; the start date will be announced on this page</li>
+    <li>Essay answer review: <strong>¥5,500 per answer</strong> (send the question and your answer; it is returned with corrections and comments within 7 days of receipt)</li>
+    <li>One-on-one session (60 min, online; in person in Tokyo by arrangement): <strong>¥11,000</strong> — essay technique and answer review, short-answer preparation, subject priorities and study planning</li>
+    <li>No pass is guaranteed.</li>
+    <li>Coaching works from exam and hypothetical problems only; no legal advice on actual cases or disputes is given (Attorneys Act, Art. 72).</li>
   </ul>
 
   <h2>How it works</h2>
