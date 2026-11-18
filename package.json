@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "npm run bib && astro dev",
     "start": "npm run dev",
-    "build": "npm run bib && astro build",
+    "build": "npm run bib && astro build && node scripts/placeholder_mode.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
