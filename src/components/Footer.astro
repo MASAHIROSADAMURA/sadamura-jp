@@ -12,7 +12,7 @@ const ccUrl = lang === 'ja'
 // previously only the JA footer carried it and EN readers had no route to the
 // statutory disclosures at all. `/about` exists in JA and EN only, so ZH readers
 // are sent to the JA page and the ZH label says so (「关于本站（日文）」).
-const aboutHref = lang === 'en' ? '/en/about' : '/about';
+const aboutHref = lang === 'en' ? '/en/about/' : '/about/';
 const aboutHreflang = lang === 'en' ? langTag.en : langTag.ja;
 ---
 
@@ -27,7 +27,7 @@ const aboutHreflang = lang === 'en' ? langTag.en : langTag.ja;
         <Fragment> &middot; <a href="/rss.xml">RSS</a></Fragment>
       )}
       &middot; <a href={aboutHref} hreflang={aboutHreflang}>{t('footer.about')}</a>
-      &middot; <a href="/legal" hreflang={langTag.ja}>{t('footer.legal')}</a>
+      &middot; <a href="/legal/" hreflang={langTag.ja}>{t('footer.legal')}</a>
     </span>
   </div>
 </footer>

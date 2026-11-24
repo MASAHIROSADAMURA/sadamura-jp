@@ -164,7 +164,9 @@ for (const [idx, seg] of usableSegments.entries()) {
   const isLast = idx === usableSegments.length - 1;
   if (!isLast && noIndexSegments.has(seg)) continue;
   const label = (isLast ? breadcrumbLabel : undefined) ?? segmentLabels[seg]?.[lang] ?? seg;
-  crumbs.push({ name: label, href: crumbPath });
+  // Each crumb points at the URL the page is served from: the last one is this
+  // page (its canonical path), the others are directory indexes ending in `/`.
+  crumbs.push({ name: label, href: isLast ? pathname : `${crumbPath}/` });
 }
 const breadcrumbLd = crumbs.length > 1 ? {
   '@context': 'https://schema.org',

@@ -51,13 +51,16 @@ export async function GET(context: APIContext) {
       // Unique, stable guid per item. Items without a DOI previously all
       // shared guid=…/publications, so readers folded them into one entry and
       // never surfaced new work. DOI when present, else a per-citekey anchor.
+      // The guid keeps its form so readers do not list old items again; the
+      // link points at the URL the page is served from (with the slash).
       const guid = p.doi ? `https://doi.org/${p.doi}` : `https://sadamura.jp/publications#${p.key}`;
+      const link = p.doi ? guid : `https://sadamura.jp/publications/#${p.key}`;
       const categories = [...p.topics, p.pubtype];
       return {
         title: p.title,
         pubDate: isoDate,
         description: descParts.join(' — '),
-        link: guid,
+        link,
         categories,
         author: 'Masahiro Sadamura',
         // Override @astrojs/rss's default guid (which is link with

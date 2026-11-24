@@ -19,27 +19,29 @@ const here = normalizePath(Astro.url.pathname);
 // `/zh/guide` (指南) was added on 2026-07-31; JA and EN keep their page sets.
 // `/services` shipped its EN copy on 2026-07-31, so Services is now in the EN
 // nav too (JA / ZH nav order is unchanged).
+// Paths end with `/`: the pages are served from directories, and the form
+// without the slash costs a 301 on every click.
 const navItems: Record<Lang, { path: string; key: string }[]> = {
   ja: [
-    { path: '/profile', key: 'nav.profile' },
-    { path: '/publications', key: 'nav.publications' },
-    { path: '/resources', key: 'nav.resources' },
-    { path: '/services', key: 'nav.services' },
-    { path: '/contact', key: 'nav.contact' }
+    { path: '/profile/', key: 'nav.profile' },
+    { path: '/publications/', key: 'nav.publications' },
+    { path: '/resources/', key: 'nav.resources' },
+    { path: '/services/', key: 'nav.services' },
+    { path: '/contact/', key: 'nav.contact' }
   ],
   en: [
-    { path: '/profile', key: 'nav.profile' },
-    { path: '/publications', key: 'nav.publications' },
-    { path: '/resources', key: 'nav.resources' },
-    { path: '/services', key: 'nav.services' },
-    { path: '/contact', key: 'nav.contact' }
+    { path: '/profile/', key: 'nav.profile' },
+    { path: '/publications/', key: 'nav.publications' },
+    { path: '/resources/', key: 'nav.resources' },
+    { path: '/services/', key: 'nav.services' },
+    { path: '/contact/', key: 'nav.contact' }
   ],
   zh: [
     { path: '/', key: 'nav.home' },
-    { path: '/profile', key: 'nav.profile' },
-    { path: '/services', key: 'nav.services' },
-    { path: '/guide', key: 'nav.guide' },
-    { path: '/contact', key: 'nav.contact' }
+    { path: '/profile/', key: 'nav.profile' },
+    { path: '/services/', key: 'nav.services' },
+    { path: '/guide/', key: 'nav.guide' },
+    { path: '/contact/', key: 'nav.contact' }
   ]
 };
 
