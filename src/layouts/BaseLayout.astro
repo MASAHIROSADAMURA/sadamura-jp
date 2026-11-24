@@ -4,6 +4,7 @@ import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import SEO from '@components/SEO.astro';
 import { getLangFromUrl, useTranslations, langTag } from '@i18n/index';
+import { pageLastUpdated } from '@/lib/page-dates';
 
 export interface Props {
   title: string;
@@ -12,7 +13,11 @@ export interface Props {
   image?: string;
   /** Override the canonical path. Defaults to Astro.url.pathname. */
   canonicalPath?: string;
-  /** Last update date in ISO YYYY-MM-DD. Defaults to today. */
+  /**
+   * Last update date in ISO YYYY-MM-DD. Defaults to the date the page's
+   * content last changed (src/lib/page-dates.ts); the line is left out when
+   * that date is unknown.
+   */
   lastUpdated?: string;
   /** Optional comma-separated keyword list (legacy CN engines only). */
   keywords?: string;
@@ -24,15 +29,9 @@ const { title, description, image, canonicalPath, lastUpdated, keywords, breadcr
   Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-// Anchor "today" to Asia/Tokyo (JST). UTC-derived dates flip a day too
-// early when the build runs late-evening JST.
-const today = new Intl.DateTimeFormat('en-CA', {
-  timeZone: 'Asia/Tokyo',
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit'
-}).format(new Date());
-const updated = lastUpdated ?? today;
+// Never the build date: that changed on every deploy, whether or not the page
+// had changed.
+const updated = lastUpdated ?? pageLastUpdated(Astro.url.pathname);
 ---
 
 <!doctype html>
@@ -98,9 +97,11 @@ const updated = lastUpdated ?? today;
     <Header />
     <main id="main">
       <slot />
-      <p style="margin-top: 3rem; font-size: 0.85rem; color: var(--color-muted);">
-        <small>{t('common.lastUpdated')}: <time datetime={updated}>{updated}</time></small>
-      </p>
+      {updated && (
+        <p style="margin-top: 3rem; font-size: 0.85rem; color: var(--color-muted);">
+          <small>{t('common.lastUpdated')}: <time datetime={updated}>{updated}</time></small>
+        </p>
+      )}
     </main>
     <Footer />
   </body>

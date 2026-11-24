@@ -1,7 +1,24 @@
 // @ts-check
+import { readFileSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+
+// The sitemap's <lastmod> repeats the "Last updated" date the built page shows
+// (src/lib/page-dates.ts), so the two never disagree; a page that shows no date
+// gets no <lastmod>. It used to be the build time for every URL.
+const distDir = new URL('./dist/', import.meta.url);
+/** @param {string} pageUrl */
+function shownLastUpdated(pageUrl) {
+  try {
+    const { pathname } = new URL(pageUrl);
+    const file = new URL(`.${pathname}${pathname.endsWith('/') ? 'index.html' : ''}`, distDir);
+    const html = readFileSync(file, 'utf8');
+    return html.match(/<time datetime="(\d{4}-\d{2}-\d{2})">[^<]*<\/time><\/small>\s*<\/p>\s*<\/main>/)?.[1];
+  } catch {
+    return undefined;
+  }
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -44,7 +61,12 @@ export default defineConfig({
       },
       changefreq: 'monthly',
       priority: 0.7,
-      lastmod: new Date()
+      serialize(item) {
+        const lastmod = shownLastUpdated(item.url);
+        if (lastmod) item.lastmod = lastmod;
+        else delete item.lastmod;
+        return item;
+      }
     })
   ],
   vite: {
