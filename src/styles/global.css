@@ -112,6 +112,11 @@ main {
   padding: var(--gutter);
 }
 
+/* URLs and hashes have no break points. Let them wrap at the edge of the
+   column instead of pushing the page wider than a phone screen; other text
+   breaks where it would anyway. */
+main { overflow-wrap: break-word; }
+
 /* ---------- Skip Link ----------------------------------------------------- */
 .skip-link {
   position: absolute;
@@ -438,6 +443,10 @@ th {
   h2 { font-size: 1.05rem; }
   .site-header__inner { flex-direction: column; align-items: flex-start; }
   .site-nav { width: 100%; }
+  /* In a table cell a URL must also let its column shrink. Tables in
+     .table-scroll keep their sideways scroll. */
+  main td a[href^="http"] { overflow-wrap: anywhere; }
+  .table-scroll td a[href^="http"] { overflow-wrap: break-word; }
 }
 
 /* ---------- Print -------------------------------------------------------- */
