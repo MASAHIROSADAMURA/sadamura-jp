@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import { SERVICES_PAUSED } from '@data/services-status';
 
 // zh 版のサービス一覧。価格は ja / en 版と同額で、以下の書き分けを守る。
 //
@@ -179,6 +180,12 @@ const servicesLd = serviceDefs.map((s) => ({
 }));
 ---
 
+{SERVICES_PAUSED ? (
+<BaseLayout title="服务 | 贞村真宏" description="本页面正在准备中。">
+  <h1>服务</h1>
+  <p>本页面正在准备中。</p>
+</BaseLayout>
+) : (
 <BaseLayout title={title} description={description} keywords={keywords}>
   <h1>服务与价格</h1>
 
@@ -386,3 +393,4 @@ const servicesLd = serviceDefs.map((s) => ({
     ))
   }
 </BaseLayout>
+)}

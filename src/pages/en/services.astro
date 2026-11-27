@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import { SERVICES_PAUSED } from '@data/services-status';
 
 // en 版のサービス一覧。価格・注記は ja / zh 版と同じ 4 サービスを指す。
 // title はサイト慣例の brand サフィックス付き。
@@ -141,6 +142,12 @@ const servicesLd = serviceDefs.map((s) => ({
 }));
 ---
 
+{SERVICES_PAUSED ? (
+<BaseLayout title="Services | Masahiro Sadamura" description="This page is temporarily unavailable.">
+  <h1>Services</h1>
+  <p>This page is temporarily unavailable.</p>
+</BaseLayout>
+) : (
 <BaseLayout title={title} description={description} keywords={keywords}>
   <h1>Research &amp; Academic Services</h1>
 
@@ -323,3 +330,4 @@ const servicesLd = serviceDefs.map((s) => ({
     ))
   }
 </BaseLayout>
+)}

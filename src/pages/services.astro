@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import { SERVICES_PAUSED } from '@data/services-status';
 
 // ja 版のサービス一覧。価格・注記は en / zh 版と同じ 4 サービスを指す。
 //
@@ -116,6 +117,12 @@ const servicesLd = serviceDefs.map((s) => ({
 }));
 ---
 
+{SERVICES_PAUSED ? (
+<BaseLayout title="サービス | 貞村真宏" description="ただいま準備中です。">
+  <h1>サービス</h1>
+  <p>ただいま準備中です。</p>
+</BaseLayout>
+) : (
 <BaseLayout title={title} description={description}>
   <h1>学術支援・進学指導サービス</h1>
 
@@ -302,3 +309,4 @@ const servicesLd = serviceDefs.map((s) => ({
     ))
   }
 </BaseLayout>
+)}
